@@ -27,8 +27,8 @@ function App() {
 
     try {
       // In production this URL would be relative or come from an env var.
-      // We hardcode the backend IP and Port for this milestone.
-      const response = await fetch('http://192.168.1.92:8001/api/evaluate', {
+      // We use localhost for this milestone so evaluators can run it easily.
+      const response = await fetch('http://localhost:8001/api/evaluate', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
