@@ -17,11 +17,15 @@ app = FastAPI(
 # talking to our FastAPI app because they will be running on different ports.
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # In a real app, you restrict this to the exact React URL
+    allow_origins=["http://localhost:5173", "http://192.168.1.92:5173", "http://127.0.0.1:5173"], # Restricted to frontend domains for security
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.get("/api/health")
+def health_check():
+    return {"status": "healthy", "version": "1.0.0"}
 
 @app.post("/api/evaluate", response_model=schemas.EvaluationResponse)
 def submit_evaluation(eval_input: schemas.EvaluationInput, db: Session = Depends(database.get_db)):

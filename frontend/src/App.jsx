@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './App.css'
 
 function App() {
@@ -11,6 +11,25 @@ function App() {
   
   const [status, setStatus] = useState({ type: '', message: '' })
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [theme, setTheme] = useState('light')
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme')
+    if (savedTheme) {
+      setTheme(savedTheme)
+      document.body.setAttribute('data-theme', savedTheme)
+    } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      setTheme('dark')
+      document.body.setAttribute('data-theme', 'dark')
+    }
+  }, [])
+
+  const toggleTheme = () => {
+    const newTheme = theme === 'light' ? 'dark' : 'light'
+    setTheme(newTheme)
+    document.body.setAttribute('data-theme', newTheme)
+    localStorage.setItem('theme', newTheme)
+  }
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -26,17 +45,12 @@ function App() {
     setStatus({ type: '', message: '' })
 
     try {
-      // In production this URL would be relative or come from an env var.
-      // We use localhost for this milestone so evaluators can run it easily.
-      const response = await fetch('http://localhost:8001/api/evaluate', {
+      const response = await fetch('http://192.168.1.92:8001/api/evaluate', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           question: formData.question,
           ai_response: formData.ai_response,
-          // Only send optional fields if they have content
           ...(formData.reference_answer && { reference_answer: formData.reference_answer }),
           ...(formData.source_document && { source_document: formData.source_document })
         })
@@ -45,8 +59,8 @@ function App() {
       const data = await response.json()
 
       if (response.ok) {
-        setStatus({ type: 'success', message: `Success! Evaluation ID: ${data.id}. ${data.message}` })
-        setFormData({ question: '', ai_response: '', reference_answer: '', source_document: '' }) // Clear form
+        setStatus({ type: 'success', message: `Evaluation ID: ${data.id}. ${data.message}` })
+        setFormData({ question: '', ai_response: '', reference_answer: '', source_document: '' })
       } else {
         setStatus({ type: 'error', message: `Error: ${data.detail ? JSON.stringify(data.detail) : 'Failed to submit'}` })
       }
@@ -61,78 +75,100 @@ function App() {
   return (
     <div className="app-container">
       <header className="header">
-        <h1>AI Response Validator</h1>
-        <p>Evaluation Input Module (M1.3)</p>
+        <div className="header-text">
+          <h1>Evaluation Module</h1>
+          <p>Submit responses for AI validation</p>
+        </div>
+        <button onClick={toggleTheme} className="theme-toggle-btn" aria-label="Toggle Theme">
+          {theme === 'light' ? '🌙' : '☀️'}
+        </button>
       </header>
 
-      <div className="glass-panel">
-        <form onSubmit={handleSubmit}>
-          
-          <div className="form-group">
-            <label htmlFor="question">Original Question <span>*Required</span></label>
-            <textarea 
-              id="question"
-              name="question"
-              value={formData.question}
-              onChange={handleChange}
-              className="form-control"
-              placeholder="e.g., What is the capital of France?"
-              required
-            />
+      <form onSubmit={handleSubmit} className="form-layout">
+        <div className="form-grid">
+          {/* LEFT COLUMN - Core Input */}
+          <div className="grid-col">
+            <div className="input-wrapper">
+              <div className="input-header">
+                <label htmlFor="question">Original Question</label>
+              </div>
+              <textarea 
+                id="question"
+                name="question"
+                value={formData.question}
+                onChange={handleChange}
+                className="form-control"
+                placeholder="e.g., What is the capital of France?"
+                required
+              />
+            </div>
+
+            <div className="input-wrapper flex-grow">
+              <div className="input-header">
+                <label htmlFor="ai_response">AI Response</label>
+              </div>
+              <textarea 
+                id="ai_response"
+                name="ai_response"
+                value={formData.ai_response}
+                onChange={handleChange}
+                className="form-control large"
+                placeholder="The generated response to evaluate..."
+                required
+              />
+            </div>
           </div>
 
-          <div className="form-group">
-            <label htmlFor="ai_response">AI Generated Response <span>*Required</span></label>
-            <textarea 
-              id="ai_response"
-              name="ai_response"
-              value={formData.ai_response}
-              onChange={handleChange}
-              className="form-control"
-              placeholder="e.g., The capital of France is Paris."
-              required
-            />
-          </div>
+          {/* RIGHT COLUMN - Context */}
+          <div className="grid-col">
+            <div className="input-wrapper">
+              <div className="input-header">
+                <label htmlFor="reference_answer">Reference Answer</label>
+                <span className="badge">Optional</span>
+              </div>
+              <textarea 
+                id="reference_answer"
+                name="reference_answer"
+                value={formData.reference_answer}
+                onChange={handleChange}
+                className="form-control"
+                placeholder="Ground truth answer for accuracy comparison"
+              />
+            </div>
 
-          <div className="form-group">
-            <label htmlFor="reference_answer">Reference Answer <span>(Optional)</span></label>
-            <textarea 
-              id="reference_answer"
-              name="reference_answer"
-              value={formData.reference_answer}
-              onChange={handleChange}
-              className="form-control"
-              placeholder="Ground truth answer for accuracy comparison"
-            />
+            <div className="input-wrapper flex-grow">
+              <div className="input-header">
+                <label htmlFor="source_document">Source Context</label>
+                <span className="badge">Optional</span>
+              </div>
+              <textarea 
+                id="source_document"
+                name="source_document"
+                value={formData.source_document}
+                onChange={handleChange}
+                className="form-control large"
+                placeholder="Paste source context or RAG chunks here"
+              />
+            </div>
           </div>
+        </div>
 
-          <div className="form-group">
-            <label htmlFor="source_document">Source Document <span>(Optional)</span></label>
-            <textarea 
-              id="source_document"
-              name="source_document"
-              value={formData.source_document}
-              onChange={handleChange}
-              className="form-control"
-              placeholder="Paste source context or RAG chunks here"
-            />
-          </div>
-
+        <div className="submit-container">
           <button 
             type="submit" 
             className="submit-btn"
             disabled={isSubmitting}
           >
-            {isSubmitting ? 'Submitting...' : 'Submit Evaluation'}
+            {isSubmitting ? 'Evaluating...' : 'Submit Evaluation'}
           </button>
-        </form>
-
-        {status.message && (
-          <div className={`message-box ${status.type}`}>
-            {status.message}
-          </div>
-        )}
-      </div>
+        </div>
+      </form>
+      
+      {status.message && (
+        <div className={`message-box ${status.type}`}>
+          {status.message}
+        </div>
+      )}
     </div>
   )
 }

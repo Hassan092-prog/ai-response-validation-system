@@ -5,128 +5,188 @@
   width: 100%;
 }
 
+/* Header */
 .header {
   text-align: center;
   margin-bottom: 3rem;
+  width: 100%;
+  max-width: 900px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
 }
 
-.header h1 {
-  font-size: 3rem;
-  background: linear-gradient(to right, #a78bfa, #f472b6);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+.header-text {
+  text-align: left;
+}
+
+.header-text h1 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--text-primary);
   margin-bottom: 0.5rem;
 }
 
-.header p {
-  color: #94a3b8;
-  font-size: 1.1rem;
+.header-text p {
+  color: var(--text-secondary);
+  font-size: 1rem;
+  font-weight: 400;
 }
 
-/* The Glass Panel Container */
-.glass-panel {
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 24px;
-  padding: 2.5rem;
+.theme-toggle-btn {
+  background: transparent;
+  border: 2px solid var(--input-border);
+  color: var(--text-primary);
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.2s ease;
+}
+
+.theme-toggle-btn:hover {
+  border-color: var(--text-secondary);
+}
+
+/* Form Container - No wrapper panel anymore! */
+.form-layout {
   width: 100%;
-  max-width: 800px;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  max-width: 900px;
 }
 
-.form-group {
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+@media (max-width: 800px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.grid-col {
   display: flex;
   flex-direction: column;
-  margin-bottom: 1.5rem;
+  gap: 1.5rem;
 }
 
-.form-group label {
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-  color: #e2e8f0;
-  font-size: 0.95rem;
+.flex-grow {
+  flex-grow: 1;
 }
 
-.form-group label span {
-  color: #64748b;
+/* Input Wrappers (No more cards, just floating labels above inputs) */
+.input-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.input-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.input-header label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.badge {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
   font-weight: 400;
-  font-size: 0.85rem;
-  margin-left: 8px;
 }
 
+/* Input Fields */
 .form-control {
-  background: rgba(15, 23, 42, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
+  background: var(--input-bg);
+  border: 2px solid var(--input-border);
+  border-radius: var(--radius);
   padding: 1rem;
-  color: #f8fafc;
+  color: var(--text-primary);
   font-family: inherit;
   font-size: 1rem;
-  transition: all 0.3s ease;
-  resize: vertical;
-  min-height: 100px;
+  line-height: 1.5;
+  resize: none;
+  min-height: 120px;
+  width: 100%;
+  transition: border-color 0.2s ease;
+}
+
+.form-control.large {
+  min-height: 200px;
+}
+
+.form-control::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.7;
 }
 
 .form-control:focus {
   outline: none;
-  border-color: #8b5cf6;
-  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.3);
+  border-color: var(--input-focus);
+}
+
+/* Submit Button - Neon Accent */
+.submit-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 2.5rem;
 }
 
 .submit-btn {
-  background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
-  color: white;
+  background: var(--btn-bg);
+  color: var(--btn-text);
   border: none;
-  border-radius: 12px;
-  padding: 1rem 2rem;
-  font-size: 1.1rem;
+  border-radius: var(--radius);
+  padding: 1rem 3rem;
+  font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
+  transition: all 0.2s ease;
   width: 100%;
-  margin-top: 1rem;
-  transition: all 0.3s ease;
-  box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.4);
+  max-width: 400px;
 }
 
 .submit-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 20px 25px -5px rgba(99, 102, 241, 0.5);
+  background: var(--btn-hover);
 }
 
 .submit-btn:active {
-  transform: translateY(0);
+  transform: scale(0.98);
 }
 
 .submit-btn:disabled {
-  opacity: 0.7;
+  opacity: 0.5;
   cursor: not-allowed;
   transform: none;
 }
 
+/* Message Box */
 .message-box {
-  margin-top: 2rem;
+  margin-top: 1.5rem;
   padding: 1rem;
-  border-radius: 12px;
+  border-radius: var(--radius);
   text-align: center;
-  font-weight: 600;
-  animation: slideUp 0.3s ease-out;
+  font-weight: 500;
+  font-size: 0.9rem;
 }
 
 .message-box.success {
-  background: rgba(16, 185, 129, 0.2);
-  border: 1px solid rgba(16, 185, 129, 0.3);
-  color: #34d399;
+  background: rgba(203, 251, 69, 0.1); /* Neon tint */
+  border: 1px solid var(--btn-bg);
+  color: var(--text-primary);
 }
 
 .message-box.error {
-  background: rgba(239, 68, 68, 0.2);
+  background: rgba(239, 68, 68, 0.1);
   border: 1px solid rgba(239, 68, 68, 0.3);
-  color: #f87171;
-}
-
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  color: #ef4444;
 }

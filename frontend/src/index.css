@@ -1,12 +1,39 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
-  font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+  /* Light Mode - Ultra Flat & Neon Accent */
+  --bg-color: #fafafa;
+  --text-primary: #111111;
+  --text-secondary: #71717a;
+  
+  --input-bg: #ffffff;
+  --input-border: #d4d4d8; /* Darkened for better visibility */
+  --input-focus: #111111;
+  
+  --btn-bg: #cbfb45; /* Neon lime */
+  --btn-text: #111111;
+  --btn-hover: #bced34;
+  
+  --grid-color: rgba(0, 0, 0, 0.12); /* Increased opacity for visibility */
+  
+  --radius: 10px;
+}
 
-  color: #ffffff;
-  background-color: #0f172a;
+[data-theme='dark'] {
+  /* Dark Mode - Ultra Flat & Neon Accent */
+  --bg-color: #121212;
+  --text-primary: #f4f4f5;
+  --text-secondary: #a1a1aa;
+  
+  --input-bg: #121212;
+  --input-border: #52525b; /* Lightened for better visibility */
+  --input-focus: #f4f4f5;
+  
+  --btn-bg: #cbfb45; /* Neon lime stays the same in dark mode */
+  --btn-text: #111111;
+  --btn-hover: #bced34;
+  
+  --grid-color: rgba(255, 255, 255, 0.08); /* Increased opacity for visibility */
 }
 
 * {
@@ -16,49 +43,23 @@
 }
 
 body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  line-height: 1.5;
+  color: var(--text-primary);
+  background-color: var(--bg-color);
+  
+  /* Developer Grid Pattern (Temporarily Removed) */
+  /* background-image: radial-gradient(var(--grid-color) 2px, transparent 2px); */
+  /* background-size: 28px 28px; */
+  /* background-position: 0 0; */
+  
   min-height: 100vh;
-  background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
-  position: relative;
-  overflow-x: hidden;
-}
-
-/* Background decorative glowing blobs for the glassmorphism effect */
-body::before, body::after {
-  content: '';
-  position: absolute;
-  width: 500px;
-  height: 500px;
-  border-radius: 50%;
-  filter: blur(100px);
-  z-index: -1;
-  animation: float 10s infinite ease-in-out alternate;
-}
-
-body::before {
-  background: rgba(99, 102, 241, 0.4);
-  top: -100px;
-  left: -100px;
-}
-
-body::after {
-  background: rgba(236, 72, 153, 0.4);
-  bottom: -100px;
-  right: -100px;
-  animation-delay: -5s;
-}
-
-@keyframes float {
-  0% { transform: translate(0, 0) scale(1); }
-  100% { transform: translate(50px, 50px) scale(1.1); }
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 #root {
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 4rem 2rem;
 }
