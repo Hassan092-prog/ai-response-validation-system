@@ -1,52 +1,51 @@
 import sys
+import pytest
 from pathlib import Path
 
 # Add project root to path so we can import from backend
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 
-from backend.core import config
 from backend.kb.vector_store import get_chroma_client, get_embedding_model
 
-def test_retrieval(query, top_k=3):
-    print(f"\n--- Testing Retrieval ---")
-    print(f"Query: '{query}'")
-    
-    # Initialize DB and Model using our new modular functions
+@pytest.fixture(scope="module")
+def chroma_collection():
+    """Fixture to provide the ChromaDB collection to tests."""
     client = get_chroma_client()
     try:
         collection = client.get_collection("knowledge_base")
+        return collection
     except ValueError:
-        print("Error: knowledge_base collection not found. Did you run setup_kb.py?")
-        return
+        pytest.fail("knowledge_base collection not found. Did you run setup_kb.py?")
 
-    model = get_embedding_model()
+@pytest.fixture(scope="module")
+def embedding_model():
+    """Fixture to provide the embedding model to tests."""
+    return get_embedding_model()
+
+def test_chroma_collection_exists(chroma_collection):
+    """Test that the collection is successfully initialized and has documents."""
+    assert chroma_collection is not None
+    assert chroma_collection.count() > 0, "Collection is empty."
+
+def test_retrieval_returns_results(chroma_collection, embedding_model):
+    """Test that querying the DB returns results with distances."""
+    query = "What happens if you crack your knuckles a lot?"
+    query_embedding = embedding_model.encode([query]).tolist()
     
-    # Generate embedding for query
-    query_embedding = model.encode([query]).tolist()
-    
-    # Query ChromaDB
-    results = collection.query(
+    results = chroma_collection.query(
         query_embeddings=query_embedding,
-        n_results=top_k
+        n_results=3
     )
     
-    print(f"\nTop {top_k} Results:")
-    for i in range(len(results['ids'][0])):
-        doc_id = results['ids'][0][i]
-        distance = results['distances'][0][i]
-        document = results['documents'][0][i]
-        metadata = results['metadatas'][0][i]
-        
-        print(f"\nResult {i+1} (ID: {doc_id}, Distance: {distance:.4f})")
-        print(f"Dataset: {metadata.get('dataset')}")
-        print(f"Content:\n{document}")
-
-if __name__ == "__main__":
-    sample_queries = [
-        "What is the capital of France?", # Might not be in the 100 sample chunks, let's see
-        "To whom did the Virgin Mary allegedly appear in 1858 in Lourdes France?", # A SQuAD question
-        "What happens if you crack your knuckles a lot?" # A TruthfulQA question
-    ]
+    assert 'ids' in results
+    assert 'distances' in results
+    assert 'documents' in results
     
-    for q in sample_queries:
-        test_retrieval(q)
+    # Check that we got 3 results back
+    assert len(results['ids'][0]) > 0
+    assert len(results['distances'][0]) > 0
+    
+    # Check that distances are reasonable (e.g. not identical/0 if not same text, and under 1.5 distance)
+    # Cosine distance for all-MiniLM typically falls under 1.5 for related semantic similarity
+    distance = results['distances'][0][0]
+    assert distance < 1.5, f"The match distance {distance} is too far!"

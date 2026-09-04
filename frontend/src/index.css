@@ -2,38 +2,42 @@
 
 :root {
   /* Light Mode - Ultra Flat & Neon Accent */
-  --bg-color: #fafafa;
-  --text-primary: #111111;
-  --text-secondary: #71717a;
+  --bg-color: #fbfbfb;
+  --text-primary: #1a1a1a;
+  --text-secondary: #8a8a8a;
   
   --input-bg: #ffffff;
-  --input-border: #d4d4d8; /* Darkened for better visibility */
-  --input-focus: #111111;
+  --input-border: #e6e6e6;
+  --input-focus: #1a1a1a;
   
-  --btn-bg: #cbfb45; /* Neon lime */
-  --btn-text: #111111;
-  --btn-hover: #bced34;
+  --btn-bg: #b6f236; /* Neon lime */
+  --btn-text: #1a1a1a;
+  --btn-hover: #a5e222;
+  --btn-glow: rgba(182, 242, 54, 0.4);
+  --input-glow: rgba(0, 0, 0, 0.05);
   
-  --grid-color: rgba(0, 0, 0, 0.12); /* Increased opacity for visibility */
+  --grid-color: rgba(0, 0, 0, 0.12);
   
-  --radius: 10px;
+  --radius: 12px;
 }
 
 [data-theme='dark'] {
   /* Dark Mode - Ultra Flat & Neon Accent */
-  --bg-color: #121212;
-  --text-primary: #f4f4f5;
-  --text-secondary: #a1a1aa;
+  --bg-color: #1a1a1a;
+  --text-primary: #f1f1f1;
+  --text-secondary: #8a8a8a;
   
-  --input-bg: #121212;
-  --input-border: #52525b; /* Lightened for better visibility */
-  --input-focus: #f4f4f5;
+  --input-bg: #141414;
+  --input-border: #333333;
+  --input-focus: #f1f1f1;
   
-  --btn-bg: #cbfb45; /* Neon lime stays the same in dark mode */
-  --btn-text: #111111;
-  --btn-hover: #bced34;
+  --btn-bg: #b6f236;
+  --btn-text: #1a1a1a;
+  --btn-hover: #a5e222;
+  --btn-glow: rgba(182, 242, 54, 0.3);
+  --input-glow: rgba(255, 255, 255, 0.05);
   
-  --grid-color: rgba(255, 255, 255, 0.08); /* Increased opacity for visibility */
+  --grid-color: rgba(255, 255, 255, 0.08);
 }
 
 * {

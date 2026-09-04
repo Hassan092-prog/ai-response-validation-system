@@ -1,4 +1,5 @@
 import os
+import logging
 from pathlib import Path
 
 # Base directories
@@ -20,3 +21,15 @@ EMBEDDING_MODEL = "all-MiniLM-L6-v2"
 # Ingestion settings
 CHUNK_SIZE = 512
 CHUNK_OVERLAP = 50
+
+# Logging Configuration
+LOG_FILE = BASE_DIR / "app.log"
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    handlers=[
+        logging.FileHandler(LOG_FILE),
+        logging.StreamHandler()
+    ]
+)
+logger = logging.getLogger("AI-Response-Validation")

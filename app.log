@@ -1,0 +1,30 @@
+2026-09-04 15:09:13,222 - AI-Response-Validation - INFO - Initializing database connection...
+2026-09-04 15:09:13,238 - AI-Response-Validation - INFO - Database engine created at sqlite:////home/hassan/Documents/Hassan/coding_projects/Infosys Springboard Internship 7.0/ai-response-validation-system/data/evaluations.db
+2026-09-04 15:09:13,246 - AI-Response-Validation - INFO - Starting AI Response Validation API...
+2026-09-04 15:09:13,248 - AI-Response-Validation - INFO - Database tables verified/created.
+2026-09-04 15:50:31,492 - AI-Response-Validation - INFO - Initializing database connection...
+2026-09-04 15:50:31,504 - AI-Response-Validation - INFO - Database engine created at sqlite:////home/hassan/Documents/Hassan/coding_projects/Infosys Springboard Internship 7.0/ai-response-validation-system/data/evaluations.db
+2026-09-04 15:50:31,513 - AI-Response-Validation - INFO - Starting AI Response Validation API...
+2026-09-04 15:50:31,515 - AI-Response-Validation - INFO - Database tables verified/created.
+2026-09-04 15:50:43,473 - AI-Response-Validation - INFO - Health check endpoint called.
+2026-09-04 15:50:43,473 - AI-Response-Validation - INFO - path=/api/health method=GET status_code=200 process_time=1.55ms
+2026-09-04 15:50:43,556 - AI-Response-Validation - INFO - path=/favicon.ico method=GET status_code=404 process_time=1.32ms
+2026-09-04 15:50:57,381 - AI-Response-Validation - INFO - path=/api/evaluate method=OPTIONS status_code=200 process_time=1.03ms
+2026-09-04 15:50:57,393 - AI-Response-Validation - INFO - Received evaluation submission: question='What happens if you crack your...'
+2026-09-04 15:50:57,410 - AI-Response-Validation - INFO - Successfully saved evaluation with ID 2
+2026-09-04 15:50:57,411 - AI-Response-Validation - INFO - path=/api/evaluate method=POST status_code=200 process_time=20.04ms
+2026-09-04 15:59:29,062 - AI-Response-Validation - INFO - Health check endpoint called.
+2026-09-04 15:59:29,064 - AI-Response-Validation - INFO - path=/api/health method=GET status_code=200 process_time=2.98ms
+2026-09-04 15:59:36,869 - AI-Response-Validation - INFO - Initializing database connection...
+2026-09-04 15:59:36,881 - AI-Response-Validation - INFO - Database engine created at sqlite:////home/hassan/Documents/Hassan/coding_projects/Infosys Springboard Internship 7.0/ai-response-validation-system/data/evaluations.db
+2026-09-04 15:59:36,890 - AI-Response-Validation - INFO - Starting AI Response Validation API...
+2026-09-04 15:59:36,892 - AI-Response-Validation - INFO - Database tables verified/created.
+2026-09-04 15:59:52,036 - AI-Response-Validation - INFO - Health check endpoint called.
+2026-09-04 15:59:52,037 - AI-Response-Validation - INFO - path=/api/health method=GET status_code=200 process_time=1.53ms
+2026-09-04 16:12:01,521 - AI-Response-Validation - INFO - path=/api/evaluate method=OPTIONS status_code=200 process_time=1.09ms
+2026-09-04 16:12:01,531 - AI-Response-Validation - INFO - Received evaluation submission: question='What happens if you crack your...'
+2026-09-04 16:12:01,553 - AI-Response-Validation - INFO - Successfully saved evaluation with ID 3
+2026-09-04 16:12:01,555 - AI-Response-Validation - INFO - path=/api/evaluate method=POST status_code=200 process_time=26.03ms
+2026-09-04 16:21:38,251 - AI-Response-Validation - INFO - Received evaluation submission: question='What happens if you crack your...'
+2026-09-04 16:21:38,261 - AI-Response-Validation - INFO - Successfully saved evaluation with ID 4
+2026-09-04 16:21:38,262 - AI-Response-Validation - INFO - path=/api/evaluate method=POST status_code=200 process_time=15.90ms
