@@ -7,13 +7,19 @@
   --text-secondary: #8a8a8a;
   
   --input-bg: #ffffff;
-  --input-border: #e6e6e6;
+  --input-border: #cccccc;
   --input-focus: #1a1a1a;
   
   --btn-bg: #b6f236; /* Neon lime */
   --btn-text: #1a1a1a;
   --btn-hover: #a5e222;
   --btn-glow: rgba(182, 242, 54, 0.4);
+  
+  --btn-sec-bg: #111111;
+  --btn-sec-text: #ffffff;
+  --btn-sec-hover: #333333;
+  --btn-sec-glow: rgba(0, 0, 0, 0.3);
+
   --input-glow: rgba(0, 0, 0, 0.05);
   
   --grid-color: rgba(0, 0, 0, 0.12);
@@ -28,13 +34,19 @@
   --text-secondary: #8a8a8a;
   
   --input-bg: #141414;
-  --input-border: #333333;
+  --input-border: #4a4a4a;
   --input-focus: #f1f1f1;
   
   --btn-bg: #b6f236;
   --btn-text: #1a1a1a;
   --btn-hover: #a5e222;
   --btn-glow: rgba(182, 242, 54, 0.3);
+  
+  --btn-sec-bg: #ffffff;
+  --btn-sec-text: #111111;
+  --btn-sec-hover: #e6e6e6;
+  --btn-sec-glow: rgba(255, 255, 255, 0.2);
+
   --input-glow: rgba(255, 255, 255, 0.05);
   
   --grid-color: rgba(255, 255, 255, 0.08);

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import './App.css'
+import Results from './Results'
 
 function App() {
   const [formData, setFormData] = useState({
@@ -11,6 +12,7 @@ function App() {
   
   const [status, setStatus] = useState({ type: '', message: '' })
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [evaluationId, setEvaluationId] = useState(null)
   const [theme, setTheme] = useState('light')
 
   useEffect(() => {
@@ -68,7 +70,7 @@ function App() {
       const data = await response.json()
 
       if (response.ok) {
-        setStatus({ type: 'success', message: `Evaluation ID: ${data.id}. ${data.message}` })
+        setEvaluationId(data.id)
         setFormData({ question: '', ai_response: '', reference_answer: '', source_document: '' })
       } else {
         setStatus({ type: 'error', message: `Error: ${data.detail ? JSON.stringify(data.detail) : 'Failed to submit'}` })
@@ -111,95 +113,100 @@ function App() {
 
       <form onSubmit={handleSubmit} className="form-layout">
         <div className="form-grid">
-          {/* LEFT COLUMN - Core Input */}
-          <div className="grid-col">
-            <div className="input-wrapper">
-              <div className="input-header">
-                <label htmlFor="question">Original Question</label>
+              {/* LEFT COLUMN - Core Input */}
+              <div className="grid-col">
+                <div className="input-wrapper">
+                  <div className="input-header">
+                    <label htmlFor="question">Original Question</label>
+                  </div>
+                  <textarea 
+                    id="question"
+                    name="question"
+                    value={formData.question}
+                    onChange={handleChange}
+                    className="form-control"
+                    placeholder="e.g., What is the capital of France?"
+                    required
+                  />
+                </div>
+
+                <div className="input-wrapper flex-grow">
+                  <div className="input-header">
+                    <label htmlFor="ai_response">AI Response</label>
+                  </div>
+                  <textarea 
+                    id="ai_response"
+                    name="ai_response"
+                    value={formData.ai_response}
+                    onChange={handleChange}
+                    className="form-control large"
+                    placeholder="The generated response to evaluate..."
+                    required
+                  />
+                </div>
               </div>
-              <textarea 
-                id="question"
-                name="question"
-                value={formData.question}
-                onChange={handleChange}
-                className="form-control"
-                placeholder="e.g., What is the capital of France?"
-                required
-              />
+
+              {/* RIGHT COLUMN - Context */}
+              <div className="grid-col">
+                <div className="input-wrapper">
+                  <div className="input-header">
+                    <label htmlFor="reference_answer">Reference Answer</label>
+                    <span className="badge">Optional</span>
+                  </div>
+                  <textarea 
+                    id="reference_answer"
+                    name="reference_answer"
+                    value={formData.reference_answer}
+                    onChange={handleChange}
+                    className="form-control"
+                    placeholder="Ground truth answer for accuracy comparison"
+                  />
+                </div>
+
+                <div className="input-wrapper flex-grow">
+                  <div className="input-header">
+                    <label htmlFor="source_document">Source Context</label>
+                    <span className="badge">Optional</span>
+                  </div>
+                  <textarea 
+                    id="source_document"
+                    name="source_document"
+                    value={formData.source_document}
+                    onChange={handleChange}
+                    className="form-control large"
+                    placeholder="Paste source context or RAG chunks here"
+                  />
+                </div>
+              </div>
             </div>
 
-            <div className="input-wrapper flex-grow">
-              <div className="input-header">
-                <label htmlFor="ai_response">AI Response</label>
-              </div>
-              <textarea 
-                id="ai_response"
-                name="ai_response"
-                value={formData.ai_response}
-                onChange={handleChange}
-                className="form-control large"
-                placeholder="The generated response to evaluate..."
-                required
-              />
+            <div className="submit-container" style={{ gap: '1rem', display: 'flex' }}>
+              <button 
+                type="button" 
+                className="submit-btn secondary-btn"
+                onClick={fillTestData}
+              >
+                Test Data
+              </button>
+              <button 
+                type="submit" 
+                className="submit-btn"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? 'Evaluating...' : 'Submit Evaluation'}
+              </button>
             </div>
-          </div>
-
-          {/* RIGHT COLUMN - Context */}
-          <div className="grid-col">
-            <div className="input-wrapper">
-              <div className="input-header">
-                <label htmlFor="reference_answer">Reference Answer</label>
-                <span className="badge">Optional</span>
-              </div>
-              <textarea 
-                id="reference_answer"
-                name="reference_answer"
-                value={formData.reference_answer}
-                onChange={handleChange}
-                className="form-control"
-                placeholder="Ground truth answer for accuracy comparison"
-              />
-            </div>
-
-            <div className="input-wrapper flex-grow">
-              <div className="input-header">
-                <label htmlFor="source_document">Source Context</label>
-                <span className="badge">Optional</span>
-              </div>
-              <textarea 
-                id="source_document"
-                name="source_document"
-                value={formData.source_document}
-                onChange={handleChange}
-                className="form-control large"
-                placeholder="Paste source context or RAG chunks here"
-              />
-            </div>
-          </div>
-        </div>
-
-        <div className="submit-container" style={{ gap: '1rem', display: 'flex' }}>
-          <button 
-            type="button" 
-            className="submit-btn"
-            style={{ backgroundColor: '#a1a1aa', maxWidth: '200px', color: '#111111' }}
-            onClick={fillTestData}
-          >
-            Prefill Test Data
-          </button>
-          <button 
-            type="submit" 
-            className="submit-btn"
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? 'Evaluating...' : 'Submit Evaluation'}
-          </button>
-        </div>
       </form>
       
-      {status.message && (
+      {!evaluationId && status.message && (
         <div className={`message-box ${status.type}`}>
           {status.message}
+        </div>
+      )}
+
+      {evaluationId && (
+        <div style={{ marginTop: '2rem', width: '100%', display: 'flex', justifyContent: 'center', borderTop: '1px solid var(--input-border)', paddingTop: '3rem' }}>
+          <Results evaluationId={evaluationId} onBack={() => setEvaluationId(null)} />
         </div>
       )}
     </div>

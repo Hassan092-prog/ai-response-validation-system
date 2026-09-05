@@ -28,3 +28,393 @@
 2026-09-04 16:21:38,251 - AI-Response-Validation - INFO - Received evaluation submission: question='What happens if you crack your...'
 2026-09-04 16:21:38,261 - AI-Response-Validation - INFO - Successfully saved evaluation with ID 4
 2026-09-04 16:21:38,262 - AI-Response-Validation - INFO - path=/api/evaluate method=POST status_code=200 process_time=15.90ms
+2026-09-05 04:37:34,358 - AI-Response-Validation - INFO - Initializing database connection...
+2026-09-05 04:37:34,371 - AI-Response-Validation - INFO - Database engine created at sqlite:////home/hassan/Documents/Hassan/coding_projects/Infosys Springboard Internship 7.0/ai-response-validation-system/data/evaluations.db
+2026-09-05 04:37:36,082 - AI-Response-Validation - INFO - Starting AI Response Validation API...
+2026-09-05 04:37:36,084 - AI-Response-Validation - INFO - Database tables verified/created.
+2026-09-05 04:38:34,482 - AI-Response-Validation - INFO - path=/api/evaluate method=OPTIONS status_code=200 process_time=0.42ms
+2026-09-05 04:38:34,490 - AI-Response-Validation - INFO - Received evaluation submission: question='What happens if you crack your...'
+2026-09-05 04:38:34,503 - AI-Response-Validation - INFO - Successfully saved and queued evaluation ID 5
+2026-09-05 04:38:34,504 - AI-Response-Validation - INFO - path=/api/evaluate method=POST status_code=200 process_time=15.93ms
+2026-09-05 04:38:34,508 - AI-Response-Validation - INFO - Orchestrator started for evaluation 5
+2026-09-05 04:38:34,508 - AI-Response-Validation - INFO - Mock RAG retrieval for: What happens if you crack your
+2026-09-05 04:38:34,508 - AI-Response-Validation - INFO - Evaluation 5: Running Relevance Judge...
+2026-09-05 04:38:34,529 - AI-Response-Validation - INFO - path=/api/results/5 method=GET status_code=200 process_time=5.53ms
+2026-09-05 04:38:34,545 - AI-Response-Validation - INFO - path=/api/results/5 method=GET status_code=200 process_time=4.37ms
+2026-09-05 04:38:36,922 - httpx2 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-09-05 04:38:36,924 - openai._base_client - INFO - Retrying request in 0.380373 seconds
+2026-09-05 04:38:37,528 - AI-Response-Validation - INFO - path=/api/results/5 method=GET status_code=200 process_time=7.30ms
+2026-09-05 04:38:37,997 - httpx2 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-09-05 04:38:37,999 - openai._base_client - INFO - Retrying request in 0.761071 seconds
+2026-09-05 04:38:39,436 - httpx2 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-09-05 04:38:39,440 - AI-Response-Validation - ERROR - LLM Call Failed: Error code: 429 - {'error': {'message': 'You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.', 'type': 'insufficient_quota', 'param': None, 'code': 'credit_balance_exhausted'}}
+2026-09-05 04:38:39,441 - AI-Response-Validation - INFO - Evaluation 5: Running Accuracy Judge...
+2026-09-05 04:38:40,386 - httpx2 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-09-05 04:38:40,387 - openai._base_client - INFO - Retrying request in 0.457554 seconds
+2026-09-05 04:38:40,530 - AI-Response-Validation - INFO - path=/api/results/5 method=GET status_code=200 process_time=8.16ms
+2026-09-05 04:38:41,502 - httpx2 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-09-05 04:38:41,503 - openai._base_client - INFO - Retrying request in 0.809359 seconds
+2026-09-05 04:38:42,616 - httpx2 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-09-05 04:38:42,618 - AI-Response-Validation - ERROR - LLM Call Failed: Error code: 429 - {'error': {'message': 'You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.', 'type': 'insufficient_quota', 'param': None, 'code': 'credit_balance_exhausted'}}
+2026-09-05 04:38:42,619 - AI-Response-Validation - INFO - Evaluation 5: Running Completeness Judge...
+2026-09-05 04:38:43,255 - httpx2 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-09-05 04:38:43,257 - openai._base_client - INFO - Retrying request in 0.391324 seconds
+2026-09-05 04:38:43,527 - AI-Response-Validation - INFO - path=/api/results/5 method=GET status_code=200 process_time=6.20ms
+2026-09-05 04:38:43,924 - httpx2 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-09-05 04:38:43,925 - openai._base_client - INFO - Retrying request in 0.776380 seconds
+2026-09-05 04:38:45,043 - httpx2 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-09-05 04:38:45,045 - AI-Response-Validation - ERROR - LLM Call Failed: Error code: 429 - {'error': {'message': 'You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.', 'type': 'insufficient_quota', 'param': None, 'code': 'credit_balance_exhausted'}}
+2026-09-05 04:38:45,046 - AI-Response-Validation - INFO - Evaluation 5: Running Hallucination Detector...
+2026-09-05 04:38:45,346 - httpx2 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-09-05 04:38:45,347 - openai._base_client - INFO - Retrying request in 0.467647 seconds
+2026-09-05 04:38:46,303 - httpx2 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-09-05 04:38:46,305 - openai._base_client - INFO - Retrying request in 0.806531 seconds
+2026-09-05 04:38:46,654 - AI-Response-Validation - INFO - path=/api/results/5 method=GET status_code=200 process_time=6.90ms
+2026-09-05 04:38:47,432 - httpx2 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-09-05 04:38:47,434 - AI-Response-Validation - ERROR - LLM Call Failed: Error code: 429 - {'error': {'message': 'You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.', 'type': 'insufficient_quota', 'param': None, 'code': 'credit_balance_exhausted'}}
+2026-09-05 04:38:47,435 - AI-Response-Validation - INFO - Evaluation 5: Computing Final Verdict...
+2026-09-05 04:38:47,445 - AI-Response-Validation - INFO - Evaluation 5 completed successfully. Score: 0
+2026-09-05 04:38:49,529 - AI-Response-Validation - INFO - path=/api/results/5 method=GET status_code=200 process_time=7.29ms
+2026-09-05 04:40:33,006 - AI-Response-Validation - INFO - path=/api/results/5 method=GET status_code=200 process_time=9.19ms
+2026-09-05 04:40:33,021 - AI-Response-Validation - INFO - path=/api/results/5 method=GET status_code=200 process_time=6.62ms
+2026-09-05 04:40:43,055 - AI-Response-Validation - INFO - path=/api/results/5 method=GET status_code=200 process_time=8.54ms
+2026-09-05 04:49:57,790 - AI-Response-Validation - INFO - path=/api/evaluate method=OPTIONS status_code=200 process_time=1.02ms
+2026-09-05 04:49:57,800 - AI-Response-Validation - INFO - Received evaluation submission: question='What happens if you crack your...'
+2026-09-05 04:49:57,807 - AI-Response-Validation - INFO - Successfully saved and queued evaluation ID 6
+2026-09-05 04:49:57,808 - AI-Response-Validation - INFO - path=/api/evaluate method=POST status_code=200 process_time=9.81ms
+2026-09-05 04:49:57,811 - AI-Response-Validation - INFO - Orchestrator started for evaluation 6
+2026-09-05 04:49:57,811 - AI-Response-Validation - INFO - Mock RAG retrieval for: What happens if you crack your
+2026-09-05 04:49:57,811 - AI-Response-Validation - INFO - Evaluation 6: Running Relevance Judge...
+2026-09-05 04:49:57,821 - AI-Response-Validation - INFO - path=/api/results/6 method=GET status_code=200 process_time=4.14ms
+2026-09-05 04:49:57,830 - AI-Response-Validation - INFO - path=/api/results/6 method=GET status_code=200 process_time=3.28ms
+2026-09-05 04:49:58,287 - httpx2 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-09-05 04:49:58,289 - openai._base_client - INFO - Retrying request in 0.376974 seconds
+2026-09-05 04:49:59,320 - httpx2 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-09-05 04:49:59,322 - openai._base_client - INFO - Retrying request in 0.770746 seconds
+2026-09-05 04:50:00,835 - AI-Response-Validation - INFO - path=/api/results/6 method=GET status_code=200 process_time=6.36ms
+2026-09-05 04:50:01,300 - httpx2 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-09-05 04:50:01,301 - AI-Response-Validation - ERROR - LLM Call Failed: Error code: 429 - {'error': {'message': 'You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.', 'type': 'insufficient_quota', 'param': None, 'code': 'credit_balance_exhausted'}}
+2026-09-05 04:50:01,302 - AI-Response-Validation - INFO - Evaluation 6: Running Accuracy Judge...
+2026-09-05 04:50:01,855 - httpx2 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-09-05 04:50:01,857 - openai._base_client - INFO - Retrying request in 0.453943 seconds
+2026-09-05 04:50:02,677 - httpx2 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-09-05 04:50:02,678 - openai._base_client - INFO - Retrying request in 0.976020 seconds
+2026-09-05 04:50:03,839 - AI-Response-Validation - INFO - path=/api/results/6 method=GET status_code=200 process_time=6.63ms
+2026-09-05 04:50:03,961 - httpx2 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-09-05 04:50:03,962 - AI-Response-Validation - ERROR - LLM Call Failed: Error code: 429 - {'error': {'message': 'You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.', 'type': 'insufficient_quota', 'param': None, 'code': 'credit_balance_exhausted'}}
+2026-09-05 04:50:03,963 - AI-Response-Validation - INFO - Evaluation 6: Running Completeness Judge...
+2026-09-05 04:50:04,433 - httpx2 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-09-05 04:50:04,435 - openai._base_client - INFO - Retrying request in 0.478870 seconds
+2026-09-05 04:50:05,285 - httpx2 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-09-05 04:50:05,287 - openai._base_client - INFO - Retrying request in 0.855828 seconds
+2026-09-05 04:50:06,448 - httpx2 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-09-05 04:50:06,449 - AI-Response-Validation - ERROR - LLM Call Failed: Error code: 429 - {'error': {'message': 'You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.', 'type': 'insufficient_quota', 'param': None, 'code': 'credit_balance_exhausted'}}
+2026-09-05 04:50:06,450 - AI-Response-Validation - INFO - Evaluation 6: Running Hallucination Detector...
+2026-09-05 04:50:06,813 - httpx2 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-09-05 04:50:06,814 - openai._base_client - INFO - Retrying request in 0.425580 seconds
+2026-09-05 04:50:07,004 - AI-Response-Validation - INFO - path=/api/results/6 method=GET status_code=200 process_time=7.18ms
+2026-09-05 04:50:07,564 - httpx2 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-09-05 04:50:07,566 - openai._base_client - INFO - Retrying request in 0.929426 seconds
+2026-09-05 04:50:08,784 - httpx2 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-09-05 04:50:08,787 - AI-Response-Validation - ERROR - LLM Call Failed: Error code: 429 - {'error': {'message': 'You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.', 'type': 'insufficient_quota', 'param': None, 'code': 'credit_balance_exhausted'}}
+2026-09-05 04:50:08,788 - AI-Response-Validation - INFO - Evaluation 6: Computing Final Verdict...
+2026-09-05 04:50:08,793 - AI-Response-Validation - INFO - Evaluation 6 completed successfully. Score: 0
+2026-09-05 04:50:10,063 - AI-Response-Validation - INFO - path=/api/results/6 method=GET status_code=200 process_time=7.17ms
+2026-09-05 05:06:04,651 - AI-Response-Validation - INFO - Initializing database connection...
+2026-09-05 05:06:04,664 - AI-Response-Validation - INFO - Database engine created at sqlite:////home/hassan/Documents/Hassan/coding_projects/Infosys Springboard Internship 7.0/ai-response-validation-system/data/evaluations.db
+2026-09-05 05:37:54,336 - AI-Response-Validation - INFO - Initializing database connection...
+2026-09-05 05:37:54,347 - AI-Response-Validation - INFO - Database engine created at sqlite:////home/hassan/Documents/Hassan/coding_projects/Infosys Springboard Internship 7.0/ai-response-validation-system/data/evaluations.db
+2026-09-05 05:37:55,404 - AI-Response-Validation - INFO - Starting AI Response Validation API...
+2026-09-05 05:37:55,405 - AI-Response-Validation - INFO - Database tables verified/created.
+2026-09-05 05:38:05,154 - AI-Response-Validation - INFO - path=/api/evaluate method=OPTIONS status_code=200 process_time=0.63ms
+2026-09-05 05:38:05,163 - AI-Response-Validation - INFO - Received evaluation submission: question='What happens if you crack your...'
+2026-09-05 05:38:05,185 - AI-Response-Validation - INFO - Successfully saved and queued evaluation ID 7
+2026-09-05 05:38:05,188 - AI-Response-Validation - INFO - path=/api/evaluate method=POST status_code=200 process_time=28.01ms
+2026-09-05 05:38:05,195 - AI-Response-Validation - INFO - Orchestrator started for evaluation 7
+2026-09-05 05:38:05,195 - AI-Response-Validation - INFO - Mock RAG retrieval for: What happens if you crack your
+2026-09-05 05:38:05,196 - AI-Response-Validation - INFO - Evaluation 7: Running Relevance Judge...
+2026-09-05 05:38:05,219 - AI-Response-Validation - INFO - path=/api/results/7 method=GET status_code=200 process_time=20.86ms
+2026-09-05 05:38:05,230 - AI-Response-Validation - INFO - path=/api/results/7 method=GET status_code=200 process_time=4.98ms
+2026-09-05 05:38:05,533 - AI-Response-Validation - ERROR - LLM Call Failed: 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-09-05 05:38:05,533 - AI-Response-Validation - INFO - Evaluation 7: Running Accuracy Judge...
+2026-09-05 05:38:05,719 - AI-Response-Validation - ERROR - LLM Call Failed: 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-09-05 05:38:05,719 - AI-Response-Validation - INFO - Evaluation 7: Running Completeness Judge...
+2026-09-05 05:38:05,898 - AI-Response-Validation - ERROR - LLM Call Failed: 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-09-05 05:38:05,898 - AI-Response-Validation - INFO - Evaluation 7: Running Hallucination Detector...
+2026-09-05 05:38:06,059 - AI-Response-Validation - ERROR - LLM Call Failed: 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-09-05 05:38:06,059 - AI-Response-Validation - INFO - Evaluation 7: Computing Final Verdict...
+2026-09-05 05:38:06,072 - AI-Response-Validation - INFO - Evaluation 7 completed successfully. Score: 0
+2026-09-05 05:38:08,210 - AI-Response-Validation - INFO - path=/api/results/7 method=GET status_code=200 process_time=9.64ms
+2026-09-05 05:38:46,189 - AI-Response-Validation - INFO - Initializing database connection...
+2026-09-05 05:38:46,201 - AI-Response-Validation - INFO - Database engine created at sqlite:////home/hassan/Documents/Hassan/coding_projects/Infosys Springboard Internship 7.0/ai-response-validation-system/data/evaluations.db
+2026-09-05 05:38:47,073 - AI-Response-Validation - INFO - Starting AI Response Validation API...
+2026-09-05 05:38:47,074 - AI-Response-Validation - INFO - Database tables verified/created.
+2026-09-05 05:39:22,494 - AI-Response-Validation - INFO - Initializing database connection...
+2026-09-05 05:39:22,510 - AI-Response-Validation - INFO - Database engine created at sqlite:////home/hassan/Documents/Hassan/coding_projects/Infosys Springboard Internship 7.0/ai-response-validation-system/data/evaluations.db
+2026-09-05 05:39:23,470 - AI-Response-Validation - INFO - Starting AI Response Validation API...
+2026-09-05 05:39:23,471 - AI-Response-Validation - INFO - Database tables verified/created.
+2026-09-05 05:39:30,931 - AI-Response-Validation - INFO - Received evaluation submission: question='What happens if you crack your...'
+2026-09-05 05:39:30,948 - AI-Response-Validation - INFO - Successfully saved and queued evaluation ID 8
+2026-09-05 05:39:30,950 - AI-Response-Validation - INFO - path=/api/evaluate method=POST status_code=200 process_time=20.50ms
+2026-09-05 05:39:30,956 - AI-Response-Validation - INFO - Orchestrator started for evaluation 8
+2026-09-05 05:39:30,956 - AI-Response-Validation - INFO - Mock RAG retrieval for: What happens if you crack your
+2026-09-05 05:39:30,956 - AI-Response-Validation - INFO - Evaluation 8: Running Relevance Judge...
+2026-09-05 05:39:30,972 - AI-Response-Validation - INFO - path=/api/results/8 method=GET status_code=200 process_time=14.07ms
+2026-09-05 05:39:30,982 - AI-Response-Validation - INFO - path=/api/results/8 method=GET status_code=200 process_time=4.30ms
+2026-09-05 05:39:31,416 - AI-Response-Validation - ERROR - LLM Call Failed: 404 models/gemini-1.5-flash-latest is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-09-05 05:39:31,417 - AI-Response-Validation - INFO - Evaluation 8: Running Accuracy Judge...
+2026-09-05 05:39:31,564 - AI-Response-Validation - ERROR - LLM Call Failed: 404 models/gemini-1.5-flash-latest is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-09-05 05:39:31,565 - AI-Response-Validation - INFO - Evaluation 8: Running Completeness Judge...
+2026-09-05 05:39:31,762 - AI-Response-Validation - ERROR - LLM Call Failed: 404 models/gemini-1.5-flash-latest is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-09-05 05:39:31,763 - AI-Response-Validation - INFO - Evaluation 8: Running Hallucination Detector...
+2026-09-05 05:39:31,925 - AI-Response-Validation - ERROR - LLM Call Failed: 404 models/gemini-1.5-flash-latest is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-09-05 05:39:31,926 - AI-Response-Validation - INFO - Evaluation 8: Computing Final Verdict...
+2026-09-05 05:39:31,939 - AI-Response-Validation - INFO - Evaluation 8 completed successfully. Score: 0
+2026-09-05 05:39:34,941 - AI-Response-Validation - INFO - path=/api/results/8 method=GET status_code=200 process_time=8.52ms
+2026-09-05 05:40:22,011 - AI-Response-Validation - INFO - Initializing database connection...
+2026-09-05 05:40:22,022 - AI-Response-Validation - INFO - Database engine created at sqlite:////home/hassan/Documents/Hassan/coding_projects/Infosys Springboard Internship 7.0/ai-response-validation-system/data/evaluations.db
+2026-09-05 05:40:22,886 - AI-Response-Validation - INFO - Starting AI Response Validation API...
+2026-09-05 05:40:22,888 - AI-Response-Validation - INFO - Database tables verified/created.
+2026-09-05 05:40:24,129 - AI-Response-Validation - INFO - Initializing database connection...
+2026-09-05 05:40:24,141 - AI-Response-Validation - INFO - Database engine created at sqlite:////home/hassan/Documents/Hassan/coding_projects/Infosys Springboard Internship 7.0/ai-response-validation-system/data/evaluations.db
+2026-09-05 05:40:25,021 - AI-Response-Validation - INFO - Starting AI Response Validation API...
+2026-09-05 05:40:25,022 - AI-Response-Validation - INFO - Database tables verified/created.
+2026-09-05 05:50:33,177 - AI-Response-Validation - INFO - path=/api/evaluate method=OPTIONS status_code=200 process_time=0.39ms
+2026-09-05 05:50:33,185 - AI-Response-Validation - INFO - Received evaluation submission: question='What happens if you crack your...'
+2026-09-05 05:50:33,201 - AI-Response-Validation - INFO - Successfully saved and queued evaluation ID 9
+2026-09-05 05:50:33,203 - AI-Response-Validation - INFO - path=/api/evaluate method=POST status_code=200 process_time=20.05ms
+2026-09-05 05:50:33,207 - AI-Response-Validation - INFO - Orchestrator started for evaluation 9
+2026-09-05 05:50:33,207 - AI-Response-Validation - INFO - Mock RAG retrieval for: What happens if you crack your
+2026-09-05 05:50:33,208 - AI-Response-Validation - INFO - Evaluation 9: Running Relevance Judge...
+2026-09-05 05:50:33,221 - AI-Response-Validation - INFO - path=/api/results/9 method=GET status_code=200 process_time=6.07ms
+2026-09-05 05:50:33,236 - AI-Response-Validation - INFO - path=/api/results/9 method=GET status_code=200 process_time=2.53ms
+2026-09-05 05:50:33,680 - AI-Response-Validation - ERROR - LLM Call Failed: 404 models/gemini-1.5-flash-latest is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-09-05 05:50:33,681 - AI-Response-Validation - INFO - Evaluation 9: Running Accuracy Judge...
+2026-09-05 05:50:33,883 - AI-Response-Validation - ERROR - LLM Call Failed: 404 models/gemini-1.5-flash-latest is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-09-05 05:50:33,883 - AI-Response-Validation - INFO - Evaluation 9: Running Completeness Judge...
+2026-09-05 05:50:34,052 - AI-Response-Validation - ERROR - LLM Call Failed: 404 models/gemini-1.5-flash-latest is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-09-05 05:50:34,053 - AI-Response-Validation - INFO - Evaluation 9: Running Hallucination Detector...
+2026-09-05 05:50:34,221 - AI-Response-Validation - ERROR - LLM Call Failed: 404 models/gemini-1.5-flash-latest is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-09-05 05:50:34,222 - AI-Response-Validation - INFO - Evaluation 9: Computing Final Verdict...
+2026-09-05 05:50:34,230 - AI-Response-Validation - INFO - Evaluation 9 completed successfully. Score: 0
+2026-09-05 05:50:36,219 - AI-Response-Validation - INFO - path=/api/results/9 method=GET status_code=200 process_time=7.94ms
+2026-09-05 05:52:20,977 - AI-Response-Validation - INFO - Initializing database connection...
+2026-09-05 05:52:20,990 - AI-Response-Validation - INFO - Database engine created at sqlite:////home/hassan/Documents/Hassan/coding_projects/Infosys Springboard Internship 7.0/ai-response-validation-system/data/evaluations.db
+2026-09-05 05:52:21,817 - AI-Response-Validation - INFO - Starting AI Response Validation API...
+2026-09-05 05:52:21,819 - AI-Response-Validation - INFO - Database tables verified/created.
+2026-09-05 05:52:26,105 - AI-Response-Validation - INFO - Received evaluation submission: question='What happens if you crack your...'
+2026-09-05 05:52:26,127 - AI-Response-Validation - INFO - Successfully saved and queued evaluation ID 10
+2026-09-05 05:52:26,130 - AI-Response-Validation - INFO - path=/api/evaluate method=POST status_code=200 process_time=27.36ms
+2026-09-05 05:52:26,142 - AI-Response-Validation - INFO - Orchestrator started for evaluation 10
+2026-09-05 05:52:26,142 - AI-Response-Validation - INFO - Mock RAG retrieval for: What happens if you crack your
+2026-09-05 05:52:26,143 - AI-Response-Validation - INFO - Evaluation 10: Running Relevance Judge...
+2026-09-05 05:52:26,165 - AI-Response-Validation - INFO - path=/api/results/10 method=GET status_code=200 process_time=18.81ms
+2026-09-05 05:52:26,175 - AI-Response-Validation - INFO - path=/api/results/10 method=GET status_code=200 process_time=2.77ms
+2026-09-05 05:52:26,488 - AI-Response-Validation - ERROR - LLM Call Failed: 404 This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.
+2026-09-05 05:52:26,489 - AI-Response-Validation - INFO - Evaluation 10: Running Accuracy Judge...
+2026-09-05 05:52:26,721 - AI-Response-Validation - ERROR - LLM Call Failed: 404 This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.
+2026-09-05 05:52:26,722 - AI-Response-Validation - INFO - Evaluation 10: Running Completeness Judge...
+2026-09-05 05:52:26,947 - AI-Response-Validation - ERROR - LLM Call Failed: 404 This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.
+2026-09-05 05:52:26,948 - AI-Response-Validation - INFO - Evaluation 10: Running Hallucination Detector...
+2026-09-05 05:52:27,171 - AI-Response-Validation - ERROR - LLM Call Failed: 404 This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.
+2026-09-05 05:52:27,172 - AI-Response-Validation - INFO - Evaluation 10: Computing Final Verdict...
+2026-09-05 05:52:27,181 - AI-Response-Validation - INFO - Evaluation 10 completed successfully. Score: 0
+2026-09-05 05:52:29,153 - AI-Response-Validation - INFO - path=/api/results/10 method=GET status_code=200 process_time=10.13ms
+2026-09-05 05:53:05,646 - AI-Response-Validation - INFO - Initializing database connection...
+2026-09-05 05:53:05,657 - AI-Response-Validation - INFO - Database engine created at sqlite:////home/hassan/Documents/Hassan/coding_projects/Infosys Springboard Internship 7.0/ai-response-validation-system/data/evaluations.db
+2026-09-05 05:53:06,518 - AI-Response-Validation - INFO - Starting AI Response Validation API...
+2026-09-05 05:53:06,520 - AI-Response-Validation - INFO - Database tables verified/created.
+2026-09-05 05:54:09,907 - AI-Response-Validation - INFO - Initializing database connection...
+2026-09-05 05:54:09,919 - AI-Response-Validation - INFO - Database engine created at sqlite:////home/hassan/Documents/Hassan/coding_projects/Infosys Springboard Internship 7.0/ai-response-validation-system/data/evaluations.db
+2026-09-05 05:54:10,777 - AI-Response-Validation - INFO - Starting AI Response Validation API...
+2026-09-05 05:54:10,779 - AI-Response-Validation - INFO - Database tables verified/created.
+2026-09-05 05:54:15,889 - AI-Response-Validation - INFO - Received evaluation submission: question='What happens if you crack your...'
+2026-09-05 05:54:15,902 - AI-Response-Validation - INFO - Successfully saved and queued evaluation ID 11
+2026-09-05 05:54:15,903 - AI-Response-Validation - INFO - path=/api/evaluate method=POST status_code=200 process_time=15.84ms
+2026-09-05 05:54:15,907 - AI-Response-Validation - INFO - Orchestrator started for evaluation 11
+2026-09-05 05:54:15,907 - AI-Response-Validation - INFO - Mock RAG retrieval for: What happens if you crack your
+2026-09-05 05:54:15,907 - AI-Response-Validation - INFO - Evaluation 11: Running Relevance Judge...
+2026-09-05 05:54:15,917 - AI-Response-Validation - INFO - path=/api/results/11 method=GET status_code=200 process_time=4.10ms
+2026-09-05 05:54:15,929 - AI-Response-Validation - INFO - path=/api/results/11 method=GET status_code=200 process_time=6.25ms
+2026-09-05 05:54:18,960 - AI-Response-Validation - INFO - path=/api/results/11 method=GET status_code=200 process_time=5.21ms
+2026-09-05 05:54:22,041 - AI-Response-Validation - INFO - path=/api/results/11 method=GET status_code=200 process_time=5.13ms
+2026-09-05 05:54:24,962 - AI-Response-Validation - INFO - path=/api/results/11 method=GET status_code=200 process_time=5.29ms
+2026-09-05 05:54:27,961 - AI-Response-Validation - INFO - path=/api/results/11 method=GET status_code=200 process_time=6.64ms
+2026-09-05 05:54:30,960 - AI-Response-Validation - INFO - path=/api/results/11 method=GET status_code=200 process_time=5.32ms
+2026-09-05 05:54:33,960 - AI-Response-Validation - INFO - path=/api/results/11 method=GET status_code=200 process_time=4.85ms
+2026-09-05 05:54:37,031 - AI-Response-Validation - INFO - path=/api/results/11 method=GET status_code=200 process_time=6.79ms
+2026-09-05 05:54:39,963 - AI-Response-Validation - INFO - path=/api/results/11 method=GET status_code=200 process_time=8.41ms
+2026-09-05 05:54:43,033 - AI-Response-Validation - INFO - path=/api/results/11 method=GET status_code=200 process_time=5.05ms
+2026-09-05 05:54:45,974 - AI-Response-Validation - INFO - path=/api/results/11 method=GET status_code=200 process_time=8.78ms
+2026-09-05 05:54:48,378 - AI-Response-Validation - INFO - Evaluation 11: Running Accuracy Judge...
+2026-09-05 05:54:49,078 - AI-Response-Validation - INFO - path=/api/results/11 method=GET status_code=200 process_time=8.49ms
+2026-09-05 05:54:51,973 - AI-Response-Validation - INFO - path=/api/results/11 method=GET status_code=200 process_time=6.73ms
+2026-09-05 05:54:55,014 - AI-Response-Validation - INFO - path=/api/results/11 method=GET status_code=200 process_time=5.74ms
+2026-09-05 05:54:57,980 - AI-Response-Validation - INFO - path=/api/results/11 method=GET status_code=200 process_time=7.85ms
+2026-09-05 05:55:01,052 - AI-Response-Validation - INFO - path=/api/results/11 method=GET status_code=200 process_time=2.45ms
+2026-09-05 05:55:03,963 - AI-Response-Validation - INFO - path=/api/results/11 method=GET status_code=200 process_time=5.49ms
+2026-09-05 05:55:06,997 - AI-Response-Validation - INFO - path=/api/results/11 method=GET status_code=200 process_time=7.08ms
+2026-09-05 05:55:10,012 - AI-Response-Validation - INFO - path=/api/results/11 method=GET status_code=200 process_time=5.34ms
+2026-09-05 05:55:12,979 - AI-Response-Validation - INFO - path=/api/results/11 method=GET status_code=200 process_time=7.74ms
+2026-09-05 05:55:15,968 - AI-Response-Validation - INFO - path=/api/results/11 method=GET status_code=200 process_time=2.54ms
+2026-09-05 05:55:21,725 - AI-Response-Validation - INFO - Evaluation 11: Running Completeness Judge...
+2026-09-05 05:55:28,813 - AI-Response-Validation - INFO - path=/api/results/11 method=GET status_code=200 process_time=7.86ms
+2026-09-05 05:55:30,851 - AI-Response-Validation - INFO - Received evaluation submission: question='What happens if you crack your...'
+2026-09-05 05:55:30,857 - AI-Response-Validation - INFO - Successfully saved and queued evaluation ID 12
+2026-09-05 05:55:30,859 - AI-Response-Validation - INFO - path=/api/evaluate method=POST status_code=200 process_time=9.52ms
+2026-09-05 05:55:30,861 - AI-Response-Validation - INFO - Orchestrator started for evaluation 12
+2026-09-05 05:55:30,862 - AI-Response-Validation - INFO - Mock RAG retrieval for: What happens if you crack your
+2026-09-05 05:55:30,862 - AI-Response-Validation - INFO - Evaluation 12: Running Relevance Judge...
+2026-09-05 05:55:30,870 - AI-Response-Validation - INFO - path=/api/results/12 method=GET status_code=200 process_time=3.21ms
+2026-09-05 05:55:34,032 - AI-Response-Validation - INFO - path=/api/results/12 method=GET status_code=200 process_time=7.98ms
+2026-09-05 05:55:36,967 - AI-Response-Validation - INFO - path=/api/results/12 method=GET status_code=200 process_time=6.58ms
+2026-09-05 05:55:39,977 - AI-Response-Validation - INFO - path=/api/results/12 method=GET status_code=200 process_time=7.67ms
+2026-09-05 05:55:42,940 - AI-Response-Validation - INFO - path=/api/results/12 method=GET status_code=200 process_time=7.08ms
+2026-09-05 05:55:45,877 - AI-Response-Validation - INFO - path=/api/results/12 method=GET status_code=200 process_time=7.74ms
+2026-09-05 05:55:49,069 - AI-Response-Validation - INFO - path=/api/results/12 method=GET status_code=200 process_time=6.47ms
+2026-09-05 05:55:51,974 - AI-Response-Validation - INFO - path=/api/results/12 method=GET status_code=200 process_time=5.09ms
+2026-09-05 05:55:54,128 - AI-Response-Validation - INFO - Evaluation 12: Running Accuracy Judge...
+2026-09-05 05:55:54,272 - AI-Response-Validation - INFO - Evaluation 11: Running Hallucination Detector...
+2026-09-05 05:55:54,969 - AI-Response-Validation - INFO - path=/api/results/12 method=GET status_code=200 process_time=6.72ms
+2026-09-05 05:55:57,976 - AI-Response-Validation - INFO - path=/api/results/12 method=GET status_code=200 process_time=8.33ms
+2026-09-05 05:56:00,036 - AI-Response-Validation - INFO - Evaluation 12: Running Completeness Judge...
+2026-09-05 05:56:01,060 - AI-Response-Validation - INFO - path=/api/results/12 method=GET status_code=200 process_time=2.62ms
+2026-09-05 05:56:03,979 - AI-Response-Validation - INFO - path=/api/results/12 method=GET status_code=200 process_time=6.58ms
+2026-09-05 05:56:07,005 - AI-Response-Validation - INFO - path=/api/results/12 method=GET status_code=200 process_time=7.28ms
+2026-09-05 05:56:09,973 - AI-Response-Validation - INFO - path=/api/results/12 method=GET status_code=200 process_time=7.74ms
+2026-09-05 05:56:13,047 - AI-Response-Validation - INFO - path=/api/results/12 method=GET status_code=200 process_time=7.45ms
+2026-09-05 05:56:15,974 - AI-Response-Validation - INFO - path=/api/results/12 method=GET status_code=200 process_time=4.60ms
+2026-09-05 05:56:18,986 - AI-Response-Validation - INFO - path=/api/results/12 method=GET status_code=200 process_time=1.95ms
+2026-09-05 05:56:19,351 - AI-Response-Validation - INFO - Evaluation 12: Running Hallucination Detector...
+2026-09-05 05:56:20,508 - AI-Response-Validation - INFO - Evaluation 11: Computing Final Verdict...
+2026-09-05 05:56:20,521 - AI-Response-Validation - INFO - Evaluation 11 completed successfully. Score: 21.7
+2026-09-05 05:56:21,972 - AI-Response-Validation - INFO - path=/api/results/12 method=GET status_code=200 process_time=7.94ms
+2026-09-05 05:56:24,978 - AI-Response-Validation - INFO - path=/api/results/12 method=GET status_code=200 process_time=6.57ms
+2026-09-05 05:56:26,874 - AI-Response-Validation - INFO - Evaluation 12: Computing Final Verdict...
+2026-09-05 05:56:26,882 - AI-Response-Validation - INFO - Evaluation 12 completed successfully. Score: 15.0
+2026-09-05 05:56:27,974 - AI-Response-Validation - INFO - path=/api/results/12 method=GET status_code=200 process_time=8.58ms
+2026-09-05 08:48:19,341 - AI-Response-Validation - INFO - path=/api/evaluate method=OPTIONS status_code=200 process_time=1.08ms
+2026-09-05 08:48:19,355 - AI-Response-Validation - INFO - Received evaluation submission: question='What happens if you crack your...'
+2026-09-05 08:48:19,368 - AI-Response-Validation - INFO - Successfully saved and queued evaluation ID 13
+2026-09-05 08:48:19,371 - AI-Response-Validation - INFO - path=/api/evaluate method=POST status_code=200 process_time=20.20ms
+2026-09-05 08:48:19,376 - AI-Response-Validation - INFO - Orchestrator started for evaluation 13
+2026-09-05 08:48:19,376 - AI-Response-Validation - INFO - Mock RAG retrieval for: What happens if you crack your
+2026-09-05 08:48:19,377 - AI-Response-Validation - INFO - Evaluation 13: Running Relevance Judge...
+2026-09-05 08:48:19,387 - AI-Response-Validation - INFO - path=/api/results/13 method=GET status_code=200 process_time=6.87ms
+2026-09-05 08:48:19,403 - AI-Response-Validation - INFO - path=/api/results/13 method=GET status_code=200 process_time=11.65ms
+2026-09-05 08:48:22,410 - AI-Response-Validation - INFO - path=/api/results/13 method=GET status_code=200 process_time=6.68ms
+2026-09-05 08:48:25,455 - AI-Response-Validation - INFO - path=/api/results/13 method=GET status_code=200 process_time=6.49ms
+2026-09-05 08:48:28,424 - AI-Response-Validation - INFO - path=/api/results/13 method=GET status_code=200 process_time=6.56ms
+2026-09-05 08:48:31,393 - AI-Response-Validation - INFO - path=/api/results/13 method=GET status_code=200 process_time=5.72ms
+2026-09-05 08:48:34,468 - AI-Response-Validation - INFO - path=/api/results/13 method=GET status_code=200 process_time=7.60ms
+2026-09-05 08:48:34,769 - AI-Response-Validation - INFO - Evaluation 13: Running Accuracy Judge...
+2026-09-05 08:48:37,437 - AI-Response-Validation - INFO - path=/api/results/13 method=GET status_code=200 process_time=6.85ms
+2026-09-05 08:48:40,512 - AI-Response-Validation - INFO - path=/api/results/13 method=GET status_code=200 process_time=6.53ms
+2026-09-05 08:48:43,614 - AI-Response-Validation - INFO - path=/api/results/13 method=GET status_code=200 process_time=5.70ms
+2026-09-05 08:48:46,731 - AI-Response-Validation - INFO - path=/api/results/13 method=GET status_code=200 process_time=6.69ms
+2026-09-05 08:48:49,810 - AI-Response-Validation - INFO - path=/api/results/13 method=GET status_code=200 process_time=6.18ms
+2026-09-05 08:48:52,384 - AI-Response-Validation - INFO - path=/api/results/13 method=GET status_code=200 process_time=2.44ms
+2026-09-05 08:48:55,388 - AI-Response-Validation - INFO - path=/api/results/13 method=GET status_code=200 process_time=6.60ms
+2026-09-05 08:48:58,940 - AI-Response-Validation - INFO - path=/api/results/13 method=GET status_code=200 process_time=6.64ms
+2026-09-05 08:49:01,698 - AI-Response-Validation - INFO - Evaluation 13: Running Completeness Judge...
+2026-09-05 08:49:01,910 - AI-Response-Validation - INFO - path=/api/results/13 method=GET status_code=200 process_time=6.44ms
+2026-09-05 08:49:04,772 - AI-Response-Validation - INFO - Evaluation 13: Running Hallucination Detector...
+2026-09-05 08:49:04,981 - AI-Response-Validation - INFO - path=/api/results/13 method=GET status_code=200 process_time=5.44ms
+2026-09-05 08:49:07,951 - AI-Response-Validation - INFO - path=/api/results/13 method=GET status_code=200 process_time=5.64ms
+2026-09-05 08:49:10,411 - AI-Response-Validation - INFO - path=/api/results/13 method=GET status_code=200 process_time=6.08ms
+2026-09-05 08:49:13,481 - AI-Response-Validation - INFO - path=/api/results/13 method=GET status_code=200 process_time=6.53ms
+2026-09-05 08:49:16,870 - AI-Response-Validation - INFO - Evaluation 13: Computing Final Verdict...
+2026-09-05 08:49:16,879 - AI-Response-Validation - INFO - Evaluation 13 completed successfully. Score: 21.7
+2026-09-05 08:49:16,930 - AI-Response-Validation - INFO - path=/api/results/13 method=GET status_code=200 process_time=7.07ms
+2026-09-05 12:31:28,471 - AI-Response-Validation - INFO - Initializing database connection...
+2026-09-05 12:31:28,485 - AI-Response-Validation - INFO - Database engine created at sqlite:////home/hassan/Documents/Hassan/coding_projects/Infosys Springboard Internship 7.0/ai-response-validation-system/data/evaluations.db
+2026-09-05 12:31:29,430 - AI-Response-Validation - INFO - Starting AI Response Validation API...
+2026-09-05 12:31:29,432 - AI-Response-Validation - INFO - Database tables verified/created.
+2026-09-05 12:31:33,177 - AI-Response-Validation - INFO - Health check endpoint called.
+2026-09-05 12:31:33,177 - AI-Response-Validation - INFO - path=/api/health method=GET status_code=200 process_time=1.59ms
+2026-09-05 12:31:33,213 - AI-Response-Validation - INFO - path=/favicon.ico method=GET status_code=404 process_time=0.98ms
+2026-09-05 12:31:36,148 - AI-Response-Validation - INFO - path=/api/evaluate method=OPTIONS status_code=200 process_time=0.87ms
+2026-09-05 12:31:36,160 - AI-Response-Validation - INFO - Received evaluation submission: question='What happens if you crack your...'
+2026-09-05 12:31:36,194 - AI-Response-Validation - INFO - Successfully saved and queued evaluation ID 14
+2026-09-05 12:31:36,196 - AI-Response-Validation - INFO - path=/api/evaluate method=POST status_code=200 process_time=40.56ms
+2026-09-05 12:31:36,207 - AI-Response-Validation - INFO - Orchestrator started for evaluation 14
+2026-09-05 12:31:36,209 - AI-Response-Validation - INFO - Mock RAG retrieval for: What happens if you crack your
+2026-09-05 12:31:36,210 - AI-Response-Validation - INFO - Evaluation 14: Running Relevance Judge...
+2026-09-05 12:31:36,214 - AI-Response-Validation - INFO - path=/api/results/14 method=GET status_code=200 process_time=9.91ms
+2026-09-05 12:31:36,228 - AI-Response-Validation - INFO - path=/api/results/14 method=GET status_code=200 process_time=4.44ms
+2026-09-05 12:31:39,225 - AI-Response-Validation - INFO - path=/api/results/14 method=GET status_code=200 process_time=9.17ms
+2026-09-05 12:31:42,293 - AI-Response-Validation - INFO - path=/api/results/14 method=GET status_code=200 process_time=7.19ms
+2026-09-05 12:31:45,218 - AI-Response-Validation - INFO - path=/api/results/14 method=GET status_code=200 process_time=3.37ms
+2026-09-05 12:31:48,219 - AI-Response-Validation - INFO - path=/api/results/14 method=GET status_code=200 process_time=7.21ms
+2026-09-05 12:31:51,926 - AI-Response-Validation - INFO - path=/api/results/14 method=GET status_code=200 process_time=5.41ms
+2026-09-05 12:31:52,022 - AI-Response-Validation - INFO - Evaluation 14: Running Accuracy Judge...
+2026-09-05 12:31:54,400 - AI-Response-Validation - INFO - path=/api/results/14 method=GET status_code=200 process_time=6.28ms
+2026-09-05 12:31:57,218 - AI-Response-Validation - INFO - path=/api/results/14 method=GET status_code=200 process_time=5.42ms
+2026-09-05 12:31:57,365 - AI-Response-Validation - INFO - Evaluation 14: Running Completeness Judge...
+2026-09-05 12:32:00,224 - AI-Response-Validation - INFO - path=/api/results/14 method=GET status_code=200 process_time=7.33ms
+2026-09-05 12:32:03,218 - AI-Response-Validation - INFO - path=/api/results/14 method=GET status_code=200 process_time=6.19ms
+2026-09-05 12:32:06,217 - AI-Response-Validation - INFO - path=/api/results/14 method=GET status_code=200 process_time=5.13ms
+2026-09-05 12:32:06,472 - AI-Response-Validation - INFO - Evaluation 14: Running Hallucination Detector...
+2026-09-05 12:32:09,220 - AI-Response-Validation - INFO - path=/api/results/14 method=GET status_code=200 process_time=7.41ms
+2026-09-05 12:32:10,215 - AI-Response-Validation - INFO - Evaluation 14: Computing Final Verdict...
+2026-09-05 12:32:10,231 - AI-Response-Validation - INFO - Evaluation 14 completed successfully. Score: 21.7
+2026-09-05 12:32:12,216 - AI-Response-Validation - INFO - path=/api/results/14 method=GET status_code=200 process_time=5.48ms
+2026-09-05 12:33:50,013 - AI-Response-Validation - INFO - Received evaluation submission: question='What happens if you crack your...'
+2026-09-05 12:33:50,021 - AI-Response-Validation - INFO - Successfully saved and queued evaluation ID 15
+2026-09-05 12:33:50,023 - AI-Response-Validation - INFO - path=/api/evaluate method=POST status_code=200 process_time=13.75ms
+2026-09-05 12:33:50,025 - AI-Response-Validation - INFO - Orchestrator started for evaluation 15
+2026-09-05 12:33:50,025 - AI-Response-Validation - INFO - Mock RAG retrieval for: What happens if you crack your
+2026-09-05 12:33:50,026 - AI-Response-Validation - INFO - Evaluation 15: Running Relevance Judge...
+2026-09-05 12:33:50,034 - AI-Response-Validation - INFO - path=/api/results/15 method=GET status_code=200 process_time=3.75ms
+2026-09-05 12:33:53,041 - AI-Response-Validation - INFO - path=/api/results/15 method=GET status_code=200 process_time=7.55ms
+2026-09-05 12:33:54,013 - AI-Response-Validation - INFO - Received evaluation submission: question='What happens if you crack your...'
+2026-09-05 12:33:54,028 - AI-Response-Validation - INFO - Successfully saved and queued evaluation ID 16
+2026-09-05 12:33:54,031 - AI-Response-Validation - INFO - path=/api/evaluate method=POST status_code=200 process_time=22.44ms
+2026-09-05 12:33:54,037 - AI-Response-Validation - INFO - Orchestrator started for evaluation 16
+2026-09-05 12:33:54,038 - AI-Response-Validation - INFO - Mock RAG retrieval for: What happens if you crack your
+2026-09-05 12:33:54,038 - AI-Response-Validation - INFO - Evaluation 16: Running Relevance Judge...
+2026-09-05 12:33:54,054 - AI-Response-Validation - INFO - path=/api/results/16 method=GET status_code=200 process_time=12.37ms
+2026-09-05 12:33:57,056 - AI-Response-Validation - INFO - path=/api/results/16 method=GET status_code=200 process_time=6.66ms
+2026-09-05 12:34:00,116 - AI-Response-Validation - INFO - path=/api/results/16 method=GET status_code=200 process_time=6.54ms
+2026-09-05 12:34:03,051 - AI-Response-Validation - INFO - path=/api/results/16 method=GET status_code=200 process_time=4.63ms
+2026-09-05 12:34:06,060 - AI-Response-Validation - INFO - path=/api/results/16 method=GET status_code=200 process_time=8.09ms
+2026-09-05 12:34:09,136 - AI-Response-Validation - INFO - path=/api/results/16 method=GET status_code=200 process_time=7.57ms
+2026-09-05 12:34:09,334 - AI-Response-Validation - INFO - Evaluation 15: Running Accuracy Judge...
+2026-09-05 12:34:12,062 - AI-Response-Validation - INFO - path=/api/results/16 method=GET status_code=200 process_time=7.17ms
+2026-09-05 12:34:15,177 - AI-Response-Validation - INFO - path=/api/results/16 method=GET status_code=200 process_time=7.62ms
+2026-09-05 12:34:16,854 - AI-Response-Validation - INFO - Evaluation 15: Running Completeness Judge...
+2026-09-05 12:34:17,571 - AI-Response-Validation - INFO - Evaluation 16: Running Accuracy Judge...
+2026-09-05 12:34:18,052 - AI-Response-Validation - INFO - path=/api/results/16 method=GET status_code=200 process_time=2.31ms
+2026-09-05 12:34:21,117 - AI-Response-Validation - INFO - path=/api/results/16 method=GET status_code=200 process_time=7.57ms
+2026-09-05 12:34:24,108 - AI-Response-Validation - INFO - Evaluation 16: Running Completeness Judge...
+2026-09-05 12:34:24,116 - AI-Response-Validation - INFO - path=/api/results/16 method=GET status_code=200 process_time=9.78ms
+2026-09-05 12:34:26,945 - AI-Response-Validation - INFO - Evaluation 16: Running Hallucination Detector...
+2026-09-05 12:34:27,247 - AI-Response-Validation - ERROR - LLM Call Failed: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 5, model: gemini-3.6-flash
+Please retry in 32.844264314s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerMinutePerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.6-flash"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+  quota_value: 5
+}
+, retry_delay {
+  seconds: 32
+}
+]
+2026-09-05 12:34:27,247 - AI-Response-Validation - INFO - Evaluation 16: Computing Final Verdict...
+2026-09-05 12:34:27,255 - AI-Response-Validation - INFO - Evaluation 16 completed successfully. Score: 46.7
+2026-09-05 12:34:27,940 - AI-Response-Validation - INFO - path=/api/results/16 method=GET status_code=200 process_time=7.38ms
+2026-09-05 12:34:43,769 - AI-Response-Validation - INFO - Evaluation 15: Running Hallucination Detector...
+2026-09-05 12:34:47,409 - AI-Response-Validation - INFO - Evaluation 15: Computing Final Verdict...
+2026-09-05 12:34:47,413 - AI-Response-Validation - INFO - Evaluation 15 completed successfully. Score: 21.7

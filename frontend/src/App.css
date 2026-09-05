@@ -34,21 +34,25 @@
 }
 
 .theme-toggle-btn {
-  background: transparent;
-  border: 2px solid var(--input-border);
+  background: var(--input-bg);
+  border: 1.5px solid var(--input-border);
   color: var(--text-primary);
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   border-radius: var(--radius);
   cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
   transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .theme-toggle-btn:hover {
-  border-color: var(--text-secondary);
+  background: var(--btn-sec-bg);
+  color: var(--btn-sec-text);
+  border-color: var(--btn-sec-bg);
+  box-shadow: 0 4px 12px var(--btn-sec-glow);
 }
 
 /* Form Container - No wrapper panel anymore! */
@@ -101,13 +105,17 @@
 .badge {
   font-size: 0.75rem;
   color: var(--text-secondary);
-  font-weight: 400;
+  font-weight: 500;
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  padding: 0.2rem 0.6rem;
+  border-radius: 99px;
 }
 
 /* Input Fields */
 .form-control {
   background: var(--input-bg);
-  border: 1px solid var(--input-border);
+  border: 1.5px solid var(--input-border);
   border-radius: var(--radius);
   padding: 0.8rem 1rem;
   color: var(--text-primary);
@@ -156,23 +164,36 @@
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   width: 100%;
   max-width: 280px;
-  box-shadow: 0 4px 14px var(--btn-glow);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .submit-btn:hover {
   background: var(--btn-hover);
-  box-shadow: 0 6px 24px var(--btn-glow);
-  transform: translateY(-2px);
+  box-shadow: 0 8px 28px var(--btn-glow);
 }
 
 .submit-btn:focus-visible {
   outline: none;
   box-shadow: 0 0 0 3px var(--bg-color), 0 0 0 5px var(--btn-bg), 0 6px 24px var(--btn-glow);
-  transform: translateY(-2px);
 }
 
 .submit-btn:active {
   transform: scale(0.98);
+}
+
+.secondary-btn {
+  background: var(--btn-sec-bg);
+  color: var(--btn-sec-text);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.secondary-btn:hover {
+  background: var(--btn-sec-hover);
+  box-shadow: 0 8px 28px var(--btn-sec-glow);
+}
+
+.secondary-btn:focus-visible {
+  box-shadow: 0 0 0 3px var(--bg-color), 0 0 0 5px var(--btn-sec-bg), 0 6px 24px var(--btn-sec-glow);
 }
 
 .submit-btn:disabled {
@@ -186,19 +207,136 @@
   margin-top: 1.5rem;
   padding: 1rem;
   border-radius: var(--radius);
+  border: 1px solid var(--input-border);
+  background: var(--input-bg);
   text-align: center;
   font-weight: 500;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
+  box-shadow: 0 4px 12px var(--input-glow);
 }
 
 .message-box.success {
-  background: rgba(203, 251, 69, 0.1); /* Neon tint */
-  border: 1px solid var(--btn-bg);
+  border-left: 4px solid var(--btn-bg);
   color: var(--text-primary);
 }
 
 .message-box.error {
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.3);
-  color: #ef4444;
+  border-left: 4px solid #ef4444;
+  color: var(--text-primary);
+}
+
+/* Results Dashboard UI */
+.results-container {
+  width: 100%;
+  max-width: 900px;
+  animation: fadeIn 0.4s ease forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.results-container.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 0;
+  text-align: center;
+}
+
+.spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid var(--input-border);
+  border-top: 4px solid var(--btn-bg);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 2rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.results-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--input-border);
+}
+
+.score-badge {
+  font-size: 1.8rem;
+  font-weight: 700;
+  padding: 0.5rem 1.5rem;
+  border-radius: var(--radius);
+  background: var(--input-bg);
+  border: 1.5px solid var(--input-border);
+  box-shadow: 0 4px 14px var(--input-glow);
+}
+
+.score-badge.high { border-color: var(--btn-bg); color: var(--btn-bg); }
+.score-badge.medium { border-color: #f59e0b; color: #f59e0b; }
+.score-badge.low { border-color: #ef4444; color: #ef4444; }
+
+.breakdown-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+@media (max-width: 700px) {
+  .breakdown-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.breakdown-card {
+  background: var(--input-bg);
+  border: 1.5px solid var(--input-border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  box-shadow: 0 4px 12px var(--input-glow);
+  transition: all 0.2s ease;
+}
+
+.breakdown-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px var(--input-glow);
+}
+
+.breakdown-card.hallucination {
+  border-color: #ef4444;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-header h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.card-header .score {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+.breakdown-card p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.6;
 }

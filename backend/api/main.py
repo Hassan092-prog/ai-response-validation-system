@@ -1,10 +1,12 @@
-from fastapi import FastAPI, Depends, Request
+from fastapi import FastAPI, Depends, Request, BackgroundTasks, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 import time
+import json
 
 from backend.api import models, schemas, database
 from backend.core.config import logger
+from backend.core.orchestrator import process_evaluation_task
 
 logger.info("Starting AI Response Validation API...")
 
@@ -39,23 +41,48 @@ def health_check():
     return {"status": "healthy", "version": "1.0.0"}
 
 @app.post("/api/evaluate", response_model=schemas.EvaluationResponse)
-def submit_evaluation(eval_input: schemas.EvaluationInput, db: Session = Depends(database.get_db)):
+def submit_evaluation(eval_input: schemas.EvaluationInput, background_tasks: BackgroundTasks, db: Session = Depends(database.get_db)):
     logger.info(f"Received evaluation submission: question='{eval_input.question[:30]}...'")
     try:
         db_record = models.EvaluationRecord(
             question=eval_input.question,
             ai_response=eval_input.ai_response,
             reference_answer=eval_input.reference_answer,
-            source_document=eval_input.source_document
+            source_document=eval_input.source_document,
+            status="pending"
         )
         
         db.add(db_record)
         db.commit()
         db.refresh(db_record)
         
-        logger.info(f"Successfully saved evaluation with ID {db_record.id}")
-        return {"id": db_record.id, "message": "Evaluation successfully recorded in database!"}
+        # Trigger background processing
+        background_tasks.add_task(process_evaluation_task, db_record.id)
+        
+        logger.info(f"Successfully saved and queued evaluation ID {db_record.id}")
+        return {"id": db_record.id, "message": "Evaluation queued for processing."}
     except Exception as e:
         logger.error(f"Error saving evaluation: {e}")
         db.rollback()
         raise
+
+@app.get("/api/results/{eval_id}")
+def get_evaluation_result(eval_id: int, db: Session = Depends(database.get_db)):
+    record = db.query(models.EvaluationRecord).filter(models.EvaluationRecord.id == eval_id).first()
+    if not record:
+        raise HTTPException(status_code=404, detail="Evaluation not found")
+        
+    result_data = None
+    if record.result_json:
+        try:
+            result_data = json.loads(record.result_json)
+        except:
+            result_data = {"error": "Failed to parse result JSON"}
+
+    return {
+        "id": record.id,
+        "status": record.status,
+        "created_at": record.created_at,
+        "updated_at": record.updated_at,
+        "result": result_data
+    }
