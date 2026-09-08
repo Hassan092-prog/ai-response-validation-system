@@ -594,8 +594,16 @@ body {
   color: var(--text-secondary);
 }
 
-.breakdown-card p {
+.breakdown-card p, .markdown-body p {
   color: var(--text-secondary);
   font-size: 0.95rem;
   line-height: 1.6;
+  margin-bottom: 0.5rem;
+}
+.markdown-body p:last-child {
+  margin-bottom: 0;
+}
+.markdown-body strong {
+  color: var(--text-primary);
+  font-weight: 600;
 }

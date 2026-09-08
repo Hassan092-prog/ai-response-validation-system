@@ -19,6 +19,7 @@ def process_evaluation_task(evaluation_id: int):
         
         # 1. Retrieve Context
         context = ""
+        rag_context = None
         if record.source_document:
             context += f"\nUser Provided Source: {record.source_document}"
         else:
@@ -44,6 +45,9 @@ def process_evaluation_task(evaluation_id: int):
         final_verdict = agents.compute_final_verdict(
             relevance_res, accuracy_res, completeness_res, hallucination_res
         )
+        
+        if rag_context:
+            final_verdict["rag_context"] = rag_context
         
         # 4. Save to Database
         record.status = "completed"
