@@ -86,3 +86,25 @@ def get_evaluation_result(eval_id: int, db: Session = Depends(database.get_db)):
         "updated_at": record.updated_at,
         "result": result_data
     }
+
+@app.get("/api/evaluations/history")
+def get_evaluation_history(limit: int = 10, db: Session = Depends(database.get_db)):
+    records = db.query(models.EvaluationRecord).order_by(models.EvaluationRecord.created_at.desc()).limit(limit).all()
+    history = []
+    for r in records:
+        score = None
+        if r.result_json and r.status == "completed":
+            try:
+                res_data = json.loads(r.result_json)
+                score = res_data.get("final_score")
+            except:
+                pass
+        
+        history.append({
+            "id": r.id,
+            "question": r.question,
+            "status": r.status,
+            "score": score,
+            "created_at": r.created_at
+        })
+    return {"history": history}
