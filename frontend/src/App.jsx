@@ -50,6 +50,17 @@ function App() {
     })
   }
 
+  const clearInput = () => {
+    setFormData({
+      question: '',
+      ai_response: '',
+      reference_answer: '',
+      source_document: ''
+    })
+    setEvaluationId(null)
+    setStatus({ type: '', message: '' })
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     setIsSubmitting(true)
@@ -71,7 +82,6 @@ function App() {
 
       if (response.ok) {
         setEvaluationId(data.id)
-        setFormData({ question: '', ai_response: '', reference_answer: '', source_document: '' })
       } else {
         setStatus({ type: 'error', message: `Error: ${data.detail ? JSON.stringify(data.detail) : 'Failed to submit'}` })
       }
@@ -187,6 +197,13 @@ function App() {
                 onClick={fillTestData}
               >
                 Test Data
+              </button>
+              <button 
+                type="button" 
+                className="submit-btn secondary-btn"
+                onClick={clearInput}
+              >
+                Clear Input
               </button>
               <button 
                 type="submit" 

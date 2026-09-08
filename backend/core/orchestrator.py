@@ -3,17 +3,7 @@ from sqlalchemy.orm import Session
 from backend.api import models, database
 from backend.core import agents
 from backend.core.config import logger
-
-def mock_rag_retrieve(question: str) -> str:
-    """Mock Retrieval-Augmented Generation function."""
-    logger.info(f"Mock RAG retrieval for: {question[:30]}")
-    # In a real system, this queries ChromaDB.
-    # For now, return a generic verified fact snippet.
-    return (
-        "Verified Fact 1: AI response validation systems must ensure high accuracy "
-        "and penalize hallucinations severely. "
-        "Verified Fact 2: FastAPI and React are commonly used for modern web stacks."
-    )
+from backend.kb.retrieve import retrieve_context
 
 def process_evaluation_task(evaluation_id: int):
     """Background task to orchestrate the AI evaluation pipeline."""
@@ -28,9 +18,13 @@ def process_evaluation_task(evaluation_id: int):
         logger.info(f"Orchestrator started for evaluation {evaluation_id}")
         
         # 1. Retrieve Context
-        context = mock_rag_retrieve(record.question)
+        context = ""
         if record.source_document:
             context += f"\nUser Provided Source: {record.source_document}"
+        else:
+            logger.info(f"Evaluation {evaluation_id}: No source document provided. Querying ChromaDB...")
+            rag_context = retrieve_context(record.question)
+            context += f"\nRetrieved Knowledge Base Context:\n{rag_context}"
             
         # 2. Call Judge Agents (In sequence for simplicity, could be ThreadPoolExecutor)
         logger.info(f"Evaluation {evaluation_id}: Running Relevance Judge...")
