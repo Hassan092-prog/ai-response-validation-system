@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { diffWords } from 'diff';
+import { Copy, Check, Download, ChevronDown, ChevronRight, FileSpreadsheet, FileJson } from 'lucide-react';
 
 const Results = ({ evaluationId, onBack }) => {
   const [data, setData] = useState(null);
@@ -199,31 +200,32 @@ ${breakdown.hallucination.reasoning}
         <div>
           <h2>Evaluation Complete</h2>
           <div style={{ display: 'flex', gap: '0.8rem', marginTop: '1rem' }}>
-            <button onClick={handleCopy} className="secondary-btn" style={{ padding: '0.4rem 0.8rem', fontSize: '0.85rem', borderRadius: '6px', cursor: 'pointer', border: '1px solid var(--input-border)', background: 'var(--input-bg)', color: 'var(--text-primary)' }}>
-              {copied ? '✅ Copied!' : '📋 Copy as Markdown'}
+            <button onClick={handleCopy} className="secondary-btn" style={{ padding: '0.4rem 0.8rem', fontSize: '0.85rem', borderRadius: '6px', cursor: 'pointer', border: '1px solid var(--input-border)', background: 'var(--input-bg)', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              {copied ? <Check size={14} /> : <Copy size={14} />} 
+              {copied ? 'Copied!' : 'Copy as Markdown'}
             </button>
             <div className="results-export-dropdown" style={{ position: 'relative' }}>
               <button onClick={() => setIsExportMenuOpen(!isExportMenuOpen)} className="secondary-btn" style={{ padding: '0.4rem 0.8rem', fontSize: '0.85rem', borderRadius: '6px', cursor: 'pointer', border: '1px solid var(--input-border)', background: 'var(--input-bg)', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                📥 Export ▼
+                <Download size={14} /> Export <ChevronDown size={14} />
               </button>
               {isExportMenuOpen && (
                 <div className="dropdown-menu" style={{
                   position: 'absolute', left: 0, top: '100%', marginTop: '4px',
-                  background: 'var(--bg-secondary)', border: '1px solid var(--border-color)',
+                  background: 'var(--input-bg)', border: '1px solid var(--input-border)',
                   borderRadius: '6px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', zIndex: 10,
-                  minWidth: '150px', overflow: 'hidden'
+                  minWidth: '180px', overflow: 'hidden'
                 }}>
                   <button 
                     onClick={handleDownloadCSV} 
-                    style={{ width: '100%', padding: '0.6rem 1rem', textAlign: 'left', background: 'none', border: 'none', borderBottom: '1px solid var(--border-color)', color: 'var(--text-primary)', cursor: 'pointer', fontSize: '0.85rem' }}
+                    style={{ width: '100%', padding: '0.6rem 1rem', textAlign: 'left', background: 'none', border: 'none', borderBottom: '1px solid var(--input-border)', color: 'var(--text-primary)', cursor: 'pointer', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '8px', whiteSpace: 'nowrap' }}
                   >
-                    📄 Export as CSV
+                    <FileSpreadsheet size={14} /> Export as CSV
                   </button>
                   <button 
                     onClick={() => { handleDownloadJSON(); setIsExportMenuOpen(false); }} 
-                    style={{ width: '100%', padding: '0.6rem 1rem', textAlign: 'left', background: 'none', border: 'none', color: 'var(--text-primary)', cursor: 'pointer', fontSize: '0.85rem' }}
+                    style={{ width: '100%', padding: '0.6rem 1rem', textAlign: 'left', background: 'none', border: 'none', color: 'var(--text-primary)', cursor: 'pointer', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '8px', whiteSpace: 'nowrap' }}
                   >
-                    {`{}`} Export as JSON
+                    <FileJson size={14} /> Export as JSON
                   </button>
                 </div>
               )}
@@ -288,7 +290,7 @@ ${breakdown.hallucination.reasoning}
               padding: '0.8rem 1.5rem', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: '500', width: '100%'
             }}
           >
-            <span>{showDiff ? '▼' : '▶'}</span>
+            {showDiff ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
             Visual Diff: Reference vs AI Response
           </button>
           
@@ -307,7 +309,7 @@ ${breakdown.hallucination.reasoning}
               padding: '0.8rem 1.5rem', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: '500', width: '100%'
             }}
           >
-            <span>{showRag ? '▼' : '▶'}</span>
+            {showRag ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
             View Knowledge Base Sources Used
           </button>
           

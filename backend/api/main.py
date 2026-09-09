@@ -2,6 +2,7 @@ from fastapi import FastAPI, Depends, Request, BackgroundTasks, HTTPException, U
 from fastapi.responses import StreamingResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
+from sqlalchemy import func
 import time
 import json
 import io
@@ -176,22 +177,22 @@ def get_evaluation_history(page: int = 1, limit: int = 10, db: Session = Depends
     total_count = db.query(models.EvaluationRecord).count()
     total_pages = (total_count + limit - 1) // limit
     
-    records = db.query(models.EvaluationRecord).order_by(models.EvaluationRecord.created_at.desc()).offset(offset).limit(limit).all()
+    # Query only specific columns for memory efficiency
+    records = db.query(
+        models.EvaluationRecord.id,
+        models.EvaluationRecord.question,
+        models.EvaluationRecord.status,
+        models.EvaluationRecord.final_score,
+        models.EvaluationRecord.created_at
+    ).order_by(models.EvaluationRecord.created_at.desc()).offset(offset).limit(limit).all()
+    
     history = []
     for r in records:
-        score = None
-        if r.result_json and r.status == "completed":
-            try:
-                res_data = json.loads(r.result_json)
-                score = res_data.get("final_score")
-            except:
-                pass
-        
         history.append({
             "id": r.id,
             "question": r.question,
             "status": r.status,
-            "score": score,
+            "score": r.final_score,
             "created_at": r.created_at
         })
     return {
@@ -201,44 +202,92 @@ def get_evaluation_history(page: int = 1, limit: int = 10, db: Session = Depends
         "total_records": total_count
     }
 
+@app.get("/api/evaluations/analytics")
+def get_analytics(db: Session = Depends(database.get_db)):
+    total_evals = db.query(models.EvaluationRecord).filter(models.EvaluationRecord.status == "completed").count()
+    
+    if total_evals == 0:
+        return {"total_evaluations": 0, "average_score": 0, "radar_data": [], "time_series": []}
+        
+    avg_stats = db.query(
+        func.avg(models.EvaluationRecord.final_score).label("avg_final"),
+        func.avg(models.EvaluationRecord.score_relevance).label("avg_rel"),
+        func.avg(models.EvaluationRecord.score_accuracy).label("avg_acc"),
+        func.avg(models.EvaluationRecord.score_completeness).label("avg_comp"),
+        func.avg(models.EvaluationRecord.score_hallucination).label("avg_hal")
+    ).filter(models.EvaluationRecord.status == "completed").first()
+    
+    avg_final = round(avg_stats.avg_final or 0, 1)
+    
+    radar_data = [
+        {"metric": "Relevance", "score": round((avg_stats.avg_rel or 0) * 20, 1)},
+        {"metric": "Accuracy", "score": round((avg_stats.avg_acc or 0) * 20, 1)},
+        {"metric": "Completeness", "score": round((avg_stats.avg_comp or 0) * 20, 1)},
+        {"metric": "Hallucination", "score": round((avg_stats.avg_hal or 0) * 20, 1)}
+    ]
+    
+    time_series_records = db.query(
+        models.EvaluationRecord.created_at,
+        models.EvaluationRecord.final_score
+    ).filter(models.EvaluationRecord.status == "completed").order_by(models.EvaluationRecord.created_at.asc()).all()
+    
+    time_series = [
+        {"date": r.created_at.strftime("%b %d, %H:%M"), "score": r.final_score} 
+        for r in time_series_records if r.final_score is not None
+    ]
+    
+    return {
+        "total_evaluations": total_evals,
+        "average_score": avg_final,
+        "radar_data": radar_data,
+        "time_series": time_series
+    }
+
 @app.get("/api/evaluations/export")
 def export_evaluations(format: str = "csv", db: Session = Depends(database.get_db)):
-    records = db.query(models.EvaluationRecord).order_by(models.EvaluationRecord.created_at.desc()).all()
-    
     if format.lower() == "json":
-        export_data = []
-        for r in records:
-            export_data.append({
-                "id": r.id,
-                "created_at": r.created_at.isoformat(),
-                "question": r.question,
-                "ai_response": r.ai_response,
-                "reference_answer": r.reference_answer,
-                "status": r.status,
-                "result_json": json.loads(r.result_json) if r.result_json else None
-            })
-        return JSONResponse(
-            content=export_data,
+        def json_generator():
+            yield "["
+            first = True
+            for r in db.query(models.EvaluationRecord).order_by(models.EvaluationRecord.created_at.desc()).yield_per(100):
+                if not first:
+                    yield ","
+                first = False
+                yield json.dumps({
+                    "id": r.id,
+                    "created_at": r.created_at.isoformat(),
+                    "question": r.question,
+                    "ai_response": r.ai_response,
+                    "reference_answer": r.reference_answer,
+                    "status": r.status,
+                    "result_json": json.loads(r.result_json) if r.result_json else None
+                })
+            yield "]"
+            
+        return StreamingResponse(
+            json_generator(),
+            media_type="application/json",
             headers={"Content-Disposition": "attachment; filename=evaluations_history.json"}
         )
         
     elif format.lower() == "csv":
-        stream = io.StringIO()
-        writer = csv.writer(stream)
-        writer.writerow(["ID", "Date", "Status", "Question", "AI Response", "Reference Answer", "Final Score"])
-        
-        for r in records:
-            score = "N/A"
-            if r.result_json and r.status == "completed":
-                try:
-                    score = json.loads(r.result_json).get("final_score", "N/A")
-                except:
-                    pass
-            writer.writerow([r.id, r.created_at.isoformat(), r.status, r.question, r.ai_response, r.reference_answer, score])
+        def csv_generator():
+            stream = io.StringIO()
+            writer = csv.writer(stream)
+            writer.writerow(["ID", "Date", "Status", "Question", "AI Response", "Reference Answer", "Final Score"])
+            yield stream.getvalue()
+            stream.seek(0)
+            stream.truncate(0)
             
-        stream.seek(0)
+            for r in db.query(models.EvaluationRecord).order_by(models.EvaluationRecord.created_at.desc()).yield_per(100):
+                score = r.final_score if r.final_score is not None else "N/A"
+                writer.writerow([r.id, r.created_at.isoformat(), r.status, r.question, r.ai_response, r.reference_answer, score])
+                yield stream.getvalue()
+                stream.seek(0)
+                stream.truncate(0)
+                
         return StreamingResponse(
-            stream, 
+            csv_generator(), 
             media_type="text/csv", 
             headers={"Content-Disposition": "attachment; filename=evaluations_history.csv"}
         )

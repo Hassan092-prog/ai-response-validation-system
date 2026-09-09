@@ -6111,3 +6111,149 @@ violations {
 2026-09-09 13:17:20,334 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=10.06ms
 2026-09-09 13:17:21,324 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=9.53ms
 2026-09-09 13:17:23,180 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=10.17ms
+2026-09-09 13:46:35,470 - AI-Response-Validation - INFO - Initializing database connection...
+2026-09-09 13:46:35,483 - AI-Response-Validation - INFO - Database engine created at sqlite:////home/hassan/Documents/Hassan/coding_projects/Infosys Springboard Internship 7.0/ai-response-validation-system/data/evaluations.db
+2026-09-09 13:46:44,748 - datasets - INFO - PyTorch version 2.13.0 available.
+2026-09-09 13:46:44,941 - AI-Response-Validation - INFO - Starting AI Response Validation API...
+2026-09-09 13:46:44,943 - AI-Response-Validation - INFO - Database tables verified/created.
+2026-09-09 13:46:45,311 - AI-Response-Validation - INFO - path=/api/evaluations/analytics method=GET status_code=200 process_time=17.63ms
+2026-09-09 13:46:45,324 - AI-Response-Validation - INFO - path=/api/evaluations/analytics method=GET status_code=200 process_time=4.34ms
+2026-09-09 13:49:21,012 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=11.46ms
+2026-09-09 13:49:25,021 - AI-Response-Validation - INFO - path=/api/evaluations/analytics method=GET status_code=200 process_time=16.26ms
+2026-09-09 13:49:25,048 - AI-Response-Validation - INFO - path=/api/evaluations/analytics method=GET status_code=200 process_time=14.90ms
+2026-09-09 13:50:15,393 - AI-Response-Validation - INFO - path=/api/evaluations/analytics method=GET status_code=200 process_time=14.23ms
+2026-09-09 13:51:18,738 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=12.93ms
+2026-09-09 13:51:18,761 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=12.62ms
+2026-09-09 13:51:20,800 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=10.78ms
+2026-09-09 13:51:21,336 - AI-Response-Validation - INFO - path=/api/evaluations/analytics method=GET status_code=200 process_time=9.65ms
+2026-09-09 13:51:21,347 - AI-Response-Validation - INFO - path=/api/evaluations/analytics method=GET status_code=200 process_time=6.04ms
+2026-09-09 13:53:00,399 - AI-Response-Validation - INFO - path=/api/evaluations/analytics method=GET status_code=200 process_time=9.50ms
+2026-09-09 13:53:47,212 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=6.30ms
+2026-09-09 13:53:49,600 - AI-Response-Validation - INFO - path=/api/evaluations/analytics method=GET status_code=200 process_time=7.12ms
+2026-09-09 13:53:49,614 - AI-Response-Validation - INFO - path=/api/evaluations/analytics method=GET status_code=200 process_time=5.76ms
+2026-09-09 13:54:50,378 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=5.82ms
+2026-09-09 13:54:52,404 - AI-Response-Validation - INFO - path=/api/evaluations/analytics method=GET status_code=200 process_time=11.90ms
+2026-09-09 13:54:52,431 - AI-Response-Validation - INFO - path=/api/evaluations/analytics method=GET status_code=200 process_time=12.33ms
+2026-09-09 13:55:03,709 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=6.57ms
+2026-09-09 13:55:06,018 - AI-Response-Validation - INFO - path=/api/results/49 method=GET status_code=200 process_time=3.14ms
+2026-09-09 13:55:06,032 - AI-Response-Validation - INFO - path=/api/results/49 method=GET status_code=200 process_time=2.29ms
+2026-09-09 14:04:19,409 - AI-Response-Validation - INFO - Initializing database connection...
+2026-09-09 14:04:19,420 - AI-Response-Validation - INFO - Database engine created at sqlite:////home/hassan/Documents/Hassan/coding_projects/Infosys Springboard Internship 7.0/ai-response-validation-system/data/evaluations.db
+2026-09-09 14:04:28,962 - datasets - INFO - PyTorch version 2.13.0 available.
+2026-09-09 14:04:29,153 - AI-Response-Validation - INFO - Starting AI Response Validation API...
+2026-09-09 14:04:29,155 - AI-Response-Validation - INFO - Database tables verified/created.
+2026-09-09 14:04:29,564 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=13.30ms
+2026-09-09 14:04:29,576 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=4.05ms
+2026-09-09 14:04:36,062 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=10.16ms
+2026-09-09 14:04:43,875 - AI-Response-Validation - INFO - path=/api/evaluate method=OPTIONS status_code=200 process_time=0.78ms
+2026-09-09 14:04:43,888 - AI-Response-Validation - INFO - Received evaluation submission: question='What happens if you crack your...'
+2026-09-09 14:04:43,899 - AI-Response-Validation - INFO - Semantic Cache HIT! Returning instant cached result.
+2026-09-09 14:04:43,919 - AI-Response-Validation - INFO - path=/api/evaluate method=POST status_code=200 process_time=34.31ms
+2026-09-09 14:04:43,944 - AI-Response-Validation - INFO - path=/api/results/50 method=GET status_code=200 process_time=10.47ms
+2026-09-09 14:04:43,949 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=16.51ms
+2026-09-09 14:04:43,957 - AI-Response-Validation - INFO - path=/api/results/50 method=GET status_code=200 process_time=4.10ms
+2026-09-09 14:04:49,294 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=9.33ms
+2026-09-09 14:04:50,578 - AI-Response-Validation - INFO - path=/api/evaluations/analytics method=GET status_code=200 process_time=10.87ms
+2026-09-09 14:04:50,592 - AI-Response-Validation - INFO - path=/api/evaluations/analytics method=GET status_code=200 process_time=5.90ms
+2026-09-09 14:04:54,767 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=10.44ms
+2026-09-09 14:04:56,939 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=10.98ms
+2026-09-09 14:05:16,320 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=6.84ms
+2026-09-09 14:05:16,800 - AI-Response-Validation - INFO - path=/api/results/50 method=GET status_code=200 process_time=8.31ms
+2026-09-09 14:05:16,820 - AI-Response-Validation - INFO - path=/api/results/50 method=GET status_code=200 process_time=7.42ms
+2026-09-09 14:06:05,426 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=15.18ms
+2026-09-09 14:06:17,376 - AI-Response-Validation - INFO - path=/api/results/50 method=GET status_code=200 process_time=8.02ms
+2026-09-09 14:09:23,602 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=12.78ms
+2026-09-09 14:09:23,623 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=12.09ms
+2026-09-09 14:09:25,109 - AI-Response-Validation - INFO - path=/api/evaluations/analytics method=GET status_code=200 process_time=7.00ms
+2026-09-09 14:09:25,210 - AI-Response-Validation - INFO - path=/api/evaluations/analytics method=GET status_code=200 process_time=13.46ms
+2026-09-09 14:09:25,302 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=6.84ms
+2026-09-09 14:09:26,159 - AI-Response-Validation - INFO - path=/api/results/50 method=GET status_code=200 process_time=6.16ms
+2026-09-09 14:09:26,221 - AI-Response-Validation - INFO - path=/api/results/50 method=GET status_code=200 process_time=8.71ms
+2026-09-09 14:11:23,393 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=11.08ms
+2026-09-09 14:11:24,385 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=10.88ms
+2026-09-09 14:11:36,376 - AI-Response-Validation - INFO - path=/api/results/50 method=GET status_code=200 process_time=6.28ms
+2026-09-09 14:26:01,061 - AI-Response-Validation - INFO - path=/api/results/50 method=GET status_code=200 process_time=11.75ms
+2026-09-09 14:26:01,063 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=14.36ms
+2026-09-09 14:26:01,085 - AI-Response-Validation - INFO - path=/api/results/50 method=GET status_code=200 process_time=4.56ms
+2026-09-09 14:26:03,867 - AI-Response-Validation - INFO - path=/api/results/50 method=GET status_code=200 process_time=6.70ms
+2026-09-09 14:26:03,885 - AI-Response-Validation - INFO - path=/api/results/50 method=GET status_code=200 process_time=6.59ms
+2026-09-09 14:31:00,121 - AI-Response-Validation - INFO - Initializing database connection...
+2026-09-09 14:31:00,133 - AI-Response-Validation - INFO - Database engine created at sqlite:////home/hassan/Documents/Hassan/coding_projects/Infosys Springboard Internship 7.0/ai-response-validation-system/data/evaluations.db
+2026-09-09 14:31:08,197 - datasets - INFO - PyTorch version 2.13.0 available.
+2026-09-09 14:31:08,392 - AI-Response-Validation - INFO - Starting AI Response Validation API...
+2026-09-09 14:31:08,393 - AI-Response-Validation - INFO - Database tables verified/created.
+2026-09-09 14:31:44,912 - AI-Response-Validation - INFO - Initializing database connection...
+2026-09-09 14:31:44,924 - AI-Response-Validation - INFO - Database engine created at sqlite:////home/hassan/Documents/Hassan/coding_projects/Infosys Springboard Internship 7.0/ai-response-validation-system/data/evaluations.db
+2026-09-09 14:31:52,954 - datasets - INFO - PyTorch version 2.13.0 available.
+2026-09-09 14:31:53,147 - AI-Response-Validation - INFO - Starting AI Response Validation API...
+2026-09-09 14:31:53,149 - AI-Response-Validation - INFO - Database tables verified/created.
+2026-09-09 14:31:57,157 - AI-Response-Validation - INFO - Initializing database connection...
+2026-09-09 14:31:57,169 - AI-Response-Validation - INFO - Database engine created at sqlite:////home/hassan/Documents/Hassan/coding_projects/Infosys Springboard Internship 7.0/ai-response-validation-system/data/evaluations.db
+2026-09-09 14:32:05,254 - datasets - INFO - PyTorch version 2.13.0 available.
+2026-09-09 14:32:05,449 - AI-Response-Validation - INFO - Starting AI Response Validation API...
+2026-09-09 14:32:05,451 - AI-Response-Validation - INFO - Database tables verified/created.
+2026-09-09 14:32:36,033 - AI-Response-Validation - INFO - Initializing database connection...
+2026-09-09 14:32:36,045 - AI-Response-Validation - INFO - Database engine created at sqlite:////home/hassan/Documents/Hassan/coding_projects/Infosys Springboard Internship 7.0/ai-response-validation-system/data/evaluations.db
+2026-09-09 14:32:44,131 - datasets - INFO - PyTorch version 2.13.0 available.
+2026-09-09 14:32:44,330 - AI-Response-Validation - INFO - Starting AI Response Validation API...
+2026-09-09 14:32:44,332 - AI-Response-Validation - INFO - Database tables verified/created.
+2026-09-09 14:35:42,586 - AI-Response-Validation - INFO - Initializing database connection...
+2026-09-09 14:35:42,597 - AI-Response-Validation - INFO - Database engine created at sqlite:////home/hassan/Documents/Hassan/coding_projects/Infosys Springboard Internship 7.0/ai-response-validation-system/data/evaluations.db
+2026-09-09 14:35:50,470 - datasets - INFO - PyTorch version 2.13.0 available.
+2026-09-09 14:35:50,659 - AI-Response-Validation - INFO - Starting AI Response Validation API...
+2026-09-09 14:35:50,661 - AI-Response-Validation - INFO - Database tables verified/created.
+2026-09-09 14:36:10,449 - AI-Response-Validation - INFO - Initializing database connection...
+2026-09-09 14:36:10,461 - AI-Response-Validation - INFO - Database engine created at sqlite:////home/hassan/Documents/Hassan/coding_projects/Infosys Springboard Internship 7.0/ai-response-validation-system/data/evaluations.db
+2026-09-09 14:36:19,229 - datasets - INFO - PyTorch version 2.13.0 available.
+2026-09-09 14:36:19,420 - AI-Response-Validation - INFO - Starting AI Response Validation API...
+2026-09-09 14:36:19,422 - AI-Response-Validation - INFO - Database tables verified/created.
+2026-09-09 14:36:21,175 - AI-Response-Validation - INFO - path=/api/evaluate method=OPTIONS status_code=200 process_time=0.48ms
+2026-09-09 14:36:21,184 - AI-Response-Validation - INFO - Received evaluation submission: question='What happens if you crack your...'
+2026-09-09 14:36:21,193 - AI-Response-Validation - INFO - Semantic Cache HIT! Returning instant cached result.
+2026-09-09 14:36:21,203 - AI-Response-Validation - INFO - path=/api/evaluate method=POST status_code=200 process_time=21.25ms
+2026-09-09 14:36:21,226 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=12.99ms
+2026-09-09 14:36:21,228 - AI-Response-Validation - INFO - path=/api/results/51 method=GET status_code=200 process_time=8.35ms
+2026-09-09 14:36:21,239 - AI-Response-Validation - INFO - path=/api/results/51 method=GET status_code=200 process_time=2.62ms
+2026-09-09 14:36:24,167 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=10.14ms
+2026-09-09 14:36:25,036 - AI-Response-Validation - INFO - path=/api/results/51 method=GET status_code=200 process_time=7.07ms
+2026-09-09 14:36:25,051 - AI-Response-Validation - INFO - path=/api/results/51 method=GET status_code=200 process_time=8.26ms
+2026-09-09 14:36:29,439 - AI-Response-Validation - INFO - path=/api/evaluations/analytics method=GET status_code=200 process_time=14.19ms
+2026-09-09 14:36:29,455 - AI-Response-Validation - INFO - path=/api/evaluations/analytics method=GET status_code=200 process_time=6.81ms
+2026-09-09 14:36:34,884 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=20.09ms
+2026-09-09 14:36:34,885 - AI-Response-Validation - INFO - path=/api/results/51 method=GET status_code=200 process_time=15.35ms
+2026-09-09 14:36:34,902 - AI-Response-Validation - INFO - path=/api/results/51 method=GET status_code=200 process_time=7.30ms
+2026-09-09 14:38:07,063 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=9.48ms
+2026-09-09 14:38:11,497 - AI-Response-Validation - INFO - path=/api/evaluations/export method=GET status_code=200 process_time=5.83ms
+2026-09-09 14:38:59,822 - AI-Response-Validation - INFO - Received evaluation submission: question='What happens if you crack your...'
+2026-09-09 14:38:59,827 - AI-Response-Validation - INFO - Semantic Cache HIT! Returning instant cached result.
+2026-09-09 14:38:59,834 - AI-Response-Validation - INFO - path=/api/evaluate method=POST status_code=200 process_time=16.88ms
+2026-09-09 14:38:59,849 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=6.79ms
+2026-09-09 14:38:59,853 - AI-Response-Validation - INFO - path=/api/results/52 method=GET status_code=200 process_time=6.27ms
+2026-09-09 14:38:59,866 - AI-Response-Validation - INFO - path=/api/results/52 method=GET status_code=200 process_time=4.18ms
+2026-09-09 14:39:16,178 - AI-Response-Validation - INFO - Received evaluation submission: question='What happens if you crack your...'
+2026-09-09 14:39:16,182 - AI-Response-Validation - INFO - Semantic Cache HIT! Returning instant cached result.
+2026-09-09 14:39:16,188 - AI-Response-Validation - INFO - path=/api/evaluate method=POST status_code=200 process_time=14.13ms
+2026-09-09 14:39:16,198 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=2.92ms
+2026-09-09 14:39:16,202 - AI-Response-Validation - INFO - path=/api/results/53 method=GET status_code=200 process_time=2.89ms
+2026-09-09 14:39:16,211 - AI-Response-Validation - INFO - path=/api/results/53 method=GET status_code=200 process_time=2.53ms
+2026-09-09 14:41:51,408 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=15.65ms
+2026-09-09 14:41:51,413 - AI-Response-Validation - INFO - path=/api/results/53 method=GET status_code=200 process_time=21.41ms
+2026-09-09 14:41:51,431 - AI-Response-Validation - INFO - path=/api/results/53 method=GET status_code=200 process_time=5.92ms
+2026-09-09 14:42:50,423 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=12.04ms
+2026-09-09 14:42:50,453 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=11.89ms
+2026-09-09 14:42:52,323 - AI-Response-Validation - INFO - Received evaluation submission: question='What happens if you crack your...'
+2026-09-09 14:42:52,326 - AI-Response-Validation - INFO - Semantic Cache HIT! Returning instant cached result.
+2026-09-09 14:42:52,339 - AI-Response-Validation - INFO - path=/api/evaluate method=POST status_code=200 process_time=20.25ms
+2026-09-09 14:42:52,372 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=22.57ms
+2026-09-09 14:42:52,373 - AI-Response-Validation - INFO - path=/api/results/54 method=GET status_code=200 process_time=18.45ms
+2026-09-09 14:42:52,389 - AI-Response-Validation - INFO - path=/api/results/54 method=GET status_code=200 process_time=3.45ms
+2026-09-09 14:43:10,451 - AI-Response-Validation - INFO - Received evaluation submission: question='What happens if you crack your...'
+2026-09-09 14:43:10,455 - AI-Response-Validation - INFO - Semantic Cache HIT! Returning instant cached result.
+2026-09-09 14:43:10,463 - AI-Response-Validation - INFO - path=/api/evaluate method=POST status_code=200 process_time=15.85ms
+2026-09-09 14:43:10,478 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=4.98ms
+2026-09-09 14:43:10,491 - AI-Response-Validation - INFO - path=/api/results/55 method=GET status_code=200 process_time=5.58ms
+2026-09-09 14:43:10,506 - AI-Response-Validation - INFO - path=/api/results/55 method=GET status_code=200 process_time=5.74ms
+2026-09-09 14:43:18,641 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=8.97ms
+2026-09-09 14:43:20,612 - AI-Response-Validation - INFO - path=/api/evaluations/analytics method=GET status_code=200 process_time=20.50ms
+2026-09-09 14:43:20,636 - AI-Response-Validation - INFO - path=/api/evaluations/analytics method=GET status_code=200 process_time=14.69ms
+2026-09-09 14:46:07,403 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=10.53ms

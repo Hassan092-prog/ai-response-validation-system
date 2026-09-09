@@ -25,6 +25,11 @@
   --sidebar-hover: #ebebeb;
   
   --radius: 12px;
+
+  /* Chart Colors */
+  --chart-radar-fill: rgba(26, 26, 26, 0.2);
+  --chart-radar-stroke: #1a1a1a;
+  --chart-line: #2563eb;
 }
 
 [data-theme='dark'] {
@@ -45,6 +50,11 @@
   --sidebar-border: #1f1f1f;
   --sidebar-active: #1a1a1a;
   --sidebar-hover: #141414;
+
+  /* Chart Colors */
+  --chart-radar-fill: rgba(182, 242, 54, 0.35);
+  --chart-radar-stroke: #b6f236;
+  --chart-line: #60a5fa;
 }
 
 * {
@@ -606,4 +616,104 @@ body {
 .markdown-body strong {
   color: var(--text-primary);
   font-weight: 600;
+}
+
+/* ==========================================================================
+   Analytics Dashboard Styles
+   ========================================================================== */
+
+.analytics-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 100%;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.stat-card {
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px var(--input-glow);
+}
+
+.stat-card h3 {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.stat-value {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.stat-value.text-high { color: #22c55e; }
+.stat-value.text-medium { color: #f59e0b; }
+.stat-value.text-low { color: #ef4444; }
+
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 1.5rem;
+}
+
+@media (max-width: 800px) {
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.chart-card {
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-card h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.chart-wrapper {
+  width: 100%;
+  flex-grow: 1;
+}
+
+/* Recharts Theme Overrides */
+.recharts-text {
+  fill: var(--text-secondary) !important;
+}
+.recharts-cartesian-grid-horizontal line,
+.recharts-cartesian-grid-vertical line {
+  stroke: var(--input-border);
+}
+.recharts-polar-grid-angle line, 
+.recharts-polar-grid-concentric polygon {
+  stroke: var(--input-border);
 }

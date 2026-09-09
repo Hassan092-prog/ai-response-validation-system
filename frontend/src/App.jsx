@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
+import { PlusCircle, History, BarChart3, Moon, Sun, ChevronDown, ChevronRight, Paperclip, Download, FileSpreadsheet, FileJson } from 'lucide-react'
 import './App.css'
 import Results from './Results'
+import AnalyticsDashboard from './AnalyticsDashboard'
 
 function App() {
   const [formData, setFormData] = useState({
@@ -19,7 +21,7 @@ function App() {
   const [history, setHistory] = useState([])
   
   // Layout Navigation State
-  const [activeTab, setActiveTab] = useState('new') // 'new' | 'history'
+  const [activeTab, setActiveTab] = useState('new') // 'new' | 'history' | 'analytics'
   const [expandedHistoryId, setExpandedHistoryId] = useState(null)
   const [isExportMenuOpen, setIsExportMenuOpen] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
@@ -101,12 +103,35 @@ function App() {
   }, [status])
 
   const fillTestData = () => {
-    setFormData({
-      question: 'What happens if you crack your knuckles a lot?',
-      ai_response: 'Cracking your knuckles causes arthritis and permanent joint damage.',
-      reference_answer: 'Cracking your knuckles does not cause arthritis. It is harmless.',
-      source_document: 'Medical studies have shown that the popping sound is just gas bubbles bursting in the synovial fluid. There is no link to arthritis.'
-    })
+    const testCases = [
+      { // Bad Score (Hallucination/Inaccurate)
+        question: 'What happens if you crack your knuckles a lot?',
+        ai_response: 'Cracking your knuckles causes arthritis and permanent joint damage.',
+        reference_answer: 'Cracking your knuckles does not cause arthritis. It is harmless.',
+        source_document: 'Medical studies have shown that the popping sound is just gas bubbles bursting in the synovial fluid. There is no link to arthritis.'
+      },
+      { // Perfect Score (Accurate & Complete)
+        question: 'What is the capital of France?',
+        ai_response: 'The capital of France is Paris.',
+        reference_answer: 'Paris is the capital of France.',
+        source_document: 'France is a country in Western Europe. Its capital and largest city is Paris.'
+      },
+      { // Partial Score (Incomplete)
+        question: 'Name three primary colors.',
+        ai_response: 'The primary colors include red and blue.',
+        reference_answer: 'The three primary colors are red, blue, and yellow.',
+        source_document: 'In traditional color theory, the primary colors are red, yellow, and blue.'
+      },
+      { // Terrible Score (Irrelevant)
+        question: 'How do you bake a chocolate cake?',
+        ai_response: 'To fix a flat tire, you need a jack and a lug wrench. First, loosen the lug nuts...',
+        reference_answer: 'To bake a chocolate cake, you need flour, sugar, cocoa powder, eggs, and butter. Mix and bake at 350F for 30 minutes.',
+        source_document: 'Baking a cake requires mixing dry and wet ingredients and baking them at specific temperatures.'
+      }
+    ];
+    
+    const randomCase = testCases[Math.floor(Math.random() * testCases.length)];
+    setFormData(randomCase);
   }
 
   const clearInput = () => {
@@ -196,23 +221,7 @@ function App() {
         <div className="sidebar-header">
           <h2>Validation AI</h2>
           <button onClick={toggleTheme} className="theme-toggle-btn" aria-label="Toggle Theme">
-            {theme === 'light' ? (
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-              </svg>
-            ) : (
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="5"></circle>
-                <line x1="12" y1="1" x2="12" y2="3"></line>
-                <line x1="12" y1="21" x2="12" y2="23"></line>
-                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                <line x1="1" y1="12" x2="3" y2="12"></line>
-                <line x1="21" y1="12" x2="23" y2="12"></line>
-                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-              </svg>
-            )}
+            {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
           </button>
         </div>
         
@@ -221,13 +230,19 @@ function App() {
             className={`nav-btn ${activeTab === 'new' ? 'active' : ''}`}
             onClick={() => { setActiveTab('new'); setEvaluationId(null); }}
           >
-            New Evaluation
+            <PlusCircle className="icon" size={18} /> New Evaluation
           </button>
           <button 
             className={`nav-btn ${activeTab === 'history' ? 'active' : ''}`}
             onClick={() => { setActiveTab('history'); fetchHistory(1); }}
           >
-            History
+            <History className="icon" size={18} /> History
+          </button>
+          <button 
+            className={`nav-btn ${activeTab === 'analytics' ? 'active' : ''}`}
+            onClick={() => setActiveTab('analytics')}
+          >
+            <BarChart3 className="icon" size={18} /> Analytics
           </button>
         </nav>
       </aside>
@@ -249,14 +264,12 @@ function App() {
           {/* TAB: NEW EVALUATION */}
           {activeTab === 'new' && (
             <div className="tab-container">
-              {!evaluationId ? (
-                <>
-                  <div className="header-text">
-                    <h1>Evaluation Module</h1>
-                    <p>Submit responses for AI validation</p>
-                  </div>
+              <div className="header-text">
+                <h1>Evaluation Module</h1>
+                <p>Submit responses for AI validation</p>
+              </div>
                   
-                  <form onSubmit={handleSubmit} onKeyDown={handleKeyDown} className="form-layout">
+              <form onSubmit={handleSubmit} onKeyDown={handleKeyDown} className="form-layout">
                     <div className="form-grid">
                       <div className="grid-col">
                         <div className="input-wrapper">
@@ -293,9 +306,7 @@ function App() {
                             <label className="secondary-btn" style={{ cursor: 'pointer', fontSize: '0.8rem', padding: '0.2rem 0.6rem', borderRadius: '6px', fontWeight: '500', display: 'flex', alignItems: 'center', gap: '6px', background: 'var(--input-bg)', border: '1px solid var(--input-border)', color: 'var(--text-primary)' }}>
                               {isUploading ? '⏳ Extracting...' : (
                                 <>
-                                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                    <path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48" />
-                                  </svg>
+                                  <Paperclip size={14} />
                                   Upload PDF/Doc
                                 </>
                               )}
@@ -318,9 +329,11 @@ function App() {
                       </button>
                     </div>
                   </form>
-                </>
-              ) : (
-                <Results evaluationId={evaluationId} onBack={() => setEvaluationId(null)} />
+              
+              {evaluationId && (
+                <div style={{ marginTop: '3rem', paddingTop: '2rem', borderTop: '1px solid var(--border-color)' }}>
+                  <Results evaluationId={evaluationId} onBack={() => setEvaluationId(null)} />
+                </div>
               )}
             </div>
           )}
@@ -341,26 +354,26 @@ function App() {
                       onClick={() => setIsExportMenuOpen(!isExportMenuOpen)}
                       style={{ padding: '0.4rem 0.8rem', display: 'flex', alignItems: 'center', gap: '6px' }}
                     >
-                      📥 Export Options ▼
+                      <Download size={16} /> Export Options <ChevronDown size={16} />
                     </button>
                     {isExportMenuOpen && (
                       <div className="dropdown-menu" style={{
                         position: 'absolute', right: 0, top: '100%', marginTop: '4px',
-                        background: 'var(--bg-secondary)', border: '1px solid var(--border-color)',
+                        background: 'var(--input-bg)', border: '1px solid var(--input-border)',
                         borderRadius: '6px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', zIndex: 10,
-                        minWidth: '150px', overflow: 'hidden'
+                        minWidth: '180px', overflow: 'hidden'
                       }}>
                         <button 
                           onClick={() => handleExport('csv')} 
-                          style={{ width: '100%', padding: '0.6rem 1rem', textAlign: 'left', background: 'none', border: 'none', borderBottom: '1px solid var(--border-color)', color: 'var(--text-primary)', cursor: 'pointer' }}
+                          style={{ width: '100%', padding: '0.6rem 1rem', textAlign: 'left', background: 'none', border: 'none', borderBottom: '1px solid var(--input-border)', color: 'var(--text-primary)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', whiteSpace: 'nowrap' }}
                         >
-                          📄 Export as CSV
+                          <FileSpreadsheet size={16} /> Export as CSV
                         </button>
                         <button 
                           onClick={() => handleExport('json')} 
-                          style={{ width: '100%', padding: '0.6rem 1rem', textAlign: 'left', background: 'none', border: 'none', color: 'var(--text-primary)', cursor: 'pointer' }}
+                          style={{ width: '100%', padding: '0.6rem 1rem', textAlign: 'left', background: 'none', border: 'none', color: 'var(--text-primary)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', whiteSpace: 'nowrap' }}
                         >
-                          {`{}`} Export as JSON
+                          <FileJson size={16} /> Export as JSON
                         </button>
                       </div>
                     )}
@@ -394,7 +407,9 @@ function App() {
                               {Math.round(item.score)}/100
                             </span>
                           )}
-                          <span className="expand-icon">{expandedHistoryId === item.id ? '▼' : '▶'}</span>
+                          <span className="expand-icon">
+                            {expandedHistoryId === item.id ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
+                          </span>
                         </div>
                       </div>
                       
@@ -448,6 +463,13 @@ function App() {
                   )}
                 </div>
               )}
+            </div>
+          )}
+
+          {/* TAB: ANALYTICS DASHBOARD */}
+          {activeTab === 'analytics' && (
+            <div className="tab-container">
+              <AnalyticsDashboard />
             </div>
           )}
 

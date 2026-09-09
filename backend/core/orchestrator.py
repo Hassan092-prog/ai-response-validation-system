@@ -54,6 +54,16 @@ def process_evaluation_task(evaluation_id: int):
         # 4. Save to Database
         record.status = "completed"
         record.result_json = json.dumps(final_verdict)
+        
+        # Save individual numeric scores to the new columns for faster queries
+        record.final_score = final_verdict.get("final_score")
+        
+        breakdown = final_verdict.get("breakdown", {})
+        record.score_relevance = breakdown.get("relevance", {}).get("score")
+        record.score_accuracy = breakdown.get("accuracy", {}).get("score")
+        record.score_completeness = breakdown.get("completeness", {}).get("score")
+        record.score_hallucination = breakdown.get("hallucination", {}).get("score")
+        
         db.commit()
         
         logger.info(f"Evaluation {evaluation_id} completed successfully. Score: {final_verdict.get('final_score')}")
