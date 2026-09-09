@@ -5727,3 +5727,387 @@ violations {
   seconds: 24
 }
 ]
+2026-09-09 11:44:24,427 - AI-Response-Validation - INFO - Initializing database connection...
+2026-09-09 11:44:24,439 - AI-Response-Validation - INFO - Database engine created at sqlite:////home/hassan/Documents/Hassan/coding_projects/Infosys Springboard Internship 7.0/ai-response-validation-system/data/evaluations.db
+2026-09-09 11:44:32,968 - datasets - INFO - PyTorch version 2.13.0 available.
+2026-09-09 11:44:33,166 - AI-Response-Validation - INFO - Starting AI Response Validation API...
+2026-09-09 11:44:33,168 - AI-Response-Validation - INFO - Database tables verified/created.
+2026-09-09 11:45:02,206 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=8.68ms
+2026-09-09 11:45:02,217 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=3.22ms
+2026-09-09 11:59:35,733 - AI-Response-Validation - INFO - Initializing database connection...
+2026-09-09 11:59:35,745 - AI-Response-Validation - INFO - Database engine created at sqlite:////home/hassan/Documents/Hassan/coding_projects/Infosys Springboard Internship 7.0/ai-response-validation-system/data/evaluations.db
+2026-09-09 11:59:44,016 - datasets - INFO - PyTorch version 2.13.0 available.
+2026-09-09 11:59:44,209 - AI-Response-Validation - INFO - Starting AI Response Validation API...
+2026-09-09 11:59:44,211 - AI-Response-Validation - INFO - Database tables verified/created.
+2026-09-09 12:01:11,190 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=8.75ms
+2026-09-09 12:01:11,201 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=3.55ms
+2026-09-09 12:02:26,472 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=9.61ms
+2026-09-09 12:04:40,411 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=8.96ms
+2026-09-09 12:12:32,042 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=9.04ms
+2026-09-09 12:12:32,060 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=9.67ms
+2026-09-09 12:14:43,539 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=8.65ms
+2026-09-09 12:14:43,556 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=10.13ms
+2026-09-09 12:14:51,574 - AI-Response-Validation - INFO - path=/api/extract-text method=POST status_code=200 process_time=6.32ms
+2026-09-09 12:15:03,574 - AI-Response-Validation - INFO - path=/api/extract-text method=POST status_code=200 process_time=3.94ms
+2026-09-09 12:15:04,907 - AI-Response-Validation - INFO - path=/api/evaluate method=OPTIONS status_code=200 process_time=0.84ms
+2026-09-09 12:15:04,917 - AI-Response-Validation - INFO - Received evaluation submission: question='What happens if you crack your...'
+2026-09-09 12:15:04,941 - AI-Response-Validation - INFO - Successfully saved and queued evaluation ID 44
+2026-09-09 12:15:04,944 - AI-Response-Validation - INFO - path=/api/evaluate method=POST status_code=200 process_time=30.21ms
+2026-09-09 12:15:04,951 - AI-Response-Validation - INFO - Orchestrator started for evaluation 44
+2026-09-09 12:15:04,955 - AI-Response-Validation - INFO - Evaluation 44: Running Relevance Judge...
+2026-09-09 12:15:04,969 - AI-Response-Validation - INFO - path=/api/results/44 method=GET status_code=200 process_time=14.72ms
+2026-09-09 12:15:04,973 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=20.83ms
+2026-09-09 12:15:04,986 - AI-Response-Validation - INFO - path=/api/results/44 method=GET status_code=200 process_time=3.00ms
+2026-09-09 12:15:05,648 - AI-Response-Validation - ERROR - LLM Call Failed: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+Please retry in 54.549986298s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerMinute-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerMinutePerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerDay-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+, retry_delay {
+  seconds: 54
+}
+]
+2026-09-09 12:15:05,649 - AI-Response-Validation - INFO - Evaluation 44: Running Accuracy Judge...
+2026-09-09 12:15:05,997 - AI-Response-Validation - ERROR - LLM Call Failed: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+Please retry in 54.157760217s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerMinute-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerMinutePerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerDay-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+, retry_delay {
+  seconds: 54
+}
+]
+2026-09-09 12:15:05,998 - AI-Response-Validation - INFO - Evaluation 44: Running Completeness Judge...
+2026-09-09 12:15:06,342 - AI-Response-Validation - ERROR - LLM Call Failed: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+Please retry in 53.822079099s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerMinute-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerMinutePerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerDay-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+, retry_delay {
+  seconds: 53
+}
+]
+2026-09-09 12:15:06,343 - AI-Response-Validation - INFO - Evaluation 44: Running Hallucination Detector...
+2026-09-09 12:15:06,690 - AI-Response-Validation - ERROR - LLM Call Failed: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+Please retry in 53.495351499s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerDay-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerMinutePerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerMinute-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+, retry_delay {
+  seconds: 53
+}
+]
+2026-09-09 12:15:06,691 - AI-Response-Validation - INFO - Evaluation 44: Computing Final Verdict...
+2026-09-09 12:15:06,700 - AI-Response-Validation - INFO - Evaluation 44 completed successfully. Score: 15.0
+2026-09-09 12:15:08,030 - AI-Response-Validation - INFO - path=/api/results/44 method=GET status_code=200 process_time=7.58ms
+2026-09-09 12:18:07,492 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=10.13ms
+2026-09-09 12:18:08,505 - AI-Response-Validation - INFO - path=/api/results/44 method=GET status_code=200 process_time=9.02ms
+2026-09-09 12:18:08,522 - AI-Response-Validation - INFO - path=/api/results/44 method=GET status_code=200 process_time=9.32ms
+2026-09-09 12:18:13,634 - AI-Response-Validation - INFO - path=/api/results/43 method=GET status_code=200 process_time=8.21ms
+2026-09-09 12:18:13,852 - AI-Response-Validation - INFO - path=/api/results/43 method=GET status_code=200 process_time=7.28ms
+2026-09-09 12:18:16,927 - AI-Response-Validation - INFO - path=/api/results/44 method=GET status_code=200 process_time=6.32ms
+2026-09-09 12:18:16,946 - AI-Response-Validation - INFO - path=/api/results/44 method=GET status_code=200 process_time=8.14ms
+2026-09-09 12:42:14,529 - AI-Response-Validation - INFO - Initializing database connection...
+2026-09-09 12:42:14,541 - AI-Response-Validation - INFO - Database engine created at sqlite:////home/hassan/Documents/Hassan/coding_projects/Infosys Springboard Internship 7.0/ai-response-validation-system/data/evaluations.db
+2026-09-09 12:42:22,585 - datasets - INFO - PyTorch version 2.13.0 available.
+2026-09-09 12:42:22,783 - AI-Response-Validation - INFO - Starting AI Response Validation API...
+2026-09-09 12:42:22,785 - AI-Response-Validation - INFO - Database tables verified/created.
+2026-09-09 12:42:33,444 - AI-Response-Validation - INFO - Initializing database connection...
+2026-09-09 12:42:33,456 - AI-Response-Validation - INFO - Database engine created at sqlite:////home/hassan/Documents/Hassan/coding_projects/Infosys Springboard Internship 7.0/ai-response-validation-system/data/evaluations.db
+2026-09-09 12:42:41,476 - datasets - INFO - PyTorch version 2.13.0 available.
+2026-09-09 12:42:41,670 - AI-Response-Validation - INFO - Starting AI Response Validation API...
+2026-09-09 12:42:41,671 - AI-Response-Validation - INFO - Database tables verified/created.
+2026-09-09 12:42:51,321 - AI-Response-Validation - INFO - Initializing database connection...
+2026-09-09 12:42:51,333 - AI-Response-Validation - INFO - Database engine created at sqlite:////home/hassan/Documents/Hassan/coding_projects/Infosys Springboard Internship 7.0/ai-response-validation-system/data/evaluations.db
+2026-09-09 12:42:59,334 - datasets - INFO - PyTorch version 2.13.0 available.
+2026-09-09 12:42:59,525 - AI-Response-Validation - INFO - Starting AI Response Validation API...
+2026-09-09 12:42:59,527 - AI-Response-Validation - INFO - Database tables verified/created.
+2026-09-09 12:43:08,547 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=9.62ms
+2026-09-09 12:43:08,559 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=3.28ms
+2026-09-09 12:49:09,173 - AI-Response-Validation - INFO - Initializing database connection...
+2026-09-09 12:49:09,186 - AI-Response-Validation - INFO - Database engine created at sqlite:////home/hassan/Documents/Hassan/coding_projects/Infosys Springboard Internship 7.0/ai-response-validation-system/data/evaluations.db
+2026-09-09 12:49:17,999 - datasets - INFO - PyTorch version 2.13.0 available.
+2026-09-09 12:49:18,203 - AI-Response-Validation - INFO - Starting AI Response Validation API...
+2026-09-09 12:49:18,205 - AI-Response-Validation - INFO - Database tables verified/created.
+2026-09-09 12:49:18,519 - AI-Response-Validation - INFO - path=/api/extract-text method=POST status_code=200 process_time=1.94ms
+2026-09-09 12:49:18,565 - AI-Response-Validation - INFO - path=/api/evaluate method=OPTIONS status_code=200 process_time=0.44ms
+2026-09-09 12:49:18,572 - AI-Response-Validation - INFO - Received evaluation submission: question='What happens if you crack your...'
+2026-09-09 12:49:18,582 - AI-Response-Validation - INFO - Semantic Cache HIT! Returning instant cached result.
+2026-09-09 12:49:18,594 - AI-Response-Validation - INFO - path=/api/evaluate method=POST status_code=200 process_time=24.18ms
+2026-09-09 12:49:18,611 - AI-Response-Validation - INFO - path=/api/results/45 method=GET status_code=200 process_time=7.85ms
+2026-09-09 12:49:18,614 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=11.89ms
+2026-09-09 12:49:18,624 - AI-Response-Validation - INFO - path=/api/results/45 method=GET status_code=200 process_time=2.74ms
+2026-09-09 12:49:23,905 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=5.76ms
+2026-09-09 12:49:24,554 - AI-Response-Validation - INFO - path=/api/results/45 method=GET status_code=200 process_time=5.24ms
+2026-09-09 12:49:24,564 - AI-Response-Validation - INFO - path=/api/results/45 method=GET status_code=200 process_time=2.89ms
+2026-09-09 12:49:34,693 - AI-Response-Validation - INFO - path=/api/results/45 method=GET status_code=200 process_time=8.08ms
+2026-09-09 12:49:34,704 - AI-Response-Validation - INFO - path=/api/results/45 method=GET status_code=200 process_time=2.99ms
+2026-09-09 12:51:10,325 - AI-Response-Validation - INFO - path=/api/results/45 method=GET status_code=200 process_time=6.56ms
+2026-09-09 12:51:10,349 - AI-Response-Validation - INFO - path=/api/results/45 method=GET status_code=200 process_time=7.18ms
+2026-09-09 12:53:59,205 - AI-Response-Validation - INFO - Initializing database connection...
+2026-09-09 12:53:59,217 - AI-Response-Validation - INFO - Database engine created at sqlite:////home/hassan/Documents/Hassan/coding_projects/Infosys Springboard Internship 7.0/ai-response-validation-system/data/evaluations.db
+2026-09-09 12:54:07,865 - datasets - INFO - PyTorch version 2.13.0 available.
+2026-09-09 12:54:08,054 - AI-Response-Validation - INFO - Starting AI Response Validation API...
+2026-09-09 12:54:08,056 - AI-Response-Validation - INFO - Database tables verified/created.
+2026-09-09 12:54:08,787 - AI-Response-Validation - INFO - Received evaluation submission: question='What happens if you crack your...'
+2026-09-09 12:54:08,795 - AI-Response-Validation - INFO - Semantic Cache HIT! Returning instant cached result.
+2026-09-09 12:54:08,805 - AI-Response-Validation - INFO - path=/api/evaluate method=POST status_code=200 process_time=19.86ms
+2026-09-09 12:54:08,816 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=4.14ms
+2026-09-09 12:54:08,832 - AI-Response-Validation - INFO - path=/api/results/46 method=GET status_code=200 process_time=3.85ms
+2026-09-09 12:54:08,844 - AI-Response-Validation - INFO - path=/api/results/46 method=GET status_code=200 process_time=2.32ms
+2026-09-09 12:54:13,271 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=3.04ms
+2026-09-09 12:54:13,280 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=3.37ms
+2026-09-09 12:54:15,360 - AI-Response-Validation - INFO - Received evaluation submission: question='What happens if you crack your...'
+2026-09-09 12:54:15,366 - AI-Response-Validation - INFO - Semantic Cache HIT! Returning instant cached result.
+2026-09-09 12:54:15,373 - AI-Response-Validation - INFO - path=/api/evaluate method=POST status_code=200 process_time=16.55ms
+2026-09-09 12:54:15,400 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=12.30ms
+2026-09-09 12:54:15,404 - AI-Response-Validation - INFO - path=/api/results/47 method=GET status_code=200 process_time=16.68ms
+2026-09-09 12:54:15,420 - AI-Response-Validation - INFO - path=/api/results/47 method=GET status_code=200 process_time=6.13ms
+2026-09-09 12:56:29,335 - AI-Response-Validation - INFO - path=/api/results/47 method=GET status_code=200 process_time=6.51ms
+2026-09-09 13:06:59,487 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=8.18ms
+2026-09-09 13:06:59,504 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=8.04ms
+2026-09-09 13:07:01,326 - AI-Response-Validation - INFO - path=/api/evaluate method=OPTIONS status_code=200 process_time=0.29ms
+2026-09-09 13:07:01,334 - AI-Response-Validation - INFO - Received evaluation submission: question='What happens if you crack your...'
+2026-09-09 13:07:01,336 - AI-Response-Validation - INFO - Semantic Cache HIT! Returning instant cached result.
+2026-09-09 13:07:01,342 - AI-Response-Validation - INFO - path=/api/evaluate method=POST status_code=200 process_time=9.10ms
+2026-09-09 13:07:01,355 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=5.75ms
+2026-09-09 13:07:01,357 - AI-Response-Validation - INFO - path=/api/results/48 method=GET status_code=200 process_time=5.17ms
+2026-09-09 13:07:01,370 - AI-Response-Validation - INFO - path=/api/results/48 method=GET status_code=200 process_time=2.98ms
+2026-09-09 13:07:32,930 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=9.18ms
+2026-09-09 13:07:33,056 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=11.92ms
+2026-09-09 13:07:36,615 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=10.81ms
+2026-09-09 13:08:27,696 - AI-Response-Validation - INFO - Initializing database connection...
+2026-09-09 13:08:27,708 - AI-Response-Validation - INFO - Database engine created at sqlite:////home/hassan/Documents/Hassan/coding_projects/Infosys Springboard Internship 7.0/ai-response-validation-system/data/evaluations.db
+2026-09-09 13:08:35,644 - datasets - INFO - PyTorch version 2.13.0 available.
+2026-09-09 13:08:35,835 - AI-Response-Validation - INFO - Starting AI Response Validation API...
+2026-09-09 13:08:35,837 - AI-Response-Validation - INFO - Database tables verified/created.
+2026-09-09 13:11:24,265 - AI-Response-Validation - INFO - Initializing database connection...
+2026-09-09 13:11:24,277 - AI-Response-Validation - INFO - Database engine created at sqlite:////home/hassan/Documents/Hassan/coding_projects/Infosys Springboard Internship 7.0/ai-response-validation-system/data/evaluations.db
+2026-09-09 13:11:32,246 - datasets - INFO - PyTorch version 2.13.0 available.
+2026-09-09 13:11:32,439 - AI-Response-Validation - INFO - Starting AI Response Validation API...
+2026-09-09 13:11:32,441 - AI-Response-Validation - INFO - Database tables verified/created.
+2026-09-09 13:11:46,568 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=12.86ms
+2026-09-09 13:11:46,584 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=4.61ms
+2026-09-09 13:16:45,707 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=10.43ms
+2026-09-09 13:16:45,731 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=11.69ms
+2026-09-09 13:16:46,944 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=10.09ms
+2026-09-09 13:16:52,565 - AI-Response-Validation - INFO - Received evaluation submission: question='What happens if you crack your...'
+2026-09-09 13:16:52,573 - AI-Response-Validation - INFO - Semantic Cache HIT! Returning instant cached result.
+2026-09-09 13:16:52,584 - AI-Response-Validation - INFO - path=/api/evaluate method=POST status_code=200 process_time=23.10ms
+2026-09-09 13:16:52,597 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=4.94ms
+2026-09-09 13:16:52,601 - AI-Response-Validation - INFO - path=/api/results/49 method=GET status_code=200 process_time=4.91ms
+2026-09-09 13:16:52,608 - AI-Response-Validation - INFO - path=/api/results/49 method=GET status_code=200 process_time=2.27ms
+2026-09-09 13:16:55,492 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=6.45ms
+2026-09-09 13:17:00,342 - AI-Response-Validation - INFO - path=/api/evaluations/export method=GET status_code=200 process_time=10.93ms
+2026-09-09 13:17:18,456 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=9.42ms
+2026-09-09 13:17:20,334 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=10.06ms
+2026-09-09 13:17:21,324 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=9.53ms
+2026-09-09 13:17:23,180 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=10.17ms

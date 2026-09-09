@@ -12,6 +12,7 @@ function App() {
   
   const [status, setStatus] = useState({ type: '', message: '' })
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isUploading, setIsUploading] = useState(false)
   const [evaluationId, setEvaluationId] = useState(null)
   
   const [theme, setTheme] = useState('light')
@@ -20,6 +21,20 @@ function App() {
   // Layout Navigation State
   const [activeTab, setActiveTab] = useState('new') // 'new' | 'history'
   const [expandedHistoryId, setExpandedHistoryId] = useState(null)
+  const [isExportMenuOpen, setIsExportMenuOpen] = useState(false)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [totalPages, setTotalPages] = useState(1)
+  const [totalRecords, setTotalRecords] = useState(0)
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!event.target.closest('.export-dropdown-container')) {
+        setIsExportMenuOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
 
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme')
@@ -30,15 +45,18 @@ function App() {
       setTheme('dark')
       document.body.setAttribute('data-theme', 'dark')
     }
-    fetchHistory()
+    fetchHistory(1)
   }, [])
 
-  const fetchHistory = async () => {
+  const fetchHistory = async (page = 1) => {
     try {
-      const response = await fetch('http://192.168.1.92:8001/api/evaluations/history')
+      const response = await fetch(`http://192.168.1.92:8001/api/evaluations/history?page=${page}&limit=10`)
       if (response.ok) {
         const data = await response.json()
         setHistory(data.history)
+        setCurrentPage(data.current_page)
+        setTotalPages(data.total_pages)
+        setTotalRecords(data.total_records)
       }
     } catch (e) {
       console.error("Failed to fetch history", e)
@@ -50,6 +68,11 @@ function App() {
     setTheme(newTheme)
     document.body.setAttribute('data-theme', newTheme)
     localStorage.setItem('theme', newTheme)
+  }
+
+  const handleExport = (format) => {
+    window.open(`http://192.168.1.92:8001/api/evaluations/export?format=${format}`, '_blank')
+    setIsExportMenuOpen(false)
   }
 
   const handleChange = (e) => {
@@ -130,6 +153,42 @@ function App() {
     }
   }
 
+  const handleFileUpload = async (e) => {
+    const file = e.target.files[0]
+    if (!file) return
+
+    setIsUploading(true)
+    setStatus({ type: '', message: 'Extracting text from document...' })
+    
+    const formData = new FormData()
+    formData.append('file', file)
+
+    try {
+      const response = await fetch('http://192.168.1.92:8001/api/extract-text', {
+        method: 'POST',
+        body: formData
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        setFormData(prev => ({
+          ...prev,
+          source_document: prev.source_document ? prev.source_document + "\n\n" + data.extracted_text : data.extracted_text
+        }))
+        setStatus({ type: 'success', message: 'Text extracted successfully!' })
+      } else {
+        setStatus({ type: 'error', message: `Error: ${data.detail || 'Failed to extract text'}` })
+      }
+    } catch (error) {
+      console.error(error)
+      setStatus({ type: 'error', message: 'Failed to connect to the backend server.' })
+    } finally {
+      setIsUploading(false)
+      e.target.value = null
+    }
+  }
+
   return (
     <div className="app-wrapper">
       {/* Sidebar Navigation */}
@@ -166,7 +225,7 @@ function App() {
           </button>
           <button 
             className={`nav-btn ${activeTab === 'history' ? 'active' : ''}`}
-            onClick={() => { setActiveTab('history'); fetchHistory(); }}
+            onClick={() => { setActiveTab('history'); fetchHistory(1); }}
           >
             History
           </button>
@@ -227,8 +286,21 @@ function App() {
                           />
                         </div>
                         <div className="input-wrapper flex-grow">
-                          <div className="input-header">
-                            <label>Source Context</label><span className="badge">Optional</span>
+                          <div className="input-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <div>
+                              <label>Source Context</label><span className="badge">Optional</span>
+                            </div>
+                            <label className="secondary-btn" style={{ cursor: 'pointer', fontSize: '0.8rem', padding: '0.2rem 0.6rem', borderRadius: '6px', fontWeight: '500', display: 'flex', alignItems: 'center', gap: '6px', background: 'var(--input-bg)', border: '1px solid var(--input-border)', color: 'var(--text-primary)' }}>
+                              {isUploading ? '⏳ Extracting...' : (
+                                <>
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48" />
+                                  </svg>
+                                  Upload PDF/Doc
+                                </>
+                              )}
+                              <input type="file" accept=".pdf,.docx,.txt,.md" style={{ display: 'none' }} onChange={handleFileUpload} disabled={isUploading} />
+                            </label>
                           </div>
                           <textarea 
                             name="source_document" value={formData.source_document} onChange={handleChange}
@@ -256,9 +328,44 @@ function App() {
           {/* TAB: HISTORY LIST */}
           {activeTab === 'history' && (
             <div className="tab-container history-list-view">
-              <div className="history-header">
-                <h2>Evaluation History</h2>
-                <span className="badge">{history.length} Total</span>
+              <div className="history-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                  <h2>Evaluation History</h2>
+                  <span className="badge">{totalRecords} Total</span>
+                </div>
+                
+                {history.length > 0 && (
+                  <div className="export-dropdown-container" style={{ position: 'relative' }}>
+                    <button 
+                      className="secondary-btn" 
+                      onClick={() => setIsExportMenuOpen(!isExportMenuOpen)}
+                      style={{ padding: '0.4rem 0.8rem', display: 'flex', alignItems: 'center', gap: '6px' }}
+                    >
+                      📥 Export Options ▼
+                    </button>
+                    {isExportMenuOpen && (
+                      <div className="dropdown-menu" style={{
+                        position: 'absolute', right: 0, top: '100%', marginTop: '4px',
+                        background: 'var(--bg-secondary)', border: '1px solid var(--border-color)',
+                        borderRadius: '6px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', zIndex: 10,
+                        minWidth: '150px', overflow: 'hidden'
+                      }}>
+                        <button 
+                          onClick={() => handleExport('csv')} 
+                          style={{ width: '100%', padding: '0.6rem 1rem', textAlign: 'left', background: 'none', border: 'none', borderBottom: '1px solid var(--border-color)', color: 'var(--text-primary)', cursor: 'pointer' }}
+                        >
+                          📄 Export as CSV
+                        </button>
+                        <button 
+                          onClick={() => handleExport('json')} 
+                          style={{ width: '100%', padding: '0.6rem 1rem', textAlign: 'left', background: 'none', border: 'none', color: 'var(--text-primary)', cursor: 'pointer' }}
+                        >
+                          {`{}`} Export as JSON
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
               
               {history.length === 0 ? (
@@ -299,6 +406,46 @@ function App() {
                       )}
                     </div>
                   ))}
+                  
+                  {totalPages > 1 && (
+                    <div className="pagination-controls" style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', marginTop: '2rem', paddingBottom: '1rem' }}>
+                      <button 
+                        className="secondary-btn" 
+                        disabled={currentPage === 1} 
+                        onClick={() => fetchHistory(currentPage - 1)}
+                        style={{ padding: '0.4rem 0.8rem', borderRadius: '4px', cursor: currentPage === 1 ? 'not-allowed' : 'pointer', opacity: currentPage === 1 ? 0.5 : 1 }}
+                      >
+                        Previous
+                      </button>
+                      
+                      {[...Array(totalPages)].map((_, i) => (
+                        <button 
+                          key={i + 1}
+                          className="secondary-btn"
+                          style={{ 
+                            padding: '0.4rem 0.8rem', 
+                            borderRadius: '4px',
+                            background: currentPage === i + 1 ? 'var(--accent-color)' : 'var(--input-bg)', 
+                            color: currentPage === i + 1 ? '#fff' : 'var(--text-primary)',
+                            border: currentPage === i + 1 ? 'none' : '1px solid var(--input-border)',
+                            cursor: 'pointer'
+                          }}
+                          onClick={() => fetchHistory(i + 1)}
+                        >
+                          {i + 1}
+                        </button>
+                      ))}
+                      
+                      <button 
+                        className="secondary-btn" 
+                        disabled={currentPage === totalPages} 
+                        onClick={() => fetchHistory(currentPage + 1)}
+                        style={{ padding: '0.4rem 0.8rem', borderRadius: '4px', cursor: currentPage === totalPages ? 'not-allowed' : 'pointer', opacity: currentPage === totalPages ? 0.5 : 1 }}
+                      >
+                        Next
+                      </button>
+                    </div>
+                  )}
                 </div>
               )}
             </div>

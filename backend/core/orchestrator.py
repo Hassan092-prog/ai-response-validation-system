@@ -1,4 +1,5 @@
 import json
+import concurrent.futures
 from sqlalchemy.orm import Session
 from backend.api import models, database
 from backend.core import agents
@@ -27,18 +28,19 @@ def process_evaluation_task(evaluation_id: int):
             rag_context = retrieve_context(record.question)
             context += f"\nRetrieved Knowledge Base Context:\n{rag_context}"
             
-        # 2. Call Judge Agents (In sequence for simplicity, could be ThreadPoolExecutor)
-        logger.info(f"Evaluation {evaluation_id}: Running Relevance Judge...")
-        relevance_res = agents.evaluate_relevance(record.question, record.ai_response)
+        # 2. Call Judge Agents Concurrently
+        logger.info(f"Evaluation {evaluation_id}: Running Judge Agents concurrently...")
         
-        logger.info(f"Evaluation {evaluation_id}: Running Accuracy Judge...")
-        accuracy_res = agents.evaluate_accuracy(record.question, record.ai_response, context)
-        
-        logger.info(f"Evaluation {evaluation_id}: Running Completeness Judge...")
-        completeness_res = agents.evaluate_completeness(record.question, record.ai_response)
-        
-        logger.info(f"Evaluation {evaluation_id}: Running Hallucination Detector...")
-        hallucination_res = agents.detect_hallucination(record.ai_response, context)
+        with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
+            future_relevance = executor.submit(agents.evaluate_relevance, record.question, record.ai_response)
+            future_accuracy = executor.submit(agents.evaluate_accuracy, record.question, record.ai_response, context)
+            future_completeness = executor.submit(agents.evaluate_completeness, record.question, record.ai_response)
+            future_hallucination = executor.submit(agents.detect_hallucination, record.ai_response, context)
+            
+            relevance_res = future_relevance.result()
+            accuracy_res = future_accuracy.result()
+            completeness_res = future_completeness.result()
+            hallucination_res = future_hallucination.result()
         
         # 3. Verdict Aggregation
         logger.info(f"Evaluation {evaluation_id}: Computing Final Verdict...")

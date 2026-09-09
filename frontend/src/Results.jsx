@@ -9,6 +9,17 @@ const Results = ({ evaluationId, onBack }) => {
   const [showRag, setShowRag] = useState(false);
   const [showDiff, setShowDiff] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [isExportMenuOpen, setIsExportMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!event.target.closest('.results-export-dropdown')) {
+        setIsExportMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   useEffect(() => {
     let intervalId;
@@ -113,6 +124,32 @@ ${breakdown.hallucination.reasoning}
     URL.revokeObjectURL(url);
   };
 
+  const handleDownloadCSV = () => {
+    const escapeCSV = (str) => `"${String(str).replace(/"/g, '""')}"`;
+    const header = ["ID", "Status", "Final Score", "Question", "AI Response", "Reference Answer", "Source Context"];
+    const row = [
+      data.id, 
+      data.status, 
+      final_score, 
+      data.question, 
+      data.ai_response, 
+      data.reference_answer || "", 
+      data.source_document || ""
+    ];
+    
+    const csvContent = header.join(",") + "\r\n" + row.map(escapeCSV).join(",");
+    const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `evaluation-${data.id}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    setIsExportMenuOpen(false);
+  };
+
   const renderDiff = () => {
     if (!data.reference_answer) return null;
     
@@ -165,9 +202,32 @@ ${breakdown.hallucination.reasoning}
             <button onClick={handleCopy} className="secondary-btn" style={{ padding: '0.4rem 0.8rem', fontSize: '0.85rem', borderRadius: '6px', cursor: 'pointer', border: '1px solid var(--input-border)', background: 'var(--input-bg)', color: 'var(--text-primary)' }}>
               {copied ? '✅ Copied!' : '📋 Copy as Markdown'}
             </button>
-            <button onClick={handleDownloadJSON} className="secondary-btn" style={{ padding: '0.4rem 0.8rem', fontSize: '0.85rem', borderRadius: '6px', cursor: 'pointer', border: '1px solid var(--input-border)', background: 'var(--input-bg)', color: 'var(--text-primary)' }}>
-              📥 Export JSON
-            </button>
+            <div className="results-export-dropdown" style={{ position: 'relative' }}>
+              <button onClick={() => setIsExportMenuOpen(!isExportMenuOpen)} className="secondary-btn" style={{ padding: '0.4rem 0.8rem', fontSize: '0.85rem', borderRadius: '6px', cursor: 'pointer', border: '1px solid var(--input-border)', background: 'var(--input-bg)', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                📥 Export ▼
+              </button>
+              {isExportMenuOpen && (
+                <div className="dropdown-menu" style={{
+                  position: 'absolute', left: 0, top: '100%', marginTop: '4px',
+                  background: 'var(--bg-secondary)', border: '1px solid var(--border-color)',
+                  borderRadius: '6px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', zIndex: 10,
+                  minWidth: '150px', overflow: 'hidden'
+                }}>
+                  <button 
+                    onClick={handleDownloadCSV} 
+                    style={{ width: '100%', padding: '0.6rem 1rem', textAlign: 'left', background: 'none', border: 'none', borderBottom: '1px solid var(--border-color)', color: 'var(--text-primary)', cursor: 'pointer', fontSize: '0.85rem' }}
+                  >
+                    📄 Export as CSV
+                  </button>
+                  <button 
+                    onClick={() => { handleDownloadJSON(); setIsExportMenuOpen(false); }} 
+                    style={{ width: '100%', padding: '0.6rem 1rem', textAlign: 'left', background: 'none', border: 'none', color: 'var(--text-primary)', cursor: 'pointer', fontSize: '0.85rem' }}
+                  >
+                    {`{}`} Export as JSON
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
         <div className={`score-badge ${final_score >= 80 ? 'high' : final_score >= 50 ? 'medium' : 'low'}`}>
