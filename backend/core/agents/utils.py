@@ -1,15 +1,21 @@
 import os
 import json
+import time
+import random
 import google.generativeai as genai
 from backend.core.config import logger
 from dotenv import load_dotenv
 
 load_dotenv()
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-MODEL_NAME = "gemini-pro-latest"
+# Using gemini-3.5-flash which is explicitly listed as supported and has generous free-tier quotas
+MODEL_NAME = "gemini-3.5-flash"
 
-def _call_llm_json(system_prompt: str, user_prompt: str, default_score: int = 0, retries: int = 1) -> dict:
+def _call_llm_json(system_prompt: str, user_prompt: str, default_score: int = 0, retries: int = 3) -> dict:
     """Helper to call Gemini and return parsed JSON with basic retry logic."""
+    # Free tier protection: Stagger concurrent requests by 0 to 2 seconds
+    time.sleep(random.uniform(0, 2))
+    
     for attempt in range(retries):
         try:
             model = genai.GenerativeModel(
@@ -20,29 +26,35 @@ def _call_llm_json(system_prompt: str, user_prompt: str, default_score: int = 0,
             response = model.generate_content(user_prompt)
             return json.loads(response.text)
         except Exception as e:
-            logger.error(f"LLM Call Failed: {e}")
+            logger.error(f"LLM Call Failed (Attempt {attempt+1}/{retries}): {e}")
             
-            # --- EMERGENCY PRESENTATION MOCK DATA ---
-            if "Relevance" in system_prompt:
-                return {"score": 4, "reasoning": "The AI response directly addresses the user's question about cracking knuckles, although it states a widespread myth as fact."}
-            elif "Accuracy" in system_prompt:
-                return {"score": 1, "reasoning": "The AI response directly contradicts the provided context by claiming that cracking knuckles causes arthritis, whereas the context explicitly states there is no link.", "supporting_evidence": "Medical studies have shown that the popping sound is just gas bubbles bursting in the synovial fluid. There is no link to arthritis."}
-            elif "Completeness" in system_prompt:
-                return {"score": 1, "reasoning": "The response is medically inaccurate and incomplete. It fails to explain what actually happens (the release of gas bubbles in the synovial fluid)."}
-            elif "Hallucination" in system_prompt:
-                return {
-                    "score": 5, 
-                    "reasoning": "The AI response directly contradicts the provided source context, falsely claiming that cracking knuckles causes arthritis and permanent joint damage.",
-                    "flagged_claims": [
-                        {
-                            "statement": "Cracking your knuckles causes arthritis and permanent joint damage.",
-                            "status": "contradicted",
-                            "explanation": "The source context explicitly states there is no link to arthritis."
-                        }
-                    ]
-                }
+            if attempt < retries - 1:
+                sleep_time = 2 ** attempt
+                logger.info(f"Retrying in {sleep_time} seconds...")
+                time.sleep(sleep_time)
+                continue
             
-            return {"score": default_score, "reasoning": f"Evaluation failed: {str(e)}"}
+            # --- EMERGENCY PRESENTATION MOCK DATA (COMMENTED OUT) ---
+            # if "Relevance" in system_prompt:
+            #     return {"score": 4, "reasoning": "The AI response directly addresses the user's question about cracking knuckles, although it states a widespread myth as fact."}
+            # elif "Accuracy" in system_prompt:
+            #     return {"score": 1, "reasoning": "The AI response directly contradicts the provided context by claiming that cracking knuckles causes arthritis, whereas the context explicitly states there is no link.", "supporting_evidence": "Medical studies have shown that the popping sound is just gas bubbles bursting in the synovial fluid. There is no link to arthritis."}
+            # elif "Completeness" in system_prompt:
+            #     return {"score": 1, "reasoning": "The response is medically inaccurate and incomplete. It fails to explain what actually happens (the release of gas bubbles in the synovial fluid)."}
+            # elif "Hallucination" in system_prompt:
+            #     return {
+            #         "score": 5, 
+            #         "reasoning": "The AI response directly contradicts the provided source context, falsely claiming that cracking knuckles causes arthritis and permanent joint damage.",
+            #         "flagged_claims": [
+            #             {
+            #                 "statement": "Cracking your knuckles causes arthritis and permanent joint damage.",
+            #                 "status": "contradicted",
+            #                 "explanation": "The source context explicitly states there is no link to arthritis."
+            #             }
+            #         ]
+            #     }
+            
+            return {"score": default_score, "reasoning": f"Evaluation failed after {retries} attempts: {str(e)}"}
 
 def compute_final_verdict(relevance: dict, accuracy: dict, completeness: dict, hallucination: dict) -> dict:
     """Aggregates scores and computes final verdict report, formatting complex json into markdown for the UI."""

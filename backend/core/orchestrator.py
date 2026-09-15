@@ -52,7 +52,10 @@ def process_evaluation_task(evaluation_id: int):
             final_verdict["rag_context"] = rag_context
         
         # 4. Save to Database
+        # We always mark as completed so the frontend can beautifully render the 4 error cards.
+        # (We handle cache prevention in main.py instead)
         record.status = "completed"
+            
         record.result_json = json.dumps(final_verdict)
         
         # Save individual numeric scores to the new columns for faster queries

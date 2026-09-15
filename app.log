@@ -6257,3 +6257,3069 @@ violations {
 2026-09-09 14:43:20,612 - AI-Response-Validation - INFO - path=/api/evaluations/analytics method=GET status_code=200 process_time=20.50ms
 2026-09-09 14:43:20,636 - AI-Response-Validation - INFO - path=/api/evaluations/analytics method=GET status_code=200 process_time=14.69ms
 2026-09-09 14:46:07,403 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=10.53ms
+2026-09-15 05:07:45,967 - AI-Response-Validation - INFO - Initializing database connection...
+2026-09-15 05:07:45,990 - AI-Response-Validation - INFO - Database engine created at sqlite:////home/hassan/Documents/Hassan/coding_projects/Infosys Springboard Internship 7.0/ai-response-validation-system/data/evaluations.db
+2026-09-15 05:07:59,406 - datasets - INFO - PyTorch version 2.13.0 available.
+2026-09-15 05:07:59,669 - AI-Response-Validation - INFO - Starting AI Response Validation API...
+2026-09-15 05:07:59,672 - AI-Response-Validation - INFO - Database tables verified/created.
+2026-09-15 06:20:33,245 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=17.47ms
+2026-09-15 06:20:43,122 - AI-Response-Validation - INFO - path=/api/results/55 method=GET status_code=200 process_time=9.47ms
+2026-09-15 06:20:43,133 - AI-Response-Validation - INFO - path=/api/results/55 method=GET status_code=200 process_time=3.18ms
+2026-09-15 10:05:46,739 - AI-Response-Validation - INFO - path=/api/evaluations/analytics method=GET status_code=200 process_time=15.88ms
+2026-09-15 10:05:46,751 - AI-Response-Validation - INFO - path=/api/evaluations/analytics method=GET status_code=200 process_time=4.52ms
+2026-09-15 10:06:14,214 - AI-Response-Validation - INFO - path=/api/extract-text method=POST status_code=200 process_time=11.59ms
+2026-09-15 10:06:23,998 - AI-Response-Validation - INFO - path=/api/evaluate method=OPTIONS status_code=200 process_time=1.01ms
+2026-09-15 10:06:24,009 - AI-Response-Validation - INFO - Received evaluation submission: question='Name three primary colors....'
+2026-09-15 10:06:24,042 - AI-Response-Validation - INFO - Successfully saved and queued evaluation ID 56
+2026-09-15 10:06:24,044 - AI-Response-Validation - INFO - path=/api/evaluate method=POST status_code=200 process_time=39.73ms
+2026-09-15 10:06:24,047 - AI-Response-Validation - INFO - Orchestrator started for evaluation 56
+2026-09-15 10:06:24,047 - AI-Response-Validation - INFO - Evaluation 56: Running Judge Agents concurrently...
+2026-09-15 10:06:24,077 - AI-Response-Validation - INFO - path=/api/results/56 method=GET status_code=200 process_time=24.24ms
+2026-09-15 10:06:24,080 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=29.17ms
+2026-09-15 10:06:24,085 - AI-Response-Validation - INFO - path=/api/results/56 method=GET status_code=200 process_time=3.43ms
+2026-09-15 10:06:24,530 - AI-Response-Validation - ERROR - LLM Call Failed: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+Please retry in 35.517762446s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerMinute-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerMinutePerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerDay-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+, retry_delay {
+  seconds: 35
+}
+]
+2026-09-15 10:06:24,724 - AI-Response-Validation - ERROR - LLM Call Failed: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+Please retry in 35.31565427s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerMinutePerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerMinute-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerDay-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+, retry_delay {
+  seconds: 35
+}
+]
+2026-09-15 10:06:24,774 - AI-Response-Validation - ERROR - LLM Call Failed: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+Please retry in 35.278081103s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerDay-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerMinute-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerMinutePerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+, retry_delay {
+  seconds: 35
+}
+]
+2026-09-15 10:06:24,820 - AI-Response-Validation - ERROR - LLM Call Failed: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+Please retry in 35.219855577s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerMinute-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerMinutePerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerDay-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+, retry_delay {
+  seconds: 35
+}
+]
+2026-09-15 10:06:24,822 - AI-Response-Validation - INFO - Evaluation 56: Computing Final Verdict...
+2026-09-15 10:06:24,831 - AI-Response-Validation - INFO - Evaluation 56 completed successfully. Score: 15.0
+2026-09-15 10:06:27,059 - AI-Response-Validation - INFO - path=/api/results/56 method=GET status_code=200 process_time=5.61ms
+2026-09-15 10:15:00,251 - AI-Response-Validation - INFO - Initializing database connection...
+2026-09-15 10:15:00,262 - AI-Response-Validation - INFO - Database engine created at sqlite:////home/hassan/Documents/Hassan/coding_projects/Infosys Springboard Internship 7.0/ai-response-validation-system/data/evaluations.db
+2026-09-15 10:15:08,861 - datasets - INFO - PyTorch version 2.13.0 available.
+2026-09-15 10:15:09,083 - AI-Response-Validation - INFO - Starting AI Response Validation API...
+2026-09-15 10:15:09,085 - AI-Response-Validation - INFO - Database tables verified/created.
+2026-09-15 10:16:12,984 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=13.47ms
+2026-09-15 10:16:12,995 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=3.73ms
+2026-09-15 10:16:17,513 - AI-Response-Validation - INFO - Received evaluation submission: question='What is the capital of France?...'
+2026-09-15 10:16:17,529 - AI-Response-Validation - INFO - Successfully saved and queued evaluation ID 57
+2026-09-15 10:16:17,530 - AI-Response-Validation - INFO - path=/api/evaluate method=POST status_code=200 process_time=21.64ms
+2026-09-15 10:16:17,533 - AI-Response-Validation - INFO - Orchestrator started for evaluation 57
+2026-09-15 10:16:17,533 - AI-Response-Validation - INFO - Evaluation 57: Running Judge Agents concurrently...
+2026-09-15 10:16:17,583 - AI-Response-Validation - INFO - path=/api/results/57 method=GET status_code=200 process_time=13.92ms
+2026-09-15 10:16:17,592 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=25.98ms
+2026-09-15 10:16:17,600 - AI-Response-Validation - INFO - path=/api/results/57 method=GET status_code=200 process_time=9.62ms
+2026-09-15 10:16:18,420 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 1/3): 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-09-15 10:16:18,420 - AI-Response-Validation - INFO - Retrying in 1 seconds...
+2026-09-15 10:16:18,619 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 1/3): 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-09-15 10:16:18,619 - AI-Response-Validation - INFO - Retrying in 1 seconds...
+2026-09-15 10:16:19,451 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 1/3): 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-09-15 10:16:19,452 - AI-Response-Validation - INFO - Retrying in 1 seconds...
+2026-09-15 10:16:19,588 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 1/3): 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-09-15 10:16:19,589 - AI-Response-Validation - INFO - Retrying in 1 seconds...
+2026-09-15 10:16:19,751 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 2/3): 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-09-15 10:16:19,752 - AI-Response-Validation - INFO - Retrying in 2 seconds...
+2026-09-15 10:16:19,944 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 2/3): 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-09-15 10:16:19,945 - AI-Response-Validation - INFO - Retrying in 2 seconds...
+2026-09-15 10:16:20,593 - AI-Response-Validation - INFO - path=/api/results/57 method=GET status_code=200 process_time=10.80ms
+2026-09-15 10:16:20,723 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 2/3): 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-09-15 10:16:20,724 - AI-Response-Validation - INFO - Retrying in 2 seconds...
+2026-09-15 10:16:20,992 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 2/3): 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-09-15 10:16:20,993 - AI-Response-Validation - INFO - Retrying in 2 seconds...
+2026-09-15 10:16:22,053 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 3/3): 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-09-15 10:16:22,296 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 3/3): 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-09-15 10:16:23,337 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 3/3): 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-09-15 10:16:23,366 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 3/3): 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-09-15 10:16:23,368 - AI-Response-Validation - INFO - Evaluation 57: Computing Final Verdict...
+2026-09-15 10:16:23,375 - AI-Response-Validation - INFO - Evaluation 57 completed successfully. Score: 15.0
+2026-09-15 10:16:23,585 - AI-Response-Validation - INFO - path=/api/results/57 method=GET status_code=200 process_time=6.21ms
+2026-09-15 10:17:32,792 - AI-Response-Validation - INFO - Initializing database connection...
+2026-09-15 10:17:32,804 - AI-Response-Validation - INFO - Database engine created at sqlite:////home/hassan/Documents/Hassan/coding_projects/Infosys Springboard Internship 7.0/ai-response-validation-system/data/evaluations.db
+2026-09-15 10:17:41,018 - datasets - INFO - PyTorch version 2.13.0 available.
+2026-09-15 10:17:41,211 - AI-Response-Validation - INFO - Starting AI Response Validation API...
+2026-09-15 10:17:41,212 - AI-Response-Validation - INFO - Database tables verified/created.
+2026-09-15 10:20:24,578 - AI-Response-Validation - INFO - Initializing database connection...
+2026-09-15 10:20:24,591 - AI-Response-Validation - INFO - Database engine created at sqlite:////home/hassan/Documents/Hassan/coding_projects/Infosys Springboard Internship 7.0/ai-response-validation-system/data/evaluations.db
+2026-09-15 10:21:36,389 - AI-Response-Validation - INFO - Initializing database connection...
+2026-09-15 10:21:36,401 - AI-Response-Validation - INFO - Database engine created at sqlite:////home/hassan/Documents/Hassan/coding_projects/Infosys Springboard Internship 7.0/ai-response-validation-system/data/evaluations.db
+2026-09-15 10:21:45,648 - datasets - INFO - PyTorch version 2.13.0 available.
+2026-09-15 10:21:45,842 - AI-Response-Validation - INFO - Starting AI Response Validation API...
+2026-09-15 10:21:45,844 - AI-Response-Validation - INFO - Database tables verified/created.
+2026-09-15 10:21:47,798 - AI-Response-Validation - INFO - path=/api/evaluate method=OPTIONS status_code=200 process_time=1.21ms
+2026-09-15 10:21:47,816 - AI-Response-Validation - INFO - Received evaluation submission: question='How do you bake a chocolate ca...'
+2026-09-15 10:21:47,853 - AI-Response-Validation - INFO - Successfully saved and queued evaluation ID 58
+2026-09-15 10:21:47,854 - AI-Response-Validation - INFO - path=/api/evaluate method=POST status_code=200 process_time=43.54ms
+2026-09-15 10:21:47,858 - AI-Response-Validation - INFO - Orchestrator started for evaluation 58
+2026-09-15 10:21:47,858 - AI-Response-Validation - INFO - Evaluation 58: Running Judge Agents concurrently...
+2026-09-15 10:21:47,881 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=12.11ms
+2026-09-15 10:21:47,884 - AI-Response-Validation - INFO - path=/api/results/58 method=GET status_code=200 process_time=7.51ms
+2026-09-15 10:21:47,891 - AI-Response-Validation - INFO - path=/api/results/58 method=GET status_code=200 process_time=2.29ms
+2026-09-15 10:21:48,375 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-09-15 10:21:48,375 - google_genai.models - WARNING - Direct use of automatic function calling (AFC) in Models.generate_content is not recommended. Instead, we recommend to use AFC in Chat.send_message. Similarly, direct use of AFC in Models.generate_content_stream is not recommended. Instead, we recommend to use AFC in Chat.send_message_stream.
+2026-09-15 10:21:48,691 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-09-15 10:21:48,700 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-09-15 10:21:48,919 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-09-15 10:21:49,518 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent "HTTP/1.1 404 Not Found"
+2026-09-15 10:21:49,520 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 1/3): 404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}
+2026-09-15 10:21:49,520 - AI-Response-Validation - INFO - Retrying in 1 seconds...
+2026-09-15 10:21:49,568 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent "HTTP/1.1 404 Not Found"
+2026-09-15 10:21:49,571 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 1/3): 404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}
+2026-09-15 10:21:49,571 - AI-Response-Validation - INFO - Retrying in 1 seconds...
+2026-09-15 10:21:50,303 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent "HTTP/1.1 404 Not Found"
+2026-09-15 10:21:50,306 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 1/3): 404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}
+2026-09-15 10:21:50,306 - AI-Response-Validation - INFO - Retrying in 1 seconds...
+2026-09-15 10:21:50,520 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-09-15 10:21:50,572 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-09-15 10:21:50,917 - AI-Response-Validation - INFO - path=/api/results/58 method=GET status_code=200 process_time=6.88ms
+2026-09-15 10:21:51,013 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent "HTTP/1.1 404 Not Found"
+2026-09-15 10:21:51,014 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 1/3): 404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}
+2026-09-15 10:21:51,014 - AI-Response-Validation - INFO - Retrying in 1 seconds...
+2026-09-15 10:21:51,307 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-09-15 10:21:51,364 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent "HTTP/1.1 404 Not Found"
+2026-09-15 10:21:51,366 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 2/3): 404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}
+2026-09-15 10:21:51,366 - AI-Response-Validation - INFO - Retrying in 2 seconds...
+2026-09-15 10:21:52,015 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-09-15 10:21:52,023 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent "HTTP/1.1 404 Not Found"
+2026-09-15 10:21:52,028 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 2/3): 404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}
+2026-09-15 10:21:52,028 - AI-Response-Validation - INFO - Retrying in 2 seconds...
+2026-09-15 10:21:52,641 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent "HTTP/1.1 404 Not Found"
+2026-09-15 10:21:52,643 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 2/3): 404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}
+2026-09-15 10:21:52,644 - AI-Response-Validation - INFO - Retrying in 2 seconds...
+2026-09-15 10:21:53,368 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-09-15 10:21:53,389 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent "HTTP/1.1 404 Not Found"
+2026-09-15 10:21:53,390 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 2/3): 404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}
+2026-09-15 10:21:53,391 - AI-Response-Validation - INFO - Retrying in 2 seconds...
+2026-09-15 10:21:53,806 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent "HTTP/1.1 404 Not Found"
+2026-09-15 10:21:53,810 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 3/3): 404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}
+2026-09-15 10:21:53,959 - AI-Response-Validation - INFO - path=/api/results/58 method=GET status_code=200 process_time=9.08ms
+2026-09-15 10:21:54,029 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-09-15 10:21:54,268 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent "HTTP/1.1 404 Not Found"
+2026-09-15 10:21:54,269 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 3/3): 404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}
+2026-09-15 10:21:54,645 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-09-15 10:21:55,105 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent "HTTP/1.1 404 Not Found"
+2026-09-15 10:21:55,108 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 3/3): 404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}
+2026-09-15 10:21:55,392 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-09-15 10:21:56,009 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent "HTTP/1.1 404 Not Found"
+2026-09-15 10:21:56,012 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 3/3): 404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}
+2026-09-15 10:21:56,014 - AI-Response-Validation - INFO - Evaluation 58: Computing Final Verdict...
+2026-09-15 10:21:56,019 - AI-Response-Validation - INFO - Evaluation 58 completed successfully. Score: 15.0
+2026-09-15 10:21:56,885 - AI-Response-Validation - INFO - path=/api/results/58 method=GET status_code=200 process_time=5.57ms
+2026-09-15 10:23:17,991 - AI-Response-Validation - INFO - Initializing database connection...
+2026-09-15 10:23:18,003 - AI-Response-Validation - INFO - Database engine created at sqlite:////home/hassan/Documents/Hassan/coding_projects/Infosys Springboard Internship 7.0/ai-response-validation-system/data/evaluations.db
+2026-09-15 10:23:26,422 - datasets - INFO - PyTorch version 2.13.0 available.
+2026-09-15 10:23:26,611 - AI-Response-Validation - INFO - Starting AI Response Validation API...
+2026-09-15 10:23:26,613 - AI-Response-Validation - INFO - Database tables verified/created.
+2026-09-15 10:23:52,389 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=36.96ms
+2026-09-15 10:23:52,400 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=5.05ms
+2026-09-15 10:23:57,244 - AI-Response-Validation - INFO - Received evaluation submission: question='What is the capital of France?...'
+2026-09-15 10:23:57,251 - AI-Response-Validation - INFO - Semantic Cache HIT! Returning instant cached result.
+2026-09-15 10:23:57,261 - AI-Response-Validation - INFO - path=/api/evaluate method=POST status_code=200 process_time=20.89ms
+2026-09-15 10:23:57,273 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=3.12ms
+2026-09-15 10:23:57,280 - AI-Response-Validation - INFO - path=/api/results/59 method=GET status_code=200 process_time=3.63ms
+2026-09-15 10:23:57,288 - AI-Response-Validation - INFO - path=/api/results/59 method=GET status_code=200 process_time=2.40ms
+2026-09-15 10:24:07,731 - AI-Response-Validation - INFO - Initializing database connection...
+2026-09-15 10:24:07,742 - AI-Response-Validation - INFO - Database engine created at sqlite:////home/hassan/Documents/Hassan/coding_projects/Infosys Springboard Internship 7.0/ai-response-validation-system/data/evaluations.db
+2026-09-15 10:24:16,932 - datasets - INFO - PyTorch version 2.13.0 available.
+2026-09-15 10:24:17,125 - AI-Response-Validation - INFO - Starting AI Response Validation API...
+2026-09-15 10:24:17,127 - AI-Response-Validation - INFO - Database tables verified/created.
+2026-09-15 10:24:18,028 - AI-Response-Validation - INFO - Received evaluation submission: question='Name three primary colors....'
+2026-09-15 10:24:18,065 - AI-Response-Validation - INFO - Successfully saved and queued evaluation ID 60
+2026-09-15 10:24:18,067 - AI-Response-Validation - INFO - path=/api/evaluate method=POST status_code=200 process_time=43.56ms
+2026-09-15 10:24:18,071 - AI-Response-Validation - INFO - Orchestrator started for evaluation 60
+2026-09-15 10:24:18,071 - AI-Response-Validation - INFO - Evaluation 60: Running Judge Agents concurrently...
+2026-09-15 10:24:18,104 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=13.22ms
+2026-09-15 10:24:18,116 - AI-Response-Validation - INFO - path=/api/results/60 method=GET status_code=200 process_time=3.27ms
+2026-09-15 10:24:18,129 - AI-Response-Validation - INFO - path=/api/results/60 method=GET status_code=200 process_time=3.08ms
+2026-09-15 10:24:18,313 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-09-15 10:24:18,313 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-09-15 10:24:18,314 - google_genai.models - WARNING - Direct use of automatic function calling (AFC) in Models.generate_content is not recommended. Instead, we recommend to use AFC in Chat.send_message. Similarly, direct use of AFC in Models.generate_content_stream is not recommended. Instead, we recommend to use AFC in Chat.send_message_stream.
+2026-09-15 10:24:18,314 - google_genai.models - WARNING - Direct use of automatic function calling (AFC) in Models.generate_content is not recommended. Instead, we recommend to use AFC in Chat.send_message. Similarly, direct use of AFC in Models.generate_content_stream is not recommended. Instead, we recommend to use AFC in Chat.send_message_stream.
+2026-09-15 10:24:18,570 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-09-15 10:24:18,888 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-09-15 10:24:19,212 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent "HTTP/1.1 404 Not Found"
+2026-09-15 10:24:19,215 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 1/3): 404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}
+2026-09-15 10:24:19,216 - AI-Response-Validation - INFO - Retrying in 1 seconds...
+2026-09-15 10:24:19,226 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent "HTTP/1.1 404 Not Found"
+2026-09-15 10:24:19,228 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 1/3): 404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}
+2026-09-15 10:24:19,229 - AI-Response-Validation - INFO - Retrying in 1 seconds...
+2026-09-15 10:24:19,421 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent "HTTP/1.1 404 Not Found"
+2026-09-15 10:24:19,424 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 1/3): 404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}
+2026-09-15 10:24:19,424 - AI-Response-Validation - INFO - Retrying in 1 seconds...
+2026-09-15 10:24:19,440 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent "HTTP/1.1 404 Not Found"
+2026-09-15 10:24:19,443 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 1/3): 404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}
+2026-09-15 10:24:19,444 - AI-Response-Validation - INFO - Retrying in 1 seconds...
+2026-09-15 10:24:20,217 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-09-15 10:24:20,229 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-09-15 10:24:20,425 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-09-15 10:24:20,444 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-09-15 10:24:20,514 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent "HTTP/1.1 404 Not Found"
+2026-09-15 10:24:20,517 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 2/3): 404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}
+2026-09-15 10:24:20,517 - AI-Response-Validation - INFO - Retrying in 2 seconds...
+2026-09-15 10:24:20,553 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent "HTTP/1.1 404 Not Found"
+2026-09-15 10:24:20,555 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 2/3): 404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}
+2026-09-15 10:24:20,556 - AI-Response-Validation - INFO - Retrying in 2 seconds...
+2026-09-15 10:24:21,169 - AI-Response-Validation - INFO - path=/api/results/60 method=GET status_code=200 process_time=8.04ms
+2026-09-15 10:24:21,213 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent "HTTP/1.1 404 Not Found"
+2026-09-15 10:24:21,215 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 2/3): 404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}
+2026-09-15 10:24:21,215 - AI-Response-Validation - INFO - Retrying in 2 seconds...
+2026-09-15 10:24:22,518 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-09-15 10:24:22,557 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-09-15 10:24:23,195 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent "HTTP/1.1 404 Not Found"
+2026-09-15 10:24:23,216 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 2/3): 404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}
+2026-09-15 10:24:23,217 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-09-15 10:24:23,217 - AI-Response-Validation - INFO - Retrying in 2 seconds...
+2026-09-15 10:24:23,513 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent "HTTP/1.1 404 Not Found"
+2026-09-15 10:24:23,515 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 3/3): 404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}
+2026-09-15 10:24:23,928 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent "HTTP/1.1 500 Internal Server Error"
+2026-09-15 10:24:23,931 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 3/3): 500 INTERNAL. {'error': {'code': 500, 'message': 'Internal error encountered.', 'status': 'INTERNAL'}}
+2026-09-15 10:24:24,093 - AI-Response-Validation - INFO - path=/api/results/60 method=GET status_code=200 process_time=7.21ms
+2026-09-15 10:24:25,224 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-09-15 10:24:25,354 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent "HTTP/1.1 404 Not Found"
+2026-09-15 10:24:25,367 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 3/3): 404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}
+2026-09-15 10:24:25,503 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent "HTTP/1.1 404 Not Found"
+2026-09-15 10:24:25,506 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 3/3): 404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}
+2026-09-15 10:24:25,507 - AI-Response-Validation - INFO - Evaluation 60: Computing Final Verdict...
+2026-09-15 10:24:25,520 - AI-Response-Validation - INFO - Evaluation 60 completed successfully. Score: 0
+2026-09-15 10:24:27,567 - AI-Response-Validation - INFO - path=/api/results/60 method=GET status_code=200 process_time=6.73ms
+2026-09-15 10:29:56,186 - AI-Response-Validation - INFO - Initializing database connection...
+2026-09-15 10:29:56,198 - AI-Response-Validation - INFO - Database engine created at sqlite:////home/hassan/Documents/Hassan/coding_projects/Infosys Springboard Internship 7.0/ai-response-validation-system/data/evaluations.db
+2026-09-15 10:30:04,706 - datasets - INFO - PyTorch version 2.13.0 available.
+2026-09-15 10:30:04,905 - AI-Response-Validation - INFO - Starting AI Response Validation API...
+2026-09-15 10:30:04,907 - AI-Response-Validation - INFO - Database tables verified/created.
+2026-09-15 10:41:46,149 - AI-Response-Validation - INFO - Initializing database connection...
+2026-09-15 10:41:46,162 - AI-Response-Validation - INFO - Database engine created at sqlite:////home/hassan/Documents/Hassan/coding_projects/Infosys Springboard Internship 7.0/ai-response-validation-system/data/evaluations.db
+2026-09-15 10:41:54,952 - datasets - INFO - PyTorch version 2.13.0 available.
+2026-09-15 10:41:55,143 - AI-Response-Validation - INFO - Starting AI Response Validation API...
+2026-09-15 10:41:55,144 - AI-Response-Validation - INFO - Database tables verified/created.
+2026-09-15 10:42:20,061 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=14.15ms
+2026-09-15 10:42:20,073 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=3.51ms
+2026-09-15 10:42:22,591 - AI-Response-Validation - INFO - path=/api/evaluate method=OPTIONS status_code=200 process_time=0.93ms
+2026-09-15 10:42:22,603 - AI-Response-Validation - INFO - Received evaluation submission: question='What is the capital of France?...'
+2026-09-15 10:42:22,608 - AI-Response-Validation - INFO - Semantic Cache HIT! Returning instant cached result.
+2026-09-15 10:42:22,618 - AI-Response-Validation - INFO - path=/api/evaluate method=POST status_code=200 process_time=18.85ms
+2026-09-15 10:42:22,630 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=4.65ms
+2026-09-15 10:42:22,633 - AI-Response-Validation - INFO - path=/api/results/61 method=GET status_code=200 process_time=5.41ms
+2026-09-15 10:42:22,643 - AI-Response-Validation - INFO - path=/api/results/61 method=GET status_code=200 process_time=2.29ms
+2026-09-15 10:44:37,300 - AI-Response-Validation - INFO - Initializing database connection...
+2026-09-15 10:44:37,312 - AI-Response-Validation - INFO - Database engine created at sqlite:////home/hassan/Documents/Hassan/coding_projects/Infosys Springboard Internship 7.0/ai-response-validation-system/data/evaluations.db
+2026-09-15 10:44:46,471 - datasets - INFO - PyTorch version 2.13.0 available.
+2026-09-15 10:44:46,660 - AI-Response-Validation - INFO - Starting AI Response Validation API...
+2026-09-15 10:44:46,662 - AI-Response-Validation - INFO - Database tables verified/created.
+2026-09-15 10:44:46,950 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=35.10ms
+2026-09-15 10:44:48,167 - AI-Response-Validation - INFO - Received evaluation submission: question='What is the capital of France?...'
+2026-09-15 10:44:48,175 - AI-Response-Validation - INFO - Semantic Cache HIT! Returning instant cached result.
+2026-09-15 10:44:48,186 - AI-Response-Validation - INFO - path=/api/evaluate method=POST status_code=200 process_time=22.24ms
+2026-09-15 10:44:48,200 - AI-Response-Validation - INFO - path=/api/results/62 method=GET status_code=200 process_time=6.03ms
+2026-09-15 10:44:48,203 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=9.70ms
+2026-09-15 10:44:48,213 - AI-Response-Validation - INFO - path=/api/results/62 method=GET status_code=200 process_time=2.31ms
+2026-09-15 11:01:14,916 - AI-Response-Validation - INFO - Initializing database connection...
+2026-09-15 11:01:14,927 - AI-Response-Validation - INFO - Database engine created at sqlite:////home/hassan/Documents/Hassan/coding_projects/Infosys Springboard Internship 7.0/ai-response-validation-system/data/evaluations.db
+2026-09-15 11:01:23,636 - datasets - INFO - PyTorch version 2.13.0 available.
+2026-09-15 11:01:23,827 - AI-Response-Validation - INFO - Starting AI Response Validation API...
+2026-09-15 11:01:23,829 - AI-Response-Validation - INFO - Database tables verified/created.
+2026-09-15 11:01:31,995 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=15.35ms
+2026-09-15 11:01:32,004 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=3.43ms
+2026-09-15 11:01:34,191 - AI-Response-Validation - INFO - path=/api/evaluate method=OPTIONS status_code=200 process_time=1.06ms
+2026-09-15 11:01:34,201 - AI-Response-Validation - INFO - Received evaluation submission: question='How do you bake a chocolate ca...'
+2026-09-15 11:01:34,207 - AI-Response-Validation - INFO - Semantic Cache HIT! Returning instant cached result.
+2026-09-15 11:01:34,223 - AI-Response-Validation - INFO - path=/api/evaluate method=POST status_code=200 process_time=23.03ms
+2026-09-15 11:01:34,240 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=10.63ms
+2026-09-15 11:01:34,243 - AI-Response-Validation - INFO - path=/api/results/63 method=GET status_code=200 process_time=12.15ms
+2026-09-15 11:01:34,256 - AI-Response-Validation - INFO - path=/api/results/63 method=GET status_code=200 process_time=2.97ms
+2026-09-15 11:05:22,323 - AI-Response-Validation - INFO - Initializing database connection...
+2026-09-15 11:05:22,336 - AI-Response-Validation - INFO - Database engine created at sqlite:////home/hassan/Documents/Hassan/coding_projects/Infosys Springboard Internship 7.0/ai-response-validation-system/data/evaluations.db
+2026-09-15 11:05:31,117 - datasets - INFO - PyTorch version 2.13.0 available.
+2026-09-15 11:05:31,309 - AI-Response-Validation - INFO - Starting AI Response Validation API...
+2026-09-15 11:05:31,330 - AI-Response-Validation - INFO - Database tables verified/created.
+2026-09-15 11:05:58,110 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=32.17ms
+2026-09-15 11:05:58,130 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=6.80ms
+2026-09-15 11:06:00,654 - AI-Response-Validation - INFO - Received evaluation submission: question='What is the capital of France?...'
+2026-09-15 11:06:00,684 - AI-Response-Validation - INFO - Successfully saved and queued evaluation ID 1
+2026-09-15 11:06:00,686 - AI-Response-Validation - INFO - path=/api/evaluate method=POST status_code=200 process_time=35.00ms
+2026-09-15 11:06:00,694 - AI-Response-Validation - INFO - Orchestrator started for evaluation 1
+2026-09-15 11:06:00,695 - AI-Response-Validation - INFO - Evaluation 1: Running Judge Agents concurrently...
+2026-09-15 11:06:00,814 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=17.85ms
+2026-09-15 11:06:00,820 - AI-Response-Validation - INFO - path=/api/results/1 method=GET status_code=200 process_time=18.40ms
+2026-09-15 11:06:00,835 - AI-Response-Validation - INFO - path=/api/results/1 method=GET status_code=200 process_time=6.70ms
+2026-09-15 11:06:01,223 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-09-15 11:06:01,223 - google_genai.models - WARNING - Direct use of automatic function calling (AFC) in Models.generate_content is not recommended. Instead, we recommend to use AFC in Chat.send_message. Similarly, direct use of AFC in Models.generate_content_stream is not recommended. Instead, we recommend to use AFC in Chat.send_message_stream.
+2026-09-15 11:06:01,284 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-09-15 11:06:01,974 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent "HTTP/1.1 404 Not Found"
+2026-09-15 11:06:01,977 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 1/3): 404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/gemini-1.5-flash-latest is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}
+2026-09-15 11:06:01,977 - AI-Response-Validation - INFO - Retrying in 1 seconds...
+2026-09-15 11:06:02,098 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-09-15 11:06:02,204 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent "HTTP/1.1 404 Not Found"
+2026-09-15 11:06:02,207 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 1/3): 404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/gemini-1.5-flash-latest is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}
+2026-09-15 11:06:02,207 - AI-Response-Validation - INFO - Retrying in 1 seconds...
+2026-09-15 11:06:02,473 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-09-15 11:06:02,509 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent "HTTP/1.1 404 Not Found"
+2026-09-15 11:06:02,512 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 1/3): 404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/gemini-1.5-flash-latest is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}
+2026-09-15 11:06:02,513 - AI-Response-Validation - INFO - Retrying in 1 seconds...
+2026-09-15 11:06:02,877 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent "HTTP/1.1 404 Not Found"
+2026-09-15 11:06:02,880 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 1/3): 404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/gemini-1.5-flash-latest is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}
+2026-09-15 11:06:02,880 - AI-Response-Validation - INFO - Retrying in 1 seconds...
+2026-09-15 11:06:02,978 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-09-15 11:06:03,208 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-09-15 11:06:03,300 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent "HTTP/1.1 404 Not Found"
+2026-09-15 11:06:03,301 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 2/3): 404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/gemini-1.5-flash-latest is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}
+2026-09-15 11:06:03,302 - AI-Response-Validation - INFO - Retrying in 2 seconds...
+2026-09-15 11:06:03,511 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent "HTTP/1.1 404 Not Found"
+2026-09-15 11:06:03,514 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 2/3): 404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/gemini-1.5-flash-latest is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}
+2026-09-15 11:06:03,515 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-09-15 11:06:03,517 - AI-Response-Validation - INFO - Retrying in 2 seconds...
+2026-09-15 11:06:03,803 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent "HTTP/1.1 404 Not Found"
+2026-09-15 11:06:03,806 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 2/3): 404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/gemini-1.5-flash-latest is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}
+2026-09-15 11:06:03,807 - AI-Response-Validation - INFO - Retrying in 2 seconds...
+2026-09-15 11:06:03,820 - AI-Response-Validation - INFO - path=/api/results/1 method=GET status_code=200 process_time=7.90ms
+2026-09-15 11:06:03,881 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-09-15 11:06:04,206 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent "HTTP/1.1 404 Not Found"
+2026-09-15 11:06:04,208 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 2/3): 404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/gemini-1.5-flash-latest is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}
+2026-09-15 11:06:04,209 - AI-Response-Validation - INFO - Retrying in 2 seconds...
+2026-09-15 11:06:05,303 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-09-15 11:06:05,518 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-09-15 11:06:05,650 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent "HTTP/1.1 404 Not Found"
+2026-09-15 11:06:05,652 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 3/3): 404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/gemini-1.5-flash-latest is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}
+2026-09-15 11:06:05,808 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-09-15 11:06:05,869 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent "HTTP/1.1 404 Not Found"
+2026-09-15 11:06:05,872 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 3/3): 404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/gemini-1.5-flash-latest is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}
+2026-09-15 11:06:06,164 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent "HTTP/1.1 404 Not Found"
+2026-09-15 11:06:06,166 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 3/3): 404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/gemini-1.5-flash-latest is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}
+2026-09-15 11:06:06,209 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-09-15 11:06:06,477 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent "HTTP/1.1 404 Not Found"
+2026-09-15 11:06:06,479 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 3/3): 404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/gemini-1.5-flash-latest is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}
+2026-09-15 11:06:06,481 - AI-Response-Validation - INFO - Evaluation 1: Computing Final Verdict...
+2026-09-15 11:06:06,496 - AI-Response-Validation - INFO - Evaluation 1 completed successfully. Score: 0
+2026-09-15 11:06:06,817 - AI-Response-Validation - INFO - path=/api/results/1 method=GET status_code=200 process_time=5.29ms
+2026-09-15 11:09:11,853 - AI-Response-Validation - INFO - Initializing database connection...
+2026-09-15 11:09:11,865 - AI-Response-Validation - INFO - Database engine created at sqlite:////home/hassan/Documents/Hassan/coding_projects/Infosys Springboard Internship 7.0/ai-response-validation-system/data/evaluations.db
+2026-09-15 11:09:20,318 - datasets - INFO - PyTorch version 2.13.0 available.
+2026-09-15 11:09:20,511 - AI-Response-Validation - INFO - Starting AI Response Validation API...
+2026-09-15 11:09:20,513 - AI-Response-Validation - INFO - Database tables verified/created.
+2026-09-15 11:10:08,869 - AI-Response-Validation - INFO - Initializing database connection...
+2026-09-15 11:10:08,881 - AI-Response-Validation - INFO - Database engine created at sqlite:////home/hassan/Documents/Hassan/coding_projects/Infosys Springboard Internship 7.0/ai-response-validation-system/data/evaluations.db
+2026-09-15 11:10:17,603 - datasets - INFO - PyTorch version 2.13.0 available.
+2026-09-15 11:10:17,797 - AI-Response-Validation - INFO - Starting AI Response Validation API...
+2026-09-15 11:10:17,798 - AI-Response-Validation - INFO - Database tables verified/created.
+2026-09-15 11:10:46,291 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=34.16ms
+2026-09-15 11:10:46,438 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=10.94ms
+2026-09-15 11:10:47,850 - AI-Response-Validation - INFO - Received evaluation submission: question='Name three primary colors....'
+2026-09-15 11:10:47,880 - AI-Response-Validation - INFO - Successfully saved and queued evaluation ID 2
+2026-09-15 11:10:47,882 - AI-Response-Validation - INFO - path=/api/evaluate method=POST status_code=200 process_time=34.89ms
+2026-09-15 11:10:47,886 - AI-Response-Validation - INFO - Orchestrator started for evaluation 2
+2026-09-15 11:10:47,886 - AI-Response-Validation - INFO - Evaluation 2: Running Judge Agents concurrently...
+2026-09-15 11:10:47,895 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=5.84ms
+2026-09-15 11:10:47,897 - AI-Response-Validation - INFO - path=/api/results/2 method=GET status_code=200 process_time=3.86ms
+2026-09-15 11:10:47,906 - AI-Response-Validation - INFO - path=/api/results/2 method=GET status_code=200 process_time=2.19ms
+2026-09-15 11:10:48,076 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-09-15 11:10:48,076 - google_genai.models - WARNING - Direct use of automatic function calling (AFC) in Models.generate_content is not recommended. Instead, we recommend to use AFC in Chat.send_message. Similarly, direct use of AFC in Models.generate_content_stream is not recommended. Instead, we recommend to use AFC in Chat.send_message_stream.
+2026-09-15 11:10:48,609 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.0-pro:generateContent "HTTP/1.1 404 Not Found"
+2026-09-15 11:10:48,612 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 1/3): 404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/gemini-1.0-pro is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}
+2026-09-15 11:10:48,612 - AI-Response-Validation - INFO - Retrying in 1 seconds...
+2026-09-15 11:10:48,863 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-09-15 11:10:49,222 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.0-pro:generateContent "HTTP/1.1 404 Not Found"
+2026-09-15 11:10:49,224 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 1/3): 404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/gemini-1.0-pro is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}
+2026-09-15 11:10:49,225 - AI-Response-Validation - INFO - Retrying in 1 seconds...
+2026-09-15 11:10:49,613 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-09-15 11:10:49,631 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-09-15 11:10:49,682 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-09-15 11:10:49,945 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.0-pro:generateContent "HTTP/1.1 404 Not Found"
+2026-09-15 11:10:49,947 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 2/3): 404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/gemini-1.0-pro is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}
+2026-09-15 11:10:49,948 - AI-Response-Validation - INFO - Retrying in 2 seconds...
+2026-09-15 11:10:50,226 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-09-15 11:10:50,259 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.0-pro:generateContent "HTTP/1.1 404 Not Found"
+2026-09-15 11:10:50,260 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.0-pro:generateContent "HTTP/1.1 404 Not Found"
+2026-09-15 11:10:50,263 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 1/3): 404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/gemini-1.0-pro is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}
+2026-09-15 11:10:50,264 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 1/3): 404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/gemini-1.0-pro is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}
+2026-09-15 11:10:50,264 - AI-Response-Validation - INFO - Retrying in 1 seconds...
+2026-09-15 11:10:50,264 - AI-Response-Validation - INFO - Retrying in 1 seconds...
+2026-09-15 11:10:50,670 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.0-pro:generateContent "HTTP/1.1 404 Not Found"
+2026-09-15 11:10:50,674 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 2/3): 404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/gemini-1.0-pro is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}
+2026-09-15 11:10:50,674 - AI-Response-Validation - INFO - Retrying in 2 seconds...
+2026-09-15 11:10:51,265 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-09-15 11:10:51,266 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-09-15 11:10:51,630 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.0-pro:generateContent "HTTP/1.1 404 Not Found"
+2026-09-15 11:10:51,632 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.0-pro:generateContent "HTTP/1.1 404 Not Found"
+2026-09-15 11:10:51,641 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 2/3): 404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/gemini-1.0-pro is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}
+2026-09-15 11:10:51,641 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 2/3): 404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/gemini-1.0-pro is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}
+2026-09-15 11:10:51,642 - AI-Response-Validation - INFO - Retrying in 2 seconds...
+2026-09-15 11:10:51,643 - AI-Response-Validation - INFO - path=/api/results/2 method=GET status_code=200 process_time=10.23ms
+2026-09-15 11:10:51,643 - AI-Response-Validation - INFO - Retrying in 2 seconds...
+2026-09-15 11:10:51,949 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-09-15 11:10:52,411 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.0-pro:generateContent "HTTP/1.1 404 Not Found"
+2026-09-15 11:10:52,414 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 3/3): 404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/gemini-1.0-pro is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}
+2026-09-15 11:10:52,675 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-09-15 11:10:53,024 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.0-pro:generateContent "HTTP/1.1 404 Not Found"
+2026-09-15 11:10:53,026 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 3/3): 404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/gemini-1.0-pro is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}
+2026-09-15 11:10:53,644 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-09-15 11:10:53,645 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-09-15 11:10:54,056 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.0-pro:generateContent "HTTP/1.1 404 Not Found"
+2026-09-15 11:10:54,059 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 3/3): 404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/gemini-1.0-pro is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}
+2026-09-15 11:10:54,081 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.0-pro:generateContent "HTTP/1.1 404 Not Found"
+2026-09-15 11:10:54,083 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 3/3): 404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/gemini-1.0-pro is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}
+2026-09-15 11:10:54,085 - AI-Response-Validation - INFO - Evaluation 2: Computing Final Verdict...
+2026-09-15 11:10:54,096 - AI-Response-Validation - INFO - Evaluation 2 completed successfully. Score: 0
+2026-09-15 11:10:54,126 - AI-Response-Validation - INFO - path=/api/results/2 method=GET status_code=200 process_time=6.92ms
+2026-09-15 11:12:00,278 - AI-Response-Validation - INFO - Initializing database connection...
+2026-09-15 11:12:00,290 - AI-Response-Validation - INFO - Database engine created at sqlite:////home/hassan/Documents/Hassan/coding_projects/Infosys Springboard Internship 7.0/ai-response-validation-system/data/evaluations.db
+2026-09-15 11:12:08,704 - datasets - INFO - PyTorch version 2.13.0 available.
+2026-09-15 11:12:08,903 - AI-Response-Validation - INFO - Starting AI Response Validation API...
+2026-09-15 11:12:08,906 - AI-Response-Validation - INFO - Database tables verified/created.
+2026-09-15 11:16:43,037 - AI-Response-Validation - INFO - Initializing database connection...
+2026-09-15 11:16:43,050 - AI-Response-Validation - INFO - Database engine created at sqlite:////home/hassan/Documents/Hassan/coding_projects/Infosys Springboard Internship 7.0/ai-response-validation-system/data/evaluations.db
+2026-09-15 11:20:53,226 - AI-Response-Validation - INFO - Initializing database connection...
+2026-09-15 11:20:53,239 - AI-Response-Validation - INFO - Database engine created at sqlite:////home/hassan/Documents/Hassan/coding_projects/Infosys Springboard Internship 7.0/ai-response-validation-system/data/evaluations.db
+2026-09-15 11:21:01,683 - datasets - INFO - PyTorch version 2.13.0 available.
+2026-09-15 11:21:01,876 - AI-Response-Validation - INFO - Starting AI Response Validation API...
+2026-09-15 11:21:01,878 - AI-Response-Validation - INFO - Database tables verified/created.
+2026-09-15 11:21:52,822 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=14.70ms
+2026-09-15 11:21:52,831 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=3.37ms
+2026-09-15 11:21:54,588 - AI-Response-Validation - INFO - path=/api/evaluate method=OPTIONS status_code=200 process_time=0.65ms
+2026-09-15 11:21:54,599 - AI-Response-Validation - INFO - Received evaluation submission: question='How do you bake a chocolate ca...'
+2026-09-15 11:21:54,628 - AI-Response-Validation - INFO - Successfully saved and queued evaluation ID 3
+2026-09-15 11:21:54,631 - AI-Response-Validation - INFO - path=/api/evaluate method=POST status_code=200 process_time=36.38ms
+2026-09-15 11:21:54,639 - AI-Response-Validation - INFO - Orchestrator started for evaluation 3
+2026-09-15 11:21:54,639 - AI-Response-Validation - INFO - Evaluation 3: Running Judge Agents concurrently...
+2026-09-15 11:21:54,658 - AI-Response-Validation - INFO - path=/api/results/3 method=GET status_code=200 process_time=12.58ms
+2026-09-15 11:21:54,661 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=18.53ms
+2026-09-15 11:21:54,673 - AI-Response-Validation - INFO - path=/api/results/3 method=GET status_code=200 process_time=2.58ms
+2026-09-15 11:21:55,115 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 1/3): 404 models/gemini-1.0-pro-latest is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-09-15 11:21:55,116 - AI-Response-Validation - INFO - Retrying in 1 seconds...
+2026-09-15 11:21:55,928 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 1/3): 404 models/gemini-1.0-pro-latest is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-09-15 11:21:55,929 - AI-Response-Validation - INFO - Retrying in 1 seconds...
+2026-09-15 11:21:56,133 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 1/3): 404 models/gemini-1.0-pro-latest is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-09-15 11:21:56,133 - AI-Response-Validation - INFO - Retrying in 1 seconds...
+2026-09-15 11:21:56,431 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 2/3): 404 models/gemini-1.0-pro-latest is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-09-15 11:21:56,431 - AI-Response-Validation - INFO - Retrying in 2 seconds...
+2026-09-15 11:21:56,959 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 1/3): 404 models/gemini-1.0-pro-latest is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-09-15 11:21:56,960 - AI-Response-Validation - INFO - Retrying in 1 seconds...
+2026-09-15 11:21:57,264 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 2/3): 404 models/gemini-1.0-pro-latest is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-09-15 11:21:57,265 - AI-Response-Validation - INFO - Retrying in 2 seconds...
+2026-09-15 11:21:57,460 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 2/3): 404 models/gemini-1.0-pro-latest is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-09-15 11:21:57,461 - AI-Response-Validation - INFO - Retrying in 2 seconds...
+2026-09-15 11:21:58,277 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 2/3): 404 models/gemini-1.0-pro-latest is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-09-15 11:21:58,278 - AI-Response-Validation - INFO - Retrying in 2 seconds...
+2026-09-15 11:21:58,554 - AI-Response-Validation - INFO - path=/api/results/3 method=GET status_code=200 process_time=7.96ms
+2026-09-15 11:21:58,804 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 3/3): 404 models/gemini-1.0-pro-latest is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-09-15 11:21:59,620 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 3/3): 404 models/gemini-1.0-pro-latest is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-09-15 11:21:59,810 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 3/3): 404 models/gemini-1.0-pro-latest is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-09-15 11:22:00,628 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 3/3): 404 models/gemini-1.0-pro-latest is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-09-15 11:22:00,629 - AI-Response-Validation - INFO - Evaluation 3: Computing Final Verdict...
+2026-09-15 11:22:00,637 - AI-Response-Validation - INFO - Evaluation 3 completed successfully. Score: 0
+2026-09-15 11:22:01,551 - AI-Response-Validation - INFO - path=/api/results/3 method=GET status_code=200 process_time=7.25ms
+2026-09-15 11:26:15,951 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=8.57ms
+2026-09-15 11:26:15,971 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=9.29ms
+2026-09-15 11:26:17,684 - AI-Response-Validation - INFO - Received evaluation submission: question='How do you bake a chocolate ca...'
+2026-09-15 11:26:17,690 - AI-Response-Validation - INFO - Semantic Cache HIT! Returning instant cached result.
+2026-09-15 11:26:17,706 - AI-Response-Validation - INFO - path=/api/evaluate method=POST status_code=200 process_time=25.18ms
+2026-09-15 11:26:17,735 - AI-Response-Validation - INFO - path=/api/results/4 method=GET status_code=200 process_time=12.84ms
+2026-09-15 11:26:17,742 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=21.31ms
+2026-09-15 11:26:17,750 - AI-Response-Validation - INFO - path=/api/results/4 method=GET status_code=200 process_time=3.47ms
+2026-09-15 11:29:16,576 - AI-Response-Validation - INFO - Initializing database connection...
+2026-09-15 11:29:16,588 - AI-Response-Validation - INFO - Database engine created at sqlite:////home/hassan/Documents/Hassan/coding_projects/Infosys Springboard Internship 7.0/ai-response-validation-system/data/evaluations.db
+2026-09-15 11:29:24,662 - datasets - INFO - PyTorch version 2.13.0 available.
+2026-09-15 11:29:24,856 - AI-Response-Validation - INFO - Starting AI Response Validation API...
+2026-09-15 11:29:24,858 - AI-Response-Validation - INFO - Database tables verified/created.
+2026-09-15 11:31:46,287 - AI-Response-Validation - INFO - Initializing database connection...
+2026-09-15 11:31:46,298 - AI-Response-Validation - INFO - Database engine created at sqlite:////home/hassan/Documents/Hassan/coding_projects/Infosys Springboard Internship 7.0/ai-response-validation-system/data/evaluations.db
+2026-09-15 11:31:55,153 - datasets - INFO - PyTorch version 2.13.0 available.
+2026-09-15 11:31:55,347 - AI-Response-Validation - INFO - Starting AI Response Validation API...
+2026-09-15 11:31:55,349 - AI-Response-Validation - INFO - Database tables verified/created.
+2026-09-15 11:34:03,873 - AI-Response-Validation - INFO - path=/api/evaluate method=OPTIONS status_code=200 process_time=0.43ms
+2026-09-15 11:34:03,888 - AI-Response-Validation - INFO - Received evaluation submission: question='What is the capital of France?...'
+2026-09-15 11:34:03,900 - AI-Response-Validation - INFO - Semantic Cache HIT! Returning instant cached result.
+2026-09-15 11:34:03,910 - AI-Response-Validation - INFO - path=/api/evaluate method=POST status_code=200 process_time=24.65ms
+2026-09-15 11:34:03,945 - AI-Response-Validation - INFO - path=/api/results/5 method=GET status_code=200 process_time=14.52ms
+2026-09-15 11:34:03,948 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=17.68ms
+2026-09-15 11:34:03,964 - AI-Response-Validation - INFO - path=/api/results/5 method=GET status_code=200 process_time=3.46ms
+2026-09-15 11:35:12,959 - AI-Response-Validation - INFO - Initializing database connection...
+2026-09-15 11:35:12,971 - AI-Response-Validation - INFO - Database engine created at sqlite:////home/hassan/Documents/Hassan/coding_projects/Infosys Springboard Internship 7.0/ai-response-validation-system/data/evaluations.db
+2026-09-15 11:35:21,158 - datasets - INFO - PyTorch version 2.13.0 available.
+2026-09-15 11:35:21,364 - AI-Response-Validation - INFO - Starting AI Response Validation API...
+2026-09-15 11:35:21,366 - AI-Response-Validation - INFO - Database tables verified/created.
+2026-09-15 11:35:25,049 - AI-Response-Validation - INFO - Initializing database connection...
+2026-09-15 11:35:25,061 - AI-Response-Validation - INFO - Database engine created at sqlite:////home/hassan/Documents/Hassan/coding_projects/Infosys Springboard Internship 7.0/ai-response-validation-system/data/evaluations.db
+2026-09-15 11:35:33,351 - datasets - INFO - PyTorch version 2.13.0 available.
+2026-09-15 11:35:33,545 - AI-Response-Validation - INFO - Starting AI Response Validation API...
+2026-09-15 11:35:33,547 - AI-Response-Validation - INFO - Database tables verified/created.
+2026-09-15 11:36:46,795 - AI-Response-Validation - INFO - Initializing database connection...
+2026-09-15 11:36:46,807 - AI-Response-Validation - INFO - Database engine created at sqlite:////home/hassan/Documents/Hassan/coding_projects/Infosys Springboard Internship 7.0/ai-response-validation-system/data/evaluations.db
+2026-09-15 11:36:55,619 - datasets - INFO - PyTorch version 2.13.0 available.
+2026-09-15 11:36:55,811 - AI-Response-Validation - INFO - Starting AI Response Validation API...
+2026-09-15 11:36:55,841 - AI-Response-Validation - INFO - Database tables verified/created.
+2026-09-15 11:36:57,677 - AI-Response-Validation - INFO - Received evaluation submission: question='Name three primary colors....'
+2026-09-15 11:36:57,717 - AI-Response-Validation - INFO - Successfully saved and queued evaluation ID 1
+2026-09-15 11:36:57,718 - AI-Response-Validation - INFO - path=/api/evaluate method=POST status_code=200 process_time=45.56ms
+2026-09-15 11:36:57,721 - AI-Response-Validation - INFO - Orchestrator started for evaluation 1
+2026-09-15 11:36:57,722 - AI-Response-Validation - INFO - Evaluation 1: Running Judge Agents concurrently...
+2026-09-15 11:36:57,736 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=11.63ms
+2026-09-15 11:36:57,739 - AI-Response-Validation - INFO - path=/api/results/1 method=GET status_code=200 process_time=5.31ms
+2026-09-15 11:36:57,749 - AI-Response-Validation - INFO - path=/api/results/1 method=GET status_code=200 process_time=2.36ms
+2026-09-15 11:36:58,438 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 1/3): 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+Please retry in 1.59054653s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerMinutePerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerMinute-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerDay-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+, retry_delay {
+  seconds: 1
+}
+]
+2026-09-15 11:36:58,439 - AI-Response-Validation - INFO - Retrying in 1 seconds...
+2026-09-15 11:36:58,669 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 1/3): 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+Please retry in 1.359780776s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerDay-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerMinute-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerMinutePerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+, retry_delay {
+  seconds: 1
+}
+]
+2026-09-15 11:36:58,670 - AI-Response-Validation - INFO - Retrying in 1 seconds...
+2026-09-15 11:36:58,843 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 1/3): 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+Please retry in 1.18458328s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerDay-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerMinute-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerMinutePerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+, retry_delay {
+  seconds: 1
+}
+]
+2026-09-15 11:36:58,844 - AI-Response-Validation - INFO - Retrying in 1 seconds...
+2026-09-15 11:36:59,459 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 1/3): 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+Please retry in 570.833054ms. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerDay-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerMinute-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerMinutePerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+, retry_delay {
+}
+]
+2026-09-15 11:36:59,460 - AI-Response-Validation - INFO - Retrying in 1 seconds...
+2026-09-15 11:36:59,754 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 2/3): 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+Please retry in 274.754534ms. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerMinutePerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerMinute-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerDay-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+, retry_delay {
+}
+]
+2026-09-15 11:36:59,755 - AI-Response-Validation - INFO - Retrying in 2 seconds...
+2026-09-15 11:36:59,963 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 2/3): 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+Please retry in 65.990525ms. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerDay-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerMinutePerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerMinute-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+, retry_delay {
+}
+]
+2026-09-15 11:36:59,964 - AI-Response-Validation - INFO - Retrying in 2 seconds...
+2026-09-15 11:37:00,170 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 2/3): 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+Please retry in 59.85719685s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerMinute-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerMinutePerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerDay-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+, retry_delay {
+  seconds: 59
+}
+]
+2026-09-15 11:37:00,170 - AI-Response-Validation - INFO - Retrying in 2 seconds...
+2026-09-15 11:37:00,780 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 2/3): 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+Please retry in 59.247879764s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerMinutePerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerMinute-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerDay-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+, retry_delay {
+  seconds: 59
+}
+]
+2026-09-15 11:37:00,781 - AI-Response-Validation - INFO - Retrying in 2 seconds...
+2026-09-15 11:37:01,555 - AI-Response-Validation - INFO - path=/api/results/1 method=GET status_code=200 process_time=5.17ms
+2026-09-15 11:37:02,108 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 3/3): 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+Please retry in 57.922955969s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerDay-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerMinute-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerMinutePerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+, retry_delay {
+  seconds: 57
+}
+]
+2026-09-15 11:37:02,309 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 3/3): 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+Please retry in 57.717943821s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerMinute-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerMinutePerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerDay-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+, retry_delay {
+  seconds: 57
+}
+]
+2026-09-15 11:37:02,524 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 3/3): 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+Please retry in 57.505030366s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerDay-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerMinutePerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerMinute-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+, retry_delay {
+  seconds: 57
+}
+]
+2026-09-15 11:37:03,136 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 3/3): 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+Please retry in 56.892542954s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerDay-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerMinute-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerMinutePerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+, retry_delay {
+  seconds: 56
+}
+]
+2026-09-15 11:37:03,139 - AI-Response-Validation - INFO - Evaluation 1: Computing Final Verdict...
+2026-09-15 11:37:03,160 - AI-Response-Validation - INFO - Evaluation 1 completed successfully. Score: 0
+2026-09-15 11:37:04,555 - AI-Response-Validation - INFO - path=/api/results/1 method=GET status_code=200 process_time=7.14ms
+2026-09-15 11:37:15,747 - AI-Response-Validation - INFO - Received evaluation submission: question='Name three primary colors....'
+2026-09-15 11:37:15,758 - AI-Response-Validation - INFO - Successfully saved and queued evaluation ID 2
+2026-09-15 11:37:15,759 - AI-Response-Validation - INFO - path=/api/evaluate method=POST status_code=200 process_time=17.40ms
+2026-09-15 11:37:15,762 - AI-Response-Validation - INFO - Orchestrator started for evaluation 2
+2026-09-15 11:37:15,762 - AI-Response-Validation - INFO - Evaluation 2: Running Judge Agents concurrently...
+2026-09-15 11:37:15,773 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=4.58ms
+2026-09-15 11:37:15,780 - AI-Response-Validation - INFO - path=/api/results/2 method=GET status_code=200 process_time=3.13ms
+2026-09-15 11:37:15,789 - AI-Response-Validation - INFO - path=/api/results/2 method=GET status_code=200 process_time=2.89ms
+2026-09-15 11:37:16,322 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 1/3): 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+Please retry in 43.706528471s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerDay-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerMinute-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerMinutePerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+, retry_delay {
+  seconds: 43
+}
+]
+2026-09-15 11:37:16,323 - AI-Response-Validation - INFO - Retrying in 1 seconds...
+2026-09-15 11:37:16,508 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 1/3): 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+Please retry in 43.520007295s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerDay-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerMinute-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerMinutePerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+, retry_delay {
+  seconds: 43
+}
+]
+2026-09-15 11:37:16,509 - AI-Response-Validation - INFO - Retrying in 1 seconds...
+2026-09-15 11:37:17,650 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 2/3): 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+Please retry in 42.378512609s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerMinute-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerMinutePerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerDay-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+, retry_delay {
+  seconds: 42
+}
+]
+2026-09-15 11:37:17,651 - AI-Response-Validation - INFO - Retrying in 2 seconds...
+2026-09-15 11:37:17,865 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 2/3): 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+Please retry in 42.163586005s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerMinute-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerMinutePerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerDay-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+, retry_delay {
+  seconds: 42
+}
+]
+2026-09-15 11:37:17,866 - AI-Response-Validation - INFO - Retrying in 2 seconds...
+2026-09-15 11:37:18,063 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 1/3): 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+Please retry in 41.965055663s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerMinutePerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerMinute-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerDay-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+, retry_delay {
+  seconds: 41
+}
+]
+2026-09-15 11:37:18,065 - AI-Response-Validation - INFO - Retrying in 1 seconds...
+2026-09-15 11:37:18,276 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 1/3): 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+Please retry in 41.7553631s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerDay-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerMinutePerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerMinute-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+, retry_delay {
+  seconds: 41
+}
+]
+2026-09-15 11:37:18,277 - AI-Response-Validation - INFO - Retrying in 1 seconds...
+2026-09-15 11:37:18,785 - AI-Response-Validation - INFO - path=/api/results/2 method=GET status_code=200 process_time=7.52ms
+2026-09-15 11:37:19,401 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 2/3): 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+Please retry in 40.628755324s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerDay-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerMinute-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerMinutePerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+, retry_delay {
+  seconds: 40
+}
+]
+2026-09-15 11:37:19,403 - AI-Response-Validation - INFO - Retrying in 2 seconds...
+2026-09-15 11:37:19,616 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 2/3): 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+Please retry in 40.411435864s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerMinutePerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerMinute-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerDay-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+, retry_delay {
+  seconds: 40
+}
+]
+2026-09-15 11:37:19,617 - AI-Response-Validation - INFO - Retrying in 2 seconds...
+2026-09-15 11:37:20,009 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 3/3): 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+Please retry in 40.01897044s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerMinutePerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerMinute-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerDay-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+, retry_delay {
+  seconds: 40
+}
+]
+2026-09-15 11:37:20,229 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 3/3): 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+Please retry in 39.798473916s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerDay-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerMinutePerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerMinute-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+, retry_delay {
+  seconds: 39
+}
+]
+2026-09-15 11:37:21,754 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 3/3): 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+Please retry in 38.274293758s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerDay-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerMinute-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerMinutePerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+, retry_delay {
+  seconds: 38
+}
+]
+2026-09-15 11:37:21,781 - AI-Response-Validation - INFO - path=/api/results/2 method=GET status_code=200 process_time=7.27ms
+2026-09-15 11:37:21,964 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 3/3): 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+Please retry in 38.064038432s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerDay-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerMinutePerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerMinute-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+, retry_delay {
+  seconds: 38
+}
+]
+2026-09-15 11:37:21,967 - AI-Response-Validation - INFO - Evaluation 2: Computing Final Verdict...
+2026-09-15 11:37:21,978 - AI-Response-Validation - INFO - Evaluation 2 completed successfully. Score: 0
+2026-09-15 11:37:25,547 - AI-Response-Validation - INFO - path=/api/results/2 method=GET status_code=200 process_time=8.81ms
+2026-09-15 11:39:10,229 - AI-Response-Validation - INFO - Initializing database connection...
+2026-09-15 11:39:10,242 - AI-Response-Validation - INFO - Database engine created at sqlite:////home/hassan/Documents/Hassan/coding_projects/Infosys Springboard Internship 7.0/ai-response-validation-system/data/evaluations.db
+2026-09-15 11:39:18,449 - datasets - INFO - PyTorch version 2.13.0 available.
+2026-09-15 11:39:18,639 - AI-Response-Validation - INFO - Starting AI Response Validation API...
+2026-09-15 11:39:18,641 - AI-Response-Validation - INFO - Database tables verified/created.
+2026-09-15 11:39:19,903 - AI-Response-Validation - INFO - Initializing database connection...
+2026-09-15 11:39:19,920 - AI-Response-Validation - INFO - Database engine created at sqlite:////home/hassan/Documents/Hassan/coding_projects/Infosys Springboard Internship 7.0/ai-response-validation-system/data/evaluations.db
+2026-09-15 11:39:28,130 - datasets - INFO - PyTorch version 2.13.0 available.
+2026-09-15 11:39:28,320 - AI-Response-Validation - INFO - Starting AI Response Validation API...
+2026-09-15 11:39:28,322 - AI-Response-Validation - INFO - Database tables verified/created.
+2026-09-15 11:41:11,002 - AI-Response-Validation - INFO - Initializing database connection...
+2026-09-15 11:41:11,014 - AI-Response-Validation - INFO - Database engine created at sqlite:////home/hassan/Documents/Hassan/coding_projects/Infosys Springboard Internship 7.0/ai-response-validation-system/data/evaluations.db
+2026-09-15 11:41:19,781 - datasets - INFO - PyTorch version 2.13.0 available.
+2026-09-15 11:41:19,971 - AI-Response-Validation - INFO - Starting AI Response Validation API...
+2026-09-15 11:41:19,973 - AI-Response-Validation - INFO - Database tables verified/created.
+2026-09-15 11:43:21,680 - AI-Response-Validation - INFO - Received evaluation submission: question='How do you bake a chocolate ca...'
+2026-09-15 11:43:21,699 - AI-Response-Validation - INFO - Successfully saved and queued evaluation ID 3
+2026-09-15 11:43:21,700 - AI-Response-Validation - INFO - path=/api/evaluate method=POST status_code=200 process_time=21.42ms
+2026-09-15 11:43:21,703 - AI-Response-Validation - INFO - Orchestrator started for evaluation 3
+2026-09-15 11:43:21,703 - AI-Response-Validation - INFO - Evaluation 3: Running Judge Agents concurrently...
+2026-09-15 11:43:21,719 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=10.59ms
+2026-09-15 11:43:21,721 - AI-Response-Validation - INFO - path=/api/results/3 method=GET status_code=200 process_time=4.00ms
+2026-09-15 11:43:21,749 - AI-Response-Validation - INFO - path=/api/results/3 method=GET status_code=200 process_time=2.91ms
+2026-09-15 11:43:22,484 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 1/3): 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+Please retry in 37.543303498s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerMinute-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerMinutePerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerDay-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+, retry_delay {
+  seconds: 37
+}
+]
+2026-09-15 11:43:22,484 - AI-Response-Validation - INFO - Retrying in 1 seconds...
+2026-09-15 11:43:22,881 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 1/3): 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+Please retry in 37.149878875s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerMinutePerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerMinute-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerDay-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+, retry_delay {
+  seconds: 37
+}
+]
+2026-09-15 11:43:22,882 - AI-Response-Validation - INFO - Retrying in 1 seconds...
+2026-09-15 11:43:23,101 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 1/3): 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+Please retry in 36.927111545s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerMinutePerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerMinute-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerDay-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+, retry_delay {
+  seconds: 36
+}
+]
+2026-09-15 11:43:23,102 - AI-Response-Validation - INFO - Retrying in 1 seconds...
+2026-09-15 11:43:23,804 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 2/3): 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+Please retry in 36.231113131s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerDay-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerMinutePerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerMinute-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+, retry_delay {
+  seconds: 36
+}
+]
+2026-09-15 11:43:23,806 - AI-Response-Validation - INFO - Retrying in 2 seconds...
+2026-09-15 11:43:23,997 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 1/3): 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+Please retry in 36.030132888s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerMinute-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerMinutePerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerDay-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+, retry_delay {
+  seconds: 36
+}
+]
+2026-09-15 11:43:23,998 - AI-Response-Validation - INFO - Retrying in 1 seconds...
+2026-09-15 11:43:24,201 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 2/3): 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+Please retry in 35.828773362s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerDay-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerMinute-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerMinutePerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+, retry_delay {
+  seconds: 35
+}
+]
+2026-09-15 11:43:24,202 - AI-Response-Validation - INFO - Retrying in 2 seconds...
+2026-09-15 11:43:24,404 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 2/3): 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+Please retry in 35.623306543s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerDay-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerMinutePerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerMinute-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+, retry_delay {
+  seconds: 35
+}
+]
+2026-09-15 11:43:24,405 - AI-Response-Validation - INFO - Retrying in 2 seconds...
+2026-09-15 11:43:24,721 - AI-Response-Validation - INFO - path=/api/results/3 method=GET status_code=200 process_time=8.96ms
+2026-09-15 11:43:25,345 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 2/3): 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+Please retry in 34.682027177s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerMinute-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerMinutePerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerDay-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+, retry_delay {
+  seconds: 34
+}
+]
+2026-09-15 11:43:25,346 - AI-Response-Validation - INFO - Retrying in 2 seconds...
+2026-09-15 11:43:26,168 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 3/3): 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+Please retry in 33.858181578s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerDay-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerMinute-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerMinutePerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+, retry_delay {
+  seconds: 33
+}
+]
+2026-09-15 11:43:26,542 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 3/3): 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+Please retry in 33.544846206s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerMinute-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerMinutePerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerDay-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+, retry_delay {
+  seconds: 33
+}
+]
+2026-09-15 11:43:26,676 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 3/3): 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+Please retry in 33.351136165s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerMinute-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerMinutePerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerDay-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+, retry_delay {
+  seconds: 33
+}
+]
+2026-09-15 11:43:27,712 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 3/3): 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-3.1-pro
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-3.1-pro
+Please retry in 32.316309878s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerDay-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerMinutePerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerMinute-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.1-pro"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+, retry_delay {
+  seconds: 32
+}
+]
+2026-09-15 11:43:27,718 - AI-Response-Validation - INFO - path=/api/results/3 method=GET status_code=200 process_time=4.20ms
+2026-09-15 11:43:27,718 - AI-Response-Validation - INFO - Evaluation 3: Computing Final Verdict...
+2026-09-15 11:43:27,727 - AI-Response-Validation - INFO - Evaluation 3 completed successfully. Score: 0
+2026-09-15 11:43:31,486 - AI-Response-Validation - INFO - path=/api/results/3 method=GET status_code=200 process_time=7.67ms
+2026-09-15 11:45:42,465 - AI-Response-Validation - INFO - Initializing database connection...
+2026-09-15 11:45:42,478 - AI-Response-Validation - INFO - Database engine created at sqlite:////home/hassan/Documents/Hassan/coding_projects/Infosys Springboard Internship 7.0/ai-response-validation-system/data/evaluations.db
+2026-09-15 11:45:50,580 - datasets - INFO - PyTorch version 2.13.0 available.
+2026-09-15 11:45:50,774 - AI-Response-Validation - INFO - Starting AI Response Validation API...
+2026-09-15 11:45:50,776 - AI-Response-Validation - INFO - Database tables verified/created.
+2026-09-15 11:52:37,893 - AI-Response-Validation - INFO - Initializing database connection...
+2026-09-15 11:52:37,907 - AI-Response-Validation - INFO - Database engine created at sqlite:////home/hassan/Documents/Hassan/coding_projects/Infosys Springboard Internship 7.0/ai-response-validation-system/data/evaluations.db
+2026-09-15 11:52:46,620 - datasets - INFO - PyTorch version 2.13.0 available.
+2026-09-15 11:52:46,815 - AI-Response-Validation - INFO - Starting AI Response Validation API...
+2026-09-15 11:52:46,817 - AI-Response-Validation - INFO - Database tables verified/created.
+2026-09-15 11:52:48,963 - AI-Response-Validation - INFO - path=/api/evaluate method=OPTIONS status_code=200 process_time=0.40ms
+2026-09-15 11:52:48,973 - AI-Response-Validation - INFO - Received evaluation submission: question='What is the capital of France?...'
+2026-09-15 11:52:48,995 - AI-Response-Validation - INFO - Successfully saved and queued evaluation ID 4
+2026-09-15 11:52:48,996 - AI-Response-Validation - INFO - path=/api/evaluate method=POST status_code=200 process_time=25.94ms
+2026-09-15 11:52:49,000 - AI-Response-Validation - INFO - Orchestrator started for evaluation 4
+2026-09-15 11:52:49,000 - AI-Response-Validation - INFO - Evaluation 4: Running Judge Agents concurrently...
+2026-09-15 11:52:49,021 - AI-Response-Validation - INFO - path=/api/results/4 method=GET status_code=200 process_time=11.85ms
+2026-09-15 11:52:49,021 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=14.61ms
+2026-09-15 11:52:49,033 - AI-Response-Validation - INFO - path=/api/results/4 method=GET status_code=200 process_time=2.52ms
+2026-09-15 11:52:49,867 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 1/3): 404 models/gemini-1.0-pro is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-09-15 11:52:49,867 - AI-Response-Validation - INFO - Retrying in 1 seconds...
+2026-09-15 11:52:50,084 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 1/3): 404 models/gemini-1.0-pro is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-09-15 11:52:50,085 - AI-Response-Validation - INFO - Retrying in 1 seconds...
+2026-09-15 11:52:50,669 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 1/3): 404 models/gemini-1.0-pro is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-09-15 11:52:50,669 - AI-Response-Validation - INFO - Retrying in 1 seconds...
+2026-09-15 11:52:51,099 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 1/3): 404 models/gemini-1.0-pro is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-09-15 11:52:51,100 - AI-Response-Validation - INFO - Retrying in 1 seconds...
+2026-09-15 11:52:51,280 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 2/3): 404 models/gemini-1.0-pro is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-09-15 11:52:51,281 - AI-Response-Validation - INFO - Retrying in 2 seconds...
+2026-09-15 11:52:51,399 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 2/3): 404 models/gemini-1.0-pro is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-09-15 11:52:51,400 - AI-Response-Validation - INFO - Retrying in 2 seconds...
+2026-09-15 11:52:52,005 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 2/3): 404 models/gemini-1.0-pro is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-09-15 11:52:52,006 - AI-Response-Validation - INFO - Retrying in 2 seconds...
+2026-09-15 11:52:52,028 - AI-Response-Validation - INFO - path=/api/results/4 method=GET status_code=200 process_time=9.30ms
+2026-09-15 11:52:52,414 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 2/3): 404 models/gemini-1.0-pro is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-09-15 11:52:52,414 - AI-Response-Validation - INFO - Retrying in 2 seconds...
+2026-09-15 11:52:53,634 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 3/3): 404 models/gemini-1.0-pro is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-09-15 11:52:53,739 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 3/3): 404 models/gemini-1.0-pro is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-09-15 11:52:54,341 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 3/3): 404 models/gemini-1.0-pro is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-09-15 11:52:54,761 - AI-Response-Validation - ERROR - LLM Call Failed (Attempt 3/3): 404 models/gemini-1.0-pro is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-09-15 11:52:54,763 - AI-Response-Validation - INFO - Evaluation 4: Computing Final Verdict...
+2026-09-15 11:52:54,777 - AI-Response-Validation - INFO - Evaluation 4 completed successfully. Score: 0
+2026-09-15 11:52:55,027 - AI-Response-Validation - INFO - path=/api/results/4 method=GET status_code=200 process_time=8.19ms
+2026-09-15 12:18:38,392 - AI-Response-Validation - INFO - Initializing database connection...
+2026-09-15 12:18:38,404 - AI-Response-Validation - INFO - Database engine created at sqlite:////home/hassan/Documents/Hassan/coding_projects/Infosys Springboard Internship 7.0/ai-response-validation-system/data/evaluations.db
+2026-09-15 12:18:46,531 - datasets - INFO - PyTorch version 2.13.0 available.
+2026-09-15 12:18:46,724 - AI-Response-Validation - INFO - Starting AI Response Validation API...
+2026-09-15 12:18:46,726 - AI-Response-Validation - INFO - Database tables verified/created.
+2026-09-15 12:27:09,762 - AI-Response-Validation - INFO - Initializing database connection...
+2026-09-15 12:27:09,774 - AI-Response-Validation - INFO - Database engine created at sqlite:////home/hassan/Documents/Hassan/coding_projects/Infosys Springboard Internship 7.0/ai-response-validation-system/data/evaluations.db
+2026-09-15 12:27:18,375 - datasets - INFO - PyTorch version 2.13.0 available.
+2026-09-15 12:27:18,571 - AI-Response-Validation - INFO - Starting AI Response Validation API...
+2026-09-15 12:27:18,573 - AI-Response-Validation - INFO - Database tables verified/created.
+2026-09-15 12:28:35,840 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=37.64ms
+2026-09-15 12:28:35,859 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=8.03ms
+2026-09-15 12:28:37,069 - AI-Response-Validation - INFO - path=/api/evaluate method=OPTIONS status_code=200 process_time=0.91ms
+2026-09-15 12:28:37,084 - AI-Response-Validation - INFO - Received evaluation submission: question='How do you bake a chocolate ca...'
+2026-09-15 12:28:37,101 - AI-Response-Validation - INFO - Successfully saved and queued evaluation ID 5
+2026-09-15 12:28:37,103 - AI-Response-Validation - INFO - path=/api/evaluate method=POST status_code=200 process_time=22.96ms
+2026-09-15 12:28:37,105 - AI-Response-Validation - INFO - Orchestrator started for evaluation 5
+2026-09-15 12:28:37,105 - AI-Response-Validation - INFO - Evaluation 5: Running Judge Agents concurrently...
+2026-09-15 12:28:37,116 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=6.47ms
+2026-09-15 12:28:37,117 - AI-Response-Validation - INFO - path=/api/results/5 method=GET status_code=200 process_time=6.15ms
+2026-09-15 12:28:37,127 - AI-Response-Validation - INFO - path=/api/results/5 method=GET status_code=200 process_time=2.09ms
+2026-09-15 12:28:40,120 - AI-Response-Validation - INFO - path=/api/results/5 method=GET status_code=200 process_time=5.89ms
+2026-09-15 12:28:43,121 - AI-Response-Validation - INFO - path=/api/results/5 method=GET status_code=200 process_time=5.54ms
+2026-09-15 12:28:44,032 - AI-Response-Validation - INFO - Evaluation 5: Computing Final Verdict...
+2026-09-15 12:28:44,047 - AI-Response-Validation - INFO - Evaluation 5 completed successfully. Score: 0
+2026-09-15 12:28:46,125 - AI-Response-Validation - INFO - path=/api/results/5 method=GET status_code=200 process_time=8.89ms
+2026-09-15 12:33:40,413 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=7.98ms
+2026-09-15 12:33:42,120 - AI-Response-Validation - INFO - path=/api/results/5 method=GET status_code=200 process_time=6.72ms
+2026-09-15 12:33:42,134 - AI-Response-Validation - INFO - path=/api/results/5 method=GET status_code=200 process_time=6.63ms
+2026-09-15 12:35:12,316 - AI-Response-Validation - INFO - path=/api/evaluations/analytics method=GET status_code=200 process_time=13.23ms
+2026-09-15 12:35:12,325 - AI-Response-Validation - INFO - path=/api/evaluations/analytics method=GET status_code=200 process_time=4.33ms
+2026-09-15 12:35:16,723 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=17.80ms
+2026-09-15 12:35:16,731 - AI-Response-Validation - INFO - path=/api/results/5 method=GET status_code=200 process_time=18.73ms
+2026-09-15 12:35:16,749 - AI-Response-Validation - INFO - path=/api/results/5 method=GET status_code=200 process_time=9.79ms

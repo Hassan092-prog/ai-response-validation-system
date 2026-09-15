@@ -609,6 +609,9 @@ body {
   font-size: 0.95rem;
   line-height: 1.6;
   margin-bottom: 0.5rem;
+  word-wrap: break-word;
+  word-break: break-all;
+  white-space: pre-wrap;
 }
 .markdown-body p:last-child {
   margin-bottom: 0;
