@@ -8,13 +8,13 @@ from dotenv import load_dotenv
 
 load_dotenv()
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-# Using gemini-3.5-flash which is explicitly listed as supported and has generous free-tier quotas
-MODEL_NAME = "gemini-3.5-flash"
+# Using gemini-3.6-flash as requested by the 404 API Error
+MODEL_NAME = "gemini-3.6-flash"
 
 def _call_llm_json(system_prompt: str, user_prompt: str, default_score: int = 0, retries: int = 3) -> dict:
     """Helper to call Gemini and return parsed JSON with basic retry logic."""
-    # Free tier protection: Stagger concurrent requests by 0 to 2 seconds
-    time.sleep(random.uniform(0, 2))
+    # Free tier protection: Stagger concurrent requests by 0 to 5 seconds
+    time.sleep(random.uniform(0, 5))
     
     for attempt in range(retries):
         try:
@@ -29,8 +29,14 @@ def _call_llm_json(system_prompt: str, user_prompt: str, default_score: int = 0,
             logger.error(f"LLM Call Failed (Attempt {attempt+1}/{retries}): {e}")
             
             if attempt < retries - 1:
+                error_str = str(e)
                 sleep_time = 2 ** attempt
-                logger.info(f"Retrying in {sleep_time} seconds...")
+                if "429" in error_str:
+                    logger.warning("Quota Exceeded (429) detected. Sleeping for 40 seconds before retrying to respect Free Tier limits...")
+                    sleep_time = 40
+                else:
+                    logger.info(f"Retrying in {sleep_time} seconds...")
+                
                 time.sleep(sleep_time)
                 continue
             
@@ -84,12 +90,18 @@ def compute_final_verdict(relevance: dict, accuracy: dict, completeness: dict, h
         if supporting_evidence:
             a_reasoning += f"\n\n**Supporting Evidence:**\n> {supporting_evidence}"
 
+        # Format Completeness Reasoning
+        c_reasoning = completeness.get("reasoning", "")
+        missing = completeness.get("missing_aspects", [])
+        if missing:
+            c_reasoning += f"\n\n**Missing Aspects:**\n- " + "\n- ".join(missing)
+
         return {
             "final_score": round(final_score, 1),
             "breakdown": {
                 "relevance": {"score": r_score, "reasoning": relevance.get("reasoning", "")},
                 "accuracy": {"score": a_score, "reasoning": a_reasoning},
-                "completeness": {"score": c_score, "reasoning": completeness.get("reasoning", "")},
+                "completeness": {"score": c_score, "reasoning": c_reasoning},
                 "hallucination": {"score": h_score, "reasoning": h_reasoning}
             }
         }

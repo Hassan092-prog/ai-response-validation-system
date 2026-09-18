@@ -8,7 +8,8 @@ from backend.kb.retrieve import retrieve_context
 
 def process_evaluation_task(evaluation_id: int):
     """Background task to orchestrate the AI evaluation pipeline."""
-    db: Session = next(database.get_db())
+    from backend.api.database import SessionLocal
+    db = SessionLocal()
     try:
         # Fetch record
         record = db.query(models.EvaluationRecord).filter(models.EvaluationRecord.id == evaluation_id).first()
@@ -18,44 +19,21 @@ def process_evaluation_task(evaluation_id: int):
 
         logger.info(f"Orchestrator started for evaluation {evaluation_id}")
         
-        # 1. Retrieve Context
-        context = ""
-        rag_context = None
-        if record.source_document:
-            context += f"\nUser Provided Source: {record.source_document}"
-        else:
-            logger.info(f"Evaluation {evaluation_id}: No source document provided. Querying ChromaDB...")
-            rag_context = retrieve_context(record.question)
-            context += f"\nRetrieved Knowledge Base Context:\n{rag_context}"
-            
-        # 2. Call Judge Agents Concurrently
-        logger.info(f"Evaluation {evaluation_id}: Running Judge Agents concurrently...")
+        # 1. Use the Consolidated Batch Orchestrator to save API quota
+        # We switched to this to prevent 429 Quota Exceeded errors on restricted free-tier API keys.
+        from backend.core.batch_orchestrator import evaluate_batch_row
         
-        with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
-            future_relevance = executor.submit(agents.evaluate_relevance, record.question, record.ai_response)
-            future_accuracy = executor.submit(agents.evaluate_accuracy, record.question, record.ai_response, context)
-            future_completeness = executor.submit(agents.evaluate_completeness, record.question, record.ai_response)
-            future_hallucination = executor.submit(agents.detect_hallucination, record.ai_response, context)
-            
-            relevance_res = future_relevance.result()
-            accuracy_res = future_accuracy.result()
-            completeness_res = future_completeness.result()
-            hallucination_res = future_hallucination.result()
-        
-        # 3. Verdict Aggregation
-        logger.info(f"Evaluation {evaluation_id}: Computing Final Verdict...")
-        final_verdict = agents.compute_final_verdict(
-            relevance_res, accuracy_res, completeness_res, hallucination_res
+        logger.info(f"Evaluation {evaluation_id}: Running Consolidated Master Prompt (1 API Request)...")
+        final_verdict = evaluate_batch_row(
+            record_id=record.id,
+            question=record.question,
+            ai_response=record.ai_response,
+            reference_answer=record.reference_answer,
+            source_document=record.source_document
         )
         
-        if rag_context:
-            final_verdict["rag_context"] = rag_context
-        
-        # 4. Save to Database
-        # We always mark as completed so the frontend can beautifully render the 4 error cards.
-        # (We handle cache prevention in main.py instead)
+        # 2. Save to Database
         record.status = "completed"
-            
         record.result_json = json.dumps(final_verdict)
         
         # Save individual numeric scores to the new columns for faster queries

@@ -21,6 +21,8 @@ except ImportError:
 from backend.api import models, schemas, database
 from backend.core.config import logger
 from backend.core.orchestrator import process_evaluation_task
+from backend.core.batch_orchestrator import evaluate_batch_row
+import uuid
 
 logger.info("Starting AI Response Validation API...")
 
@@ -148,6 +150,122 @@ def submit_evaluation(eval_input: schemas.EvaluationInput, background_tasks: Bac
         db.rollback()
         raise
 
+def process_batch_background(batch_id: str):
+    """Background task to process a batch using the consolidated orchestrator to save API quota."""
+    from backend.api.database import SessionLocal
+    db = SessionLocal()
+    try:
+        records = db.query(models.EvaluationRecord).filter(models.EvaluationRecord.batch_id == batch_id).all()
+        for record in records:
+            try:
+                # 1. Update status
+                record.status = "processing"
+                db.commit()
+                
+                # 2. Process using Consolidated Batch Orchestrator
+                result = evaluate_batch_row(
+                    record_id=record.id,
+                    question=record.question,
+                    ai_response=record.ai_response,
+                    reference_answer=record.reference_answer,
+                    source_document=record.source_document
+                )
+                
+                # 3. Save result
+                record.status = "completed"
+                record.result_json = json.dumps(result)
+                record.final_score = result.get("final_score")
+                
+                breakdown = result.get("breakdown", {})
+                record.score_relevance = breakdown.get("relevance", {}).get("score")
+                record.score_accuracy = breakdown.get("accuracy", {}).get("score")
+                record.score_completeness = breakdown.get("completeness", {}).get("score")
+                record.score_hallucination = breakdown.get("hallucination", {}).get("score")
+                
+                db.commit()
+                
+                # 4. Optimized 5 second delay to utilize the 15 RPM Free Tier Limit safely
+                # (1 request per 5 seconds = 12 RPM, leaving a buffer of 3 RPM for simultaneous UI usage)
+                time.sleep(5)
+                
+            except Exception as e:
+                logger.error(f"Error processing batch row {record.id}: {e}")
+                record.status = "failed"
+                record.result_json = json.dumps({"error": str(e)})
+                db.commit()
+    finally:
+        db.close()
+
+@app.post("/api/evaluate/batch")
+async def submit_batch(file: UploadFile = File(...), background_tasks: BackgroundTasks = BackgroundTasks(), db: Session = Depends(database.get_db)):
+    """Accepts a CSV file of evaluations and processes them in the background."""
+    if not file.filename.endswith(".csv"):
+        raise HTTPException(status_code=400, detail="Must upload a CSV file.")
+        
+    content = await file.read()
+    csv_text = content.decode("utf-8")
+    reader = csv.DictReader(io.StringIO(csv_text))
+    
+    batch_id = str(uuid.uuid4())
+    records_to_process = []
+    
+    for row in reader:
+        question = row.get("question")
+        ai_response = row.get("ai_response")
+        
+        if not question or not ai_response:
+            continue # Skip invalid rows
+            
+        db_record = models.EvaluationRecord(
+            question=question,
+            ai_response=ai_response,
+            reference_answer=row.get("reference_answer"),
+            source_document=row.get("source_document"),
+            status="pending",
+            batch_id=batch_id
+        )
+        db.add(db_record)
+        records_to_process.append(db_record)
+        
+    db.commit()
+        
+    background_tasks.add_task(process_batch_background, batch_id)
+    
+    return {
+        "batch_id": batch_id, 
+        "message": f"Successfully queued {len(records_to_process)} records for processing. This will take approx {len(records_to_process) * 20} seconds due to rate limits."
+    }
+
+@app.get("/api/batch/{batch_id}")
+def get_batch_status(batch_id: str, db: Session = Depends(database.get_db)):
+    """Returns the progress and results of a specific batch."""
+    records = db.query(models.EvaluationRecord).filter(models.EvaluationRecord.batch_id == batch_id).all()
+    if not records:
+        raise HTTPException(status_code=404, detail="Batch not found")
+        
+    total = len(records)
+    completed = sum(1 for r in records if r.status in ["completed", "failed"])
+    
+    results = []
+    for r in records:
+        results.append({
+            "id": r.id,
+            "status": r.status,
+            "question": r.question,
+            "ai_response": r.ai_response,
+            "final_score": r.final_score
+        })
+        
+    return {
+        "batch_id": batch_id,
+        "progress": {
+            "total": total,
+            "completed": completed,
+            "percent": round((completed / total) * 100) if total > 0 else 0
+        },
+        "records": results
+    }
+
 @app.get("/api/results/{eval_id}")
 def get_evaluation_result(eval_id: int, db: Session = Depends(database.get_db)):
     record = db.query(models.EvaluationRecord).filter(models.EvaluationRecord.id == eval_id).first()
@@ -184,6 +302,10 @@ def get_evaluation_history(page: int = 1, limit: int = 10, db: Session = Depends
         models.EvaluationRecord.question,
         models.EvaluationRecord.status,
         models.EvaluationRecord.final_score,
+        models.EvaluationRecord.score_accuracy,
+        models.EvaluationRecord.score_relevance,
+        models.EvaluationRecord.score_hallucination,
+        models.EvaluationRecord.ai_response,
         models.EvaluationRecord.created_at
     ).order_by(models.EvaluationRecord.created_at.desc()).offset(offset).limit(limit).all()
     
@@ -194,6 +316,10 @@ def get_evaluation_history(page: int = 1, limit: int = 10, db: Session = Depends
             "question": r.question,
             "status": r.status,
             "score": r.final_score,
+            "accuracy": r.score_accuracy,
+            "relevance": r.score_relevance,
+            "hallucination": r.score_hallucination,
+            "ai_response": r.ai_response,
             "created_at": r.created_at
         })
     return {

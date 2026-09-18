@@ -59,17 +59,19 @@ const Results = ({ evaluationId, onBack }) => {
     );
   }
 
-  if (error || data?.status === "failed") {
+  if (error || data?.status === "failed" || data?.result?.error || !data?.result?.breakdown) {
     return (
       <div className="results-container">
         <h2>Evaluation Failed</h2>
-        <p>{error || data?.result?.error}</p>
+        <p style={{ color: 'var(--text-secondary)' }}>
+          {error || data?.result?.error || "Failed to retrieve evaluation results from the AI model. The API might have timed out or returned an invalid response."}
+        </p>
         <button onClick={onBack} className="submit-btn secondary-btn" style={{marginTop: '2rem'}}>Go Back</button>
       </div>
     );
   }
 
-  const { final_score, breakdown, rag_context } = data.result;
+  const { final_score, breakdown, rag_context, verdict, consolidated_reasoning, major_issues } = data.result;
 
   const handleCopy = () => {
     const md = `# AI Validation Report
@@ -236,6 +238,42 @@ ${breakdown.hallucination.reasoning}
           {final_score} / 100
         </div>
       </div>
+
+      {verdict && (
+        <div className="verdict-banner" style={{ 
+          marginTop: '1.5rem', 
+          marginBottom: '2rem',
+          padding: '1.5rem', 
+          borderRadius: '12px', 
+          background: verdict === 'Pass' ? 'rgba(34, 197, 94, 0.1)' : verdict === 'Needs Improvement' ? 'rgba(234, 179, 8, 0.1)' : 'rgba(239, 68, 68, 0.1)',
+          border: `1px solid ${verdict === 'Pass' ? 'rgba(34, 197, 94, 0.3)' : verdict === 'Needs Improvement' ? 'rgba(234, 179, 8, 0.3)' : 'rgba(239, 68, 68, 0.3)'}`
+        }}>
+          <h3 style={{ 
+            color: verdict === 'Pass' ? '#4ade80' : verdict === 'Needs Improvement' ? '#facc15' : '#f87171', 
+            fontSize: '1.5rem', 
+            marginBottom: '0.8rem',
+            textTransform: 'uppercase',
+            fontWeight: '800',
+            letterSpacing: '0.05em'
+          }}>
+            VERDICT: {verdict}
+          </h3>
+          <p style={{ color: 'var(--text-primary)', fontSize: '1.05rem', lineHeight: '1.6', marginBottom: major_issues && major_issues.length > 0 ? '1.2rem' : '0' }}>
+            {consolidated_reasoning}
+          </p>
+          
+          {major_issues && major_issues.length > 0 && (
+            <div style={{ padding: '1rem', background: 'rgba(0,0,0,0.2)', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.05)' }}>
+              <h4 style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: '600' }}>Key Findings</h4>
+              <ul style={{ margin: 0, paddingLeft: '1.2rem', color: 'var(--text-primary)', fontSize: '0.95rem', lineHeight: '1.5' }}>
+                {major_issues.map((issue, idx) => (
+                  <li key={idx} style={{ marginBottom: '0.4rem' }}>{issue}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      )}
 
       <div className="breakdown-grid">
         <div className="breakdown-card">

@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { PlusCircle, History, BarChart3, Moon, Sun, ChevronDown, ChevronRight, Paperclip, Download, FileSpreadsheet, FileJson } from 'lucide-react'
 import './App.css'
 import Results from './Results'
 import AnalyticsDashboard from './AnalyticsDashboard'
+import BatchUpload from './BatchUpload'
 
 function App() {
   const [formData, setFormData] = useState({
@@ -244,6 +245,12 @@ function App() {
           >
             <BarChart3 className="icon" size={18} /> Analytics
           </button>
+          <button 
+            className={`nav-btn ${activeTab === 'batch' ? 'active' : ''}`}
+            onClick={() => setActiveTab('batch')}
+          >
+            <FileSpreadsheet className="icon" size={18} /> Batch Process
+          </button>
         </nav>
       </aside>
 
@@ -384,43 +391,126 @@ function App() {
               {history.length === 0 ? (
                 <p>No evaluations yet.</p>
               ) : (
-                <div className="history-list-container">
-                  {history.map(item => (
-                    <div key={item.id} className={`history-row-wrapper ${expandedHistoryId === item.id ? 'expanded' : ''}`}>
-                      <div 
-                        className="history-list-row"
-                        onClick={() => setExpandedHistoryId(expandedHistoryId === item.id ? null : item.id)}
-                      >
-                        <span className={`status-dot ${item.status}`}></span>
-                        <div className="history-row-content">
-                          <span className="history-date">
-                            {new Date(item.created_at).toLocaleDateString()} {new Date(item.created_at).toLocaleTimeString()}
-                          </span>
-                          <p className="history-question-preview">
-                            {item.question.length > 80 ? item.question.substring(0, 80) + '...' : item.question}
-                          </p>
-                        </div>
+                <>
+                  <div className="history-table-container" style={{ overflowX: 'auto', background: 'var(--input-bg)', borderRadius: 'var(--radius)', border: '1px solid var(--input-border)' }}>
+                  <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', tableLayout: 'fixed', minWidth: '950px' }}>
+                    <thead>
+                      <tr style={{ borderBottom: '1px solid var(--input-border)', color: 'var(--text-secondary)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                        <th style={{ padding: '1rem 1rem', fontWeight: '600', width: '32%' }}>Question</th>
+                        <th style={{ padding: '1rem 0.5rem', fontWeight: '600', width: '9%', textAlign: 'center' }}>Verdict</th>
+                        <th style={{ padding: '1rem 0.5rem', fontWeight: '600', width: '10%', textAlign: 'center' }}>Score</th>
+                        <th style={{ padding: '1rem 0.5rem', fontWeight: '600', width: '9%', textAlign: 'center' }}>Accuracy</th>
+                        <th style={{ padding: '1rem 0.5rem', fontWeight: '600', width: '10%', textAlign: 'center' }}>Relevance</th>
+                        <th style={{ padding: '1rem 0.5rem', fontWeight: '600', width: '12%', textAlign: 'center' }}>Hallucination</th>
+                        <th style={{ padding: '1rem 0.5rem', fontWeight: '600', width: '10%', textAlign: 'center' }}>Date / Time</th>
+                        <th style={{ padding: '1rem 1rem', fontWeight: '600', textAlign: 'right', width: '8%' }}>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {history.map(item => {
+                        let verdict = "PENDING";
+                        let verdictColor = "var(--text-secondary)";
+                        let verdictBg = "transparent";
                         
-                        <div className="history-row-actions">
-                          {item.score !== null && (
-                            <span className={`history-score ${item.score >= 80 ? 'high' : item.score >= 50 ? 'medium' : 'low'}`}>
-                              {Math.round(item.score)}/100
-                            </span>
-                          )}
-                          <span className="expand-icon">
-                            {expandedHistoryId === item.id ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
-                          </span>
-                        </div>
-                      </div>
-                      
-                      {/* Accordion Dropdown Results */}
-                      {expandedHistoryId === item.id && (
-                        <div className="history-accordion-body">
-                          <Results evaluationId={item.id} onBack={() => setExpandedHistoryId(null)} />
-                        </div>
-                      )}
-                    </div>
-                  ))}
+                        if (item.status === 'failed') { 
+                          verdict = "FAIL"; 
+                          verdictColor = "#ef4444"; 
+                          verdictBg = "rgba(239, 68, 68, 0.1)";
+                        } else if (item.status === 'completed' && item.score !== null) {
+                            if (item.score < 50 || item.hallucination <= 2 || item.accuracy <= 1) { 
+                              verdict = "FAIL"; 
+                              verdictColor = "#ef4444"; 
+                              verdictBg = "rgba(239, 68, 68, 0.1)";
+                            } else if (item.score < 80) { 
+                              verdict = "IMPROVEMENT"; 
+                              verdictColor = "#f59e0b"; 
+                              verdictBg = "rgba(245, 158, 11, 0.1)";
+                            } else { 
+                              verdict = "PASS"; 
+                              verdictColor = "var(--btn-bg)";
+                              verdictBg = "var(--btn-glow)";
+                            }
+                        }
+
+                        const isExpanded = expandedHistoryId === item.id;
+
+                        return (
+                          <React.Fragment key={item.id}>
+                            <tr 
+                              style={{ 
+                                borderBottom: '1px solid var(--input-border)', 
+                                transition: 'background-color 0.2s',
+                                backgroundColor: isExpanded ? 'var(--sidebar-hover)' : 'transparent'
+                              }}
+                            >
+                              <td style={{ padding: '1.2rem 1rem', overflow: 'hidden' }}>
+                                <div style={{ fontSize: '0.95rem', fontWeight: '600', color: 'var(--text-primary)', marginBottom: '4px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                  {item.question}
+                                </div>
+                                <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                  {item.ai_response || "No response provided"}
+                                </div>
+                              </td>
+                              <td style={{ padding: '1.2rem 0.5rem', textAlign: 'center' }}>
+                                <span style={{ 
+                                  padding: '4px 8px', 
+                                  borderRadius: '4px', 
+                                  fontSize: '0.75rem', 
+                                  fontWeight: '700', 
+                                  letterSpacing: '0.5px',
+                                  color: verdictColor,
+                                  backgroundColor: verdictBg,
+                                  border: `1px solid ${verdictColor}`
+                                }}>
+                                  {verdict}
+                                </span>
+                              </td>
+                              <td style={{ padding: '1.2rem 0.5rem', fontWeight: '700', fontSize: '1.05rem', color: 'var(--text-primary)', textAlign: 'center' }}>
+                                {item.score !== null ? `${Math.round(item.score)}/100` : '-'}
+                              </td>
+                              <td style={{ padding: '1.2rem 0.5rem', color: 'var(--text-secondary)', fontWeight: '500', textAlign: 'center' }}>
+                                {item.accuracy !== null ? `${item.accuracy}/5` : '-'}
+                              </td>
+                              <td style={{ padding: '1.2rem 0.5rem', color: 'var(--text-secondary)', fontWeight: '500', textAlign: 'center' }}>
+                                {item.relevance !== null ? `${item.relevance}/5` : '-'}
+                              </td>
+                              <td style={{ padding: '1.2rem 0.5rem', color: 'var(--text-secondary)', fontWeight: '500', textAlign: 'center' }}>
+                                {item.hallucination !== null ? (
+                                  <span style={{ color: item.hallucination <= 2 ? '#ef4444' : 'inherit' }}>
+                                    {item.hallucination <= 2 ? 'HIGH' : 'LOW'}
+                                  </span>
+                                ) : '-'}
+                              </td>
+                              <td style={{ padding: '1.2rem 0.5rem', fontSize: '0.85rem', color: 'var(--text-secondary)', whiteSpace: 'nowrap', textAlign: 'center' }}>
+                                {new Date(item.created_at).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })}
+                              </td>
+                              <td style={{ padding: '1.2rem 1rem', textAlign: 'right', whiteSpace: 'nowrap' }}>
+                                <button 
+                                  className="secondary-btn"
+                                  onClick={() => setExpandedHistoryId(isExpanded ? null : item.id)}
+                                  style={{ padding: '0.4rem 0.8rem', fontSize: '0.85rem', display: 'inline-flex', alignItems: 'center', gap: '4px', borderRadius: '6px' }}
+                                >
+                                  View {isExpanded ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
+                                </button>
+                              </td>
+                            </tr>
+                            
+                            {/* Expandable Results Row */}
+                            {isExpanded && (
+                              <tr style={{ background: 'var(--bg-color)' }}>
+                                <td colSpan="8" style={{ padding: '0' }}>
+                                  <div className="history-accordion-body" style={{ borderBottom: '1px solid var(--input-border)', borderTop: 'none' }}>
+                                    <Results evaluationId={item.id} onBack={() => setExpandedHistoryId(null)} />
+                                  </div>
+                                </td>
+                              </tr>
+                            )}
+                          </React.Fragment>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
                   
                   {totalPages > 1 && (
                     <div className="pagination-controls" style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', marginTop: '2rem', paddingBottom: '1rem' }}>
@@ -461,7 +551,7 @@ function App() {
                       </button>
                     </div>
                   )}
-                </div>
+                </>
               )}
             </div>
           )}
@@ -471,6 +561,11 @@ function App() {
             <div className="tab-container">
               <AnalyticsDashboard />
             </div>
+          )}
+
+          {/* TAB: BATCH UPLOAD */}
+          {activeTab === 'batch' && (
+            <BatchUpload />
           )}
 
         </div>

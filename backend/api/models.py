@@ -22,6 +22,9 @@ class EvaluationRecord(Base):
     status = Column(String, default="pending", index=True)
     result_json = Column(Text, nullable=True)
     
+    # Batch Processing
+    batch_id = Column(String, index=True, nullable=True)
+
     # Aggregation Columns
     final_score = Column(Float, nullable=True)
     score_relevance = Column(Float, nullable=True)
