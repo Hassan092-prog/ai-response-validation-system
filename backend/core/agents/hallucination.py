@@ -7,7 +7,7 @@ def detect_hallucination(ai_response: str, context: str) -> dict:
         "You MUST break the AI response into individual factual claims and cross-reference each against the context.\n"
         "Output JSON exactly in this format:\n"
         "{\n"
-        "  \"score\": <int 0-5>,\n"
+        "  \"score\": <int 1-5>,\n"
         "  \"reasoning\": \"<overall explanation>\",\n"
         "  \"flagged_claims\": [\n"
         "    {\n"
@@ -17,7 +17,7 @@ def detect_hallucination(ai_response: str, context: str) -> dict:
         "    }\n"
         "  ]\n"
         "}\n"
-        "Score 0 means no hallucination. Score 5 means severe hallucination. Only include unsupported or contradicted claims in the `flagged_claims` list."
+        "Score 5 means absolutely no hallucination (perfectly supported). Score 1 means severe hallucination (completely fabricated). Only include unsupported or contradicted claims in the `flagged_claims` list."
     )
     user_prompt = f"Verified Context: {context}\n\nAI Response: {ai_response}"
     return _call_llm_json(system_prompt, user_prompt, default_score=5)

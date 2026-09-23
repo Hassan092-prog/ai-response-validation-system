@@ -26,6 +26,20 @@ The goal of Milestone 2 was to build and integrate the Evaluation Judge Agents t
 
 ---
 
+## 🏆 Milestone 3 Overview
+
+The goal of Milestone 3 was to refine the evaluation metrics, introduce batch processing, and calculate final weighted scores to determine overarching Pass/Fail verdicts.
+
+### Objectives Achieved:
+1. **Completeness Agent Upgrade (M3.1)**: Enhanced the Completeness Agent to not only provide a score, but to explicitly list the specific "Addressed Aspects" and "Missing Aspects" when compared to the reference context.
+2. **Weighted Verdict Engine (M3.2)**: Developed a scoring algorithm that weighs Accuracy (40%), Relevance (20%), Completeness (20%), and Hallucination (20%). High hallucination or low accuracy now triggers an automatic "FAIL" verdict.
+3. **Per-Dimension Scoring UI (M3.3)**: Redesigned the frontend to display individual color-coded metric cards for each dimension, along with detailed AI reasoning and a centralized Verdict badge (PASS, IMPROVEMENT, FAIL).
+4. **Dual-Architecture & Batch Evaluation (M3.4)**: Engineered a robust dual-pipeline evaluation system:
+   - **Single Evaluations (M1-M3 Strict Compliance):** Powered by the 5 distinct distributed Python Micro-Agents (`relevance.py`, `accuracy.py`, `hallucination.py`, `completeness.py`, `verdict.py`) running in parallel via thread-pooling.
+   - **Batch Processing Module (M3.4):** A heavily optimized `/api/evaluate/batch` endpoint. To process massive CSV uploads without hitting strict rate limits, this module leverages a single *Consolidated Master Prompt* to extract all 4 dimensions in a single inference call, acting as a high-speed batch orchestrator.
+
+---
+
 ## ✨ Extra Features & UI Updates
 
 In addition to the core mentor requirements, we have significantly enhanced the application with the following features:
@@ -33,14 +47,14 @@ In addition to the core mentor requirements, we have significantly enhanced the 
 * **Analytics Module**: A dedicated Analytics Tab aggregates metrics from the database and visualizes the average performance over time using Recharts.
 * **History & Data Exports**: A server-side paginated History Tab that allows users to export their evaluation datasets to `CSV` and `JSON` formats.
 * **Backend Performance Optimization**: Refactored the SQLite database to extract nested JSON scores into indexed `Float` columns. Used native SQLAlchemy `func.avg()` aggregations and `.yield_per(100)` streaming generators to ensure the application scales safely without running out of memory.
-* **Dynamic Test Data Engine**: Included a "Test Data" button in the UI that auto-fills fields with 4 randomized edge-case scenarios (Perfect, Partial, Inaccurate, Irrelevant) for quick debugging.
+* **Dynamic Test Data Engine**: Included a "Test Data" button in the UI that cycles sequentially through **7 distinct edge-case testing scenarios** (Perfect Score, Dangerous Hallucination, Subtle Contradiction, Irrelevant, Incomplete, etc.) for rapid debugging and edge-case validation.
 
 ---
 
 ## 💻 Tech Stack
 * **Frontend:** React.js (Vite) with custom CSS (Glassmorphism design, Lucide icons, Recharts)
 * **Backend:** FastAPI (Python)
-* **LLM API:** Google Gemini API (`google.generativeai`)
+* **LLM API:** Groq Cloud High-Speed Inference API (`openai/gpt-oss-120b`)
 * **Database:** SQLite (SQLAlchemy ORM)
 * **Vector Store:** ChromaDB
 * **Embeddings:** `sentence-transformers` (`all-MiniLM-L6-v2`)
@@ -53,11 +67,11 @@ In addition to the core mentor requirements, we have significantly enhanced the 
 The application consists of a Python backend and a React frontend. You will need two terminal windows to run both simultaneously.
 
 ### 0. Prerequisites
-You must configure your Gemini API key for the Judge Agents to function.
+You must configure your Groq API key for the AI Evaluation Engine to function.
 1. Create a `.env` file in the root of the project (`ai-response-validation-system/.env`).
 2. Add your API key:
    ```env
-   GEMINI_API_KEY=your_google_api_key_here
+   GROQ_API_KEY=your_groq_api_key_here
    ```
 
 ### 1. Backend Setup (Terminal 1)

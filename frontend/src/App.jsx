@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { PlusCircle, History, BarChart3, Moon, Sun, ChevronDown, ChevronRight, Paperclip, Download, FileSpreadsheet, FileJson } from 'lucide-react'
+import { PlusCircle, History, BarChart3, Moon, Sun, ChevronDown, ChevronRight, Paperclip, Download, FileSpreadsheet, FileJson, Eye, EyeOff } from 'lucide-react'
 import './App.css'
 import Results from './Results'
 import AnalyticsDashboard from './AnalyticsDashboard'
@@ -17,6 +17,7 @@ function App() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
   const [evaluationId, setEvaluationId] = useState(null)
+  const [testCaseIndex, setTestCaseIndex] = useState(0)
   
   const [theme, setTheme] = useState('light')
   const [history, setHistory] = useState([])
@@ -105,34 +106,52 @@ function App() {
 
   const fillTestData = () => {
     const testCases = [
-      { // Bad Score (Hallucination/Inaccurate)
-        question: 'What happens if you crack your knuckles a lot?',
-        ai_response: 'Cracking your knuckles causes arthritis and permanent joint damage.',
-        reference_answer: 'Cracking your knuckles does not cause arthritis. It is harmless.',
-        source_document: 'Medical studies have shown that the popping sound is just gas bubbles bursting in the synovial fluid. There is no link to arthritis.'
-      },
-      { // Perfect Score (Accurate & Complete)
+      { // 1. Perfect Score (Accurate & Complete) -> PASS
         question: 'What is the capital of France?',
         ai_response: 'The capital of France is Paris.',
         reference_answer: 'Paris is the capital of France.',
         source_document: 'France is a country in Western Europe. Its capital and largest city is Paris.'
       },
-      { // Partial Score (Incomplete)
+      { // 2. Bad Score (Hallucination/Inaccurate) -> FAIL
+        question: 'What happens if you crack your knuckles a lot?',
+        ai_response: 'Cracking your knuckles causes arthritis and permanent joint damage.',
+        reference_answer: 'Cracking your knuckles does not cause arthritis. It is harmless.',
+        source_document: 'Medical studies have shown that the popping sound is just gas bubbles bursting in the synovial fluid. There is no link to arthritis.'
+      },
+      { // 3. Partial Score (Incomplete) -> NEEDS IMPROVEMENT
         question: 'Name three primary colors.',
         ai_response: 'The primary colors include red and blue.',
         reference_answer: 'The three primary colors are red, blue, and yellow.',
         source_document: 'In traditional color theory, the primary colors are red, yellow, and blue.'
       },
-      { // Terrible Score (Irrelevant)
+      { // 4. Terrible Score (Irrelevant) -> FAIL
         question: 'How do you bake a chocolate cake?',
         ai_response: 'To fix a flat tire, you need a jack and a lug wrench. First, loosen the lug nuts...',
         reference_answer: 'To bake a chocolate cake, you need flour, sugar, cocoa powder, eggs, and butter. Mix and bake at 350F for 30 minutes.',
         source_document: 'Baking a cake requires mixing dry and wet ingredients and baking them at specific temperatures.'
+      },
+      { // 5. Conflicting Information (Subtle Hallucination) -> FAIL
+        question: 'Who is the CEO of Apple as of 2023?',
+        ai_response: 'Tim Cook is the CEO of Apple, having taken over from Elon Musk in 2011.',
+        reference_answer: 'Tim Cook is the CEO of Apple. He succeeded Steve Jobs in 2011.',
+        source_document: 'Tim Cook has been the chief executive officer of Apple Inc. since 2011. He previously served as the company\'s chief operating officer under its co-founder Steve Jobs.'
+      },
+      { // 6. Slightly Inaccurate (Minor errors) -> NEEDS IMPROVEMENT
+        question: 'When did the Apollo 11 moon landing happen?',
+        ai_response: 'The Apollo 11 moon landing occurred on July 20, 1968.',
+        reference_answer: 'The Apollo 11 moon landing occurred on July 20, 1969.',
+        source_document: 'Apollo 11 was the spaceflight that first landed humans on the Moon. Commander Neil Armstrong and lunar module pilot Buzz Aldrin formed the American crew that landed the Apollo Lunar Module Eagle on July 20, 1969.'
+      },
+      { // 7. Correct but Missing Details (Context heavily underutilized) -> NEEDS IMPROVEMENT
+        question: 'What are the main causes of the French Revolution?',
+        ai_response: 'The French Revolution was caused by people being unhappy with the King.',
+        reference_answer: 'The French Revolution was driven by social inequality, tax burden on the lower classes, the rise of Enlightenment ideas, and a severe financial crisis.',
+        source_document: 'The causes of the French Revolution are complex, but generally include extreme social inequality, heavy taxation on the Third Estate, widespread famine, Enlightenment philosophies challenging absolute monarchy, and national bankruptcy caused by involvement in foreign wars.'
       }
     ];
     
-    const randomCase = testCases[Math.floor(Math.random() * testCases.length)];
-    setFormData(randomCase);
+    setFormData(testCases[testCaseIndex]);
+    setTestCaseIndex((prevIndex) => (prevIndex + 1) % testCases.length);
   }
 
   const clearInput = () => {
@@ -396,13 +415,13 @@ function App() {
                   <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', tableLayout: 'fixed', minWidth: '950px' }}>
                     <thead>
                       <tr style={{ borderBottom: '1px solid var(--input-border)', color: 'var(--text-secondary)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                        <th style={{ padding: '1rem 1rem', fontWeight: '600', width: '32%' }}>Question</th>
-                        <th style={{ padding: '1rem 0.5rem', fontWeight: '600', width: '9%', textAlign: 'center' }}>Verdict</th>
-                        <th style={{ padding: '1rem 0.5rem', fontWeight: '600', width: '10%', textAlign: 'center' }}>Score</th>
+                        <th style={{ padding: '1rem 1rem', fontWeight: '600', width: '28%' }}>Question</th>
+                        <th style={{ padding: '1rem 0.5rem', fontWeight: '600', width: '12%', textAlign: 'center' }}>Verdict</th>
+                        <th style={{ padding: '1rem 0.5rem', fontWeight: '600', width: '9%', textAlign: 'center' }}>Score</th>
                         <th style={{ padding: '1rem 0.5rem', fontWeight: '600', width: '9%', textAlign: 'center' }}>Accuracy</th>
-                        <th style={{ padding: '1rem 0.5rem', fontWeight: '600', width: '10%', textAlign: 'center' }}>Relevance</th>
-                        <th style={{ padding: '1rem 0.5rem', fontWeight: '600', width: '12%', textAlign: 'center' }}>Hallucination</th>
-                        <th style={{ padding: '1rem 0.5rem', fontWeight: '600', width: '10%', textAlign: 'center' }}>Date / Time</th>
+                        <th style={{ padding: '1rem 0.5rem', fontWeight: '600', width: '9%', textAlign: 'center' }}>Relevance</th>
+                        <th style={{ padding: '1rem 0.5rem', fontWeight: '600', width: '10%', textAlign: 'center' }}>Hallucination</th>
+                        <th style={{ padding: '1rem 0.5rem', fontWeight: '600', width: '15%', textAlign: 'center' }}>Date / Time</th>
                         <th style={{ padding: '1rem 1rem', fontWeight: '600', textAlign: 'right', width: '8%' }}>Action</th>
                       </tr>
                     </thead>
@@ -488,9 +507,10 @@ function App() {
                                 <button 
                                   className="secondary-btn"
                                   onClick={() => setExpandedHistoryId(isExpanded ? null : item.id)}
-                                  style={{ padding: '0.4rem 0.8rem', fontSize: '0.85rem', display: 'inline-flex', alignItems: 'center', gap: '4px', borderRadius: '6px' }}
+                                  title={isExpanded ? "Hide Details" : "View Details"}
+                                  style={{ padding: '0.5rem', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', borderRadius: '6px' }}
                                 >
-                                  View {isExpanded ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
+                                  {isExpanded ? <EyeOff size={18} /> : <Eye size={18} />}
                                 </button>
                               </td>
                             </tr>

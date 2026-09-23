@@ -102,30 +102,30 @@ async def extract_text(file: UploadFile = File(...)):
 def submit_evaluation(eval_input: schemas.EvaluationInput, background_tasks: BackgroundTasks, db: Session = Depends(database.get_db)):
     logger.info(f"Received evaluation submission: question='{eval_input.question[:30]}...'")
     try:
-        # 1. Semantic Caching (Only cache successful evaluations, i.e., final_score > 0)
-        cached_record = db.query(models.EvaluationRecord).filter(
-            models.EvaluationRecord.question == eval_input.question,
-            models.EvaluationRecord.ai_response == eval_input.ai_response,
-            models.EvaluationRecord.reference_answer == eval_input.reference_answer,
-            models.EvaluationRecord.source_document == eval_input.source_document,
-            models.EvaluationRecord.status == "completed",
-            models.EvaluationRecord.final_score > 0
-        ).first()
-        
-        if cached_record:
-            logger.info("Semantic Cache HIT! Returning instant cached result.")
-            db_record = models.EvaluationRecord(
-                question=eval_input.question,
-                ai_response=eval_input.ai_response,
-                reference_answer=eval_input.reference_answer,
-                source_document=eval_input.source_document,
-                status="completed",
-                result_json=cached_record.result_json
-            )
-            db.add(db_record)
-            db.commit()
-            db.refresh(db_record)
-            return {"id": db_record.id, "message": "Evaluation returned instantly from cache."}
+        # 1. Semantic Caching (TEMPORARILY DISABLED)
+        # cached_record = db.query(models.EvaluationRecord).filter(
+        #     models.EvaluationRecord.question == eval_input.question,
+        #     models.EvaluationRecord.ai_response == eval_input.ai_response,
+        #     models.EvaluationRecord.reference_answer == eval_input.reference_answer,
+        #     models.EvaluationRecord.source_document == eval_input.source_document,
+        #     models.EvaluationRecord.status == "completed",
+        #     models.EvaluationRecord.final_score > 0
+        # ).first()
+        # 
+        # if cached_record:
+        #     logger.info("Semantic Cache HIT! Returning instant cached result.")
+        #     db_record = models.EvaluationRecord(
+        #         question=eval_input.question,
+        #         ai_response=eval_input.ai_response,
+        #         reference_answer=eval_input.reference_answer,
+        #         source_document=eval_input.source_document,
+        #         status="completed",
+        #         result_json=cached_record.result_json
+        #     )
+        #     db.add(db_record)
+        #     db.commit()
+        #     db.refresh(db_record)
+        #     return {"id": db_record.id, "message": "Evaluation returned instantly from cache."}
 
         # 2. Save New Pending Record
         db_record = models.EvaluationRecord(

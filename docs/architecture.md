@@ -75,24 +75,28 @@
 ## Agent Responsibilities
 *The specialized AI judges responsible for independently analyzing different dimensions of the response.*
 
-- **Agent Orchestrator**: Manages the lifecycle of an evaluation request. It takes the user submission, calls the RAG Retrieval Pipeline to fetch context, passes inputs to the specific judge agents concurrently, and routes their outputs to the Verdict Agent.
+- **Agent Orchestrator**: Manages the lifecycle of a Single UI evaluation request. It takes the user submission, calls the RAG Retrieval Pipeline to fetch context, passes inputs to the specific judge agents concurrently via ThreadPool, and routes their outputs to the Verdict Agent.
+- **Batch Orchestrator**: A specialized, high-performance module designed for M3.4 CSV uploads. It bypasses the multi-agent threadpool and uses a single Consolidated Master Prompt to evaluate all 4 dimensions in one API call, preventing API rate limit bottlenecks during bulk processing.
 - **Relevance Judge Agent**: Evaluates how well the AI's response addresses the specific question asked. (Output: Score 1-5 + Reasoning).
 - **Accuracy Judge Agent**: Evaluates the factual correctness of the AI's response, heavily weighting the reference answer and retrieved knowledge base context. (Output: Score 1-5 + Reasoning).
-- **Hallucination Detection Agent**: Analyzes the response specifically for claims not supported by or directly contradicting the retrieved context. (Output: Score 0-5 inverted, where 0 is no hallucination and 5 is severe hallucination + Reasoning).
-- **Completeness Judge Agent**: Assesses if the AI response covers all parts of the user prompt and provides a thorough answer. (Output: Score 1-5 + Reasoning).
-- **Verdict Agent**: Aggregates the scores and reasoning from all judge agents to compute a final, holistic evaluation score and summary.
+- **Hallucination Detection Agent**: Analyzes the response specifically for claims not supported by or directly contradicting the retrieved context. (Output: Score 1-5 where 5 is no hallucination and 1 is severe hallucination + Reasoning).
+- **Completeness Judge Agent**: Assesses if the AI response covers all parts of the user prompt and provides a thorough answer. (Output: Score 1-5 + Reasoning + Missing Aspects).
+- **Verdict Agent**: Aggregates the scores and reasoning from all judge agents to compute a final, holistic evaluation score and executive summary.
 
 ## Scoring Dimensions and Verdict Formula
 *The mathematical logic used to calculate the final reliability score, which heavily penalizes any detected hallucinations.*
 
-- **Relevance**: 1 (Completely Irrelevant) to 5 (Highly Relevant)
-- **Accuracy**: 1 (Completely Incorrect) to 5 (Highly Accurate)
-- **Completeness**: 1 (Incomplete) to 5 (Comprehensive)
-- **Hallucination Penalty**: 0 (No Hallucination) to 5 (Severe Hallucination)
+- **Relevance**: 1 (Completely Irrelevant) to 5 (Highly Relevant) - *20% Weight*
+- **Accuracy**: 1 (Completely Incorrect) to 5 (Highly Accurate) - *40% Weight*
+- **Completeness**: 1 (Incomplete) to 5 (Comprehensive) - *20% Weight*
+- **Hallucination Penalty**: 1 (Severe Hallucination) to 5 (No Hallucination) - *20% Weight*
 
 **Verdict Aggregation Formula**:
-`Final Score = ((Relevance + Accuracy + Completeness) / 15) * 100 - (Hallucination Penalty * 5)`
+`Final Score = ((Relevance / 5) * 20) + ((Accuracy / 5) * 40) + ((Completeness / 5) * 20) + ((Hallucination / 5) * 20)`
 *(Final score capped between 0 and 100)*
+
+**Automatic Fail Conditions**:
+If `Final Score < 50` OR `Hallucination <= 2` OR `Accuracy <= 1`, the Verdict is automatically set to **FAIL**.
 
 ## Data Flow
 *The step-by-step journey of a single evaluation request, from user submission to the final generated report.*

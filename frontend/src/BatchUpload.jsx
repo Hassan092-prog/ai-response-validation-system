@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Upload, FileSpreadsheet, Loader2, CheckCircle2, AlertCircle } from 'lucide-react';
+import { FileSpreadsheet, Loader2, CheckCircle2 } from 'lucide-react';
 import './App.css';
 
 const BatchUpload = () => {

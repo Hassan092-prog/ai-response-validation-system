@@ -2,66 +2,46 @@ import os
 import json
 import time
 import random
-import google.generativeai as genai
+from groq import Groq
 from backend.core.config import logger
 from dotenv import load_dotenv
 
 load_dotenv()
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-# Using gemini-3.6-flash as requested by the 404 API Error
-MODEL_NAME = "gemini-3.6-flash"
+client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+MODEL_NAME = "openai/gpt-oss-120b"
 
 def _call_llm_json(system_prompt: str, user_prompt: str, default_score: int = 0, retries: int = 3) -> dict:
-    """Helper to call Gemini and return parsed JSON with basic retry logic."""
-    # Free tier protection: Stagger concurrent requests by 0 to 5 seconds
-    time.sleep(random.uniform(0, 5))
-    
+    """Helper to call Groq and return parsed JSON with basic retry logic."""
     for attempt in range(retries):
         try:
-            model = genai.GenerativeModel(
-                model_name=MODEL_NAME,
-                system_instruction=system_prompt,
-                generation_config={"response_mime_type": "application/json", "temperature": 0.1}
+            response = client.chat.completions.create(
+                model=MODEL_NAME,
+                messages=[
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": user_prompt}
+                ],
+                response_format={"type": "json_object"},
+                temperature=0.1
             )
-            response = model.generate_content(user_prompt)
-            return json.loads(response.text)
+            return json.loads(response.choices[0].message.content)
         except Exception as e:
-            logger.error(f"LLM Call Failed (Attempt {attempt+1}/{retries}): {e}")
+            logger.error(f"Groq LLM Call Failed (Attempt {attempt+1}/{retries}): {e}")
             
             if attempt < retries - 1:
-                error_str = str(e)
                 sleep_time = 2 ** attempt
-                if "429" in error_str:
-                    logger.warning("Quota Exceeded (429) detected. Sleeping for 40 seconds before retrying to respect Free Tier limits...")
-                    sleep_time = 40
-                else:
-                    logger.info(f"Retrying in {sleep_time} seconds...")
-                
+                logger.info(f"Retrying in {sleep_time} seconds...")
                 time.sleep(sleep_time)
                 continue
             
-            # --- EMERGENCY PRESENTATION MOCK DATA (COMMENTED OUT) ---
-            # if "Relevance" in system_prompt:
-            #     return {"score": 4, "reasoning": "The AI response directly addresses the user's question about cracking knuckles, although it states a widespread myth as fact."}
-            # elif "Accuracy" in system_prompt:
-            #     return {"score": 1, "reasoning": "The AI response directly contradicts the provided context by claiming that cracking knuckles causes arthritis, whereas the context explicitly states there is no link.", "supporting_evidence": "Medical studies have shown that the popping sound is just gas bubbles bursting in the synovial fluid. There is no link to arthritis."}
-            # elif "Completeness" in system_prompt:
-            #     return {"score": 1, "reasoning": "The response is medically inaccurate and incomplete. It fails to explain what actually happens (the release of gas bubbles in the synovial fluid)."}
-            # elif "Hallucination" in system_prompt:
-            #     return {
-            #         "score": 5, 
-            #         "reasoning": "The AI response directly contradicts the provided source context, falsely claiming that cracking knuckles causes arthritis and permanent joint damage.",
-            #         "flagged_claims": [
-            #             {
-            #                 "statement": "Cracking your knuckles causes arthritis and permanent joint damage.",
-            #                 "status": "contradicted",
-            #                 "explanation": "The source context explicitly states there is no link to arthritis."
-            #             }
-            #         ]
-            #     }
-            
-            return {"score": default_score, "reasoning": f"Evaluation failed after {retries} attempts: {str(e)}"}
-
+            error_msg = f"Evaluation failed after {retries} attempts: {str(e)}"
+            return {
+                "relevance": {"score": default_score, "reasoning": error_msg},
+                "accuracy": {"score": default_score, "reasoning": error_msg, "supporting_evidence": ""},
+                "completeness": {"score": default_score, "reasoning": error_msg, "addressed_aspects": [], "missing_aspects": []},
+                "hallucination": {"score": default_score, "reasoning": error_msg},
+                "major_issues": ["API Connection Error"],
+                "consolidated_reasoning": error_msg
+            }
 def compute_final_verdict(relevance: dict, accuracy: dict, completeness: dict, hallucination: dict) -> dict:
     """Aggregates scores and computes final verdict report, formatting complex json into markdown for the UI."""
     try:
