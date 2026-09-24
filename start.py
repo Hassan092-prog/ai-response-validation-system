@@ -18,8 +18,8 @@ def main():
     processes = []
     
     try:
-        print("\n=> Starting Backend (FastAPI on port 8001)...")
-        backend_cmd = [sys.executable, "-m", "uvicorn", "backend.api.main:app", "--host", "0.0.0.0", "--port", "8001", "--reload"]
+        print("\n=> Starting Backend (FastAPI on port 8005)...")
+        backend_cmd = [sys.executable, "-m", "uvicorn", "backend.api.main:app", "--host", "0.0.0.0", "--port", "8005", "--reload"]
         backend_process = subprocess.Popen(backend_cmd, cwd=root_dir)
         processes.append(backend_process)
         
@@ -31,7 +31,7 @@ def main():
         processes.append(frontend_process)
         
         print("\n=== SYSTEM IS RUNNING ===")
-        print("Backend available at:  http://192.168.1.92:8001/docs")
+        print("Backend available at:  http://192.168.1.92:8005/docs")
         print("Frontend available at: http://192.168.1.92:5173")
         print("Press Ctrl+C to stop all servers.")
         

@@ -90,10 +90,10 @@ source venv/bin/activate  # On Windows use: venv\Scripts\activate
 pip install -r requirements.txt
 
 # Start the FastAPI server
-uvicorn backend.api.main:app --host 0.0.0.0 --port 8001 --reload
+uvicorn backend.api.main:app --host 0.0.0.0 --port 8005 --reload
 ```
-The backend API will be running at: `http://localhost:8001`
-Interactive API Docs (Swagger): `http://localhost:8001/docs`
+The backend API will be running at: `http://localhost:8005`
+Interactive API Docs (Swagger): `http://localhost:8005/docs`
 
 ### 2. Frontend Setup (Terminal 2)
 Leave the backend running and open a new terminal.

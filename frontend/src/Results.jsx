@@ -27,7 +27,7 @@ const Results = ({ evaluationId, onBack }) => {
 
     const fetchResult = async () => {
       try {
-        const response = await fetch(`http://192.168.1.92:8001/api/results/${evaluationId}`);
+        const response = await fetch(`http://192.168.1.92:8005/api/results/${evaluationId}`);
         if (!response.ok) throw new Error("Result not found");
         const json = await response.json();
         

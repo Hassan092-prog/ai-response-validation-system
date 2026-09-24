@@ -13,7 +13,7 @@ const AnalyticsDashboard = () => {
   useEffect(() => {
     const fetchAnalytics = async () => {
       try {
-        const response = await fetch('http://192.168.1.92:8001/api/evaluations/analytics');
+        const response = await fetch('http://192.168.1.92:8005/api/evaluations/analytics');
         if (!response.ok) throw new Error('Failed to fetch analytics');
         const json = await response.json();
         setData(json);

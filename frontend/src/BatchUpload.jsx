@@ -34,7 +34,7 @@ const BatchUpload = () => {
     formData.append('file', file);
 
     try {
-      const response = await fetch('http://192.168.1.92:8001/api/evaluate/batch', {
+      const response = await fetch('http://192.168.1.92:8005/api/evaluate/batch', {
         method: 'POST',
         body: formData,
       });
@@ -59,7 +59,7 @@ const BatchUpload = () => {
     if (isPolling && batchId) {
       const fetchStatus = async () => {
         try {
-          const res = await fetch(`http://192.168.1.92:8001/api/batch/${batchId}`);
+          const res = await fetch(`http://192.168.1.92:8005/api/batch/${batchId}`);
           if (res.ok) {
             const data = await res.json();
             setBatchData(data);

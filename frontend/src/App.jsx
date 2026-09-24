@@ -54,7 +54,7 @@ function App() {
 
   const fetchHistory = async (page = 1) => {
     try {
-      const response = await fetch(`http://192.168.1.92:8001/api/evaluations/history?page=${page}&limit=10`)
+      const response = await fetch(`http://192.168.1.92:8005/api/evaluations/history?page=${page}&limit=10`)
       if (response.ok) {
         const data = await response.json()
         setHistory(data.history)
@@ -75,7 +75,7 @@ function App() {
   }
 
   const handleExport = (format) => {
-    window.open(`http://192.168.1.92:8001/api/evaluations/export?format=${format}`, '_blank')
+    window.open(`http://192.168.1.92:8005/api/evaluations/export?format=${format}`, '_blank')
     setIsExportMenuOpen(false)
   }
 
@@ -171,7 +171,7 @@ function App() {
     setStatus({ type: '', message: '' })
 
     try {
-      const response = await fetch('http://192.168.1.92:8001/api/evaluate', {
+      const response = await fetch('http://192.168.1.92:8005/api/evaluate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -192,7 +192,7 @@ function App() {
       }
     } catch (error) {
       console.error(error)
-      setStatus({ type: 'error', message: 'Failed to connect to the backend server. Is it running on port 8001?' })
+      setStatus({ type: 'error', message: 'Failed to connect to the backend server. Is it running on port 8005?' })
     } finally {
       setIsSubmitting(false)
     }
@@ -209,7 +209,7 @@ function App() {
     formData.append('file', file)
 
     try {
-      const response = await fetch('http://192.168.1.92:8001/api/extract-text', {
+      const response = await fetch('http://192.168.1.92:8005/api/extract-text', {
         method: 'POST',
         body: formData
       })

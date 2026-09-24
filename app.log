@@ -10776,3 +10776,6 @@ Please retry in 41.629493459s. [links {
 2026-09-23 15:30:54,964 - AI-Response-Validation - INFO - path=/api/results/15 method=GET status_code=200 process_time=2.34ms
 2026-09-23 15:31:03,666 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=10.03ms
 2026-09-23 15:31:05,106 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=14.59ms
+2026-09-23 15:36:57,067 - AI-Response-Validation - INFO - path=/api/results/15 method=GET status_code=200 process_time=8.91ms
+2026-09-23 15:36:57,109 - AI-Response-Validation - INFO - path=/api/results/15 method=GET status_code=200 process_time=10.42ms
+2026-09-23 15:37:26,656 - AI-Response-Validation - INFO - path=/api/evaluations/export method=GET status_code=200 process_time=4.51ms
