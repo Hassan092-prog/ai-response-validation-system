@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { PlusCircle, History, BarChart3, Moon, Sun, ChevronDown, ChevronRight, Paperclip, Download, FileSpreadsheet, FileJson, Eye, EyeOff } from 'lucide-react'
 import './App.css'
 import Results from './Results'
+import BatchAnalyticsView from './BatchAnalyticsView'
 import AnalyticsDashboard from './AnalyticsDashboard'
 import BatchUpload from './BatchUpload'
 
@@ -21,6 +22,7 @@ function App() {
   
   const [theme, setTheme] = useState('light')
   const [history, setHistory] = useState([])
+  const [kpis, setKpis] = useState({ total_evaluations: 0, total_singles: 0, total_batches: 0 })
   
   // Layout Navigation State
   const [activeTab, setActiveTab] = useState('new') // 'new' | 'history' | 'analytics'
@@ -61,6 +63,7 @@ function App() {
         setCurrentPage(data.current_page)
         setTotalPages(data.total_pages)
         setTotalRecords(data.total_records)
+        if (data.kpis) setKpis(data.kpis)
       }
     } catch (e) {
       console.error("Failed to fetch history", e)
@@ -367,10 +370,10 @@ function App() {
           {/* TAB: HISTORY LIST */}
           {activeTab === 'history' && (
             <div className="tab-container history-list-view">
-              <div className="history-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div className="history-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                   <h2>Evaluation History</h2>
-                  <span className="badge">{totalRecords} Total</span>
+                  <span className="badge">{totalRecords} Total Events</span>
                 </div>
                 
                 {history.length > 0 && (
@@ -411,6 +414,21 @@ function App() {
                 <p>No evaluations yet.</p>
               ) : (
                 <>
+                  <div className="stats-grid" style={{ marginBottom: '2rem', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
+                    <div className="stat-card" style={{ padding: '1.5rem', background: 'var(--input-bg)', borderRadius: '12px', border: '1px solid var(--input-border)' }}>
+                      <h4 style={{ color: 'var(--text-secondary)', margin: '0 0 0.5rem 0', fontSize: '0.9rem' }}>Total Evaluations</h4>
+                      <span style={{ fontSize: '2rem', fontWeight: 'bold' }}>{kpis.total_evaluations}</span>
+                    </div>
+                    <div className="stat-card" style={{ padding: '1.5rem', background: 'var(--input-bg)', borderRadius: '12px', border: '1px solid var(--input-border)' }}>
+                      <h4 style={{ color: 'var(--text-secondary)', margin: '0 0 0.5rem 0', fontSize: '0.9rem' }}>Single Evaluations</h4>
+                      <span style={{ fontSize: '2rem', fontWeight: 'bold' }}>{kpis.total_singles}</span>
+                    </div>
+                    <div className="stat-card" style={{ padding: '1.5rem', background: 'var(--input-bg)', borderRadius: '12px', border: '1px solid var(--input-border)' }}>
+                      <h4 style={{ color: 'var(--text-secondary)', margin: '0 0 0.5rem 0', fontSize: '0.9rem' }}>Batch Evaluations</h4>
+                      <span style={{ fontSize: '2rem', fontWeight: 'bold' }}>{kpis.total_batches}</span>
+                    </div>
+                  </div>
+
                   <div className="history-table-container" style={{ overflowX: 'auto', background: 'var(--input-bg)', borderRadius: 'var(--radius)', border: '1px solid var(--input-border)' }}>
                   <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', tableLayout: 'fixed', minWidth: '950px' }}>
                     <thead>
@@ -520,7 +538,11 @@ function App() {
                               <tr style={{ background: 'var(--bg-color)' }}>
                                 <td colSpan="8" style={{ padding: '0' }}>
                                   <div className="history-accordion-body" style={{ borderBottom: '1px solid var(--input-border)', borderTop: 'none' }}>
-                                    <Results evaluationId={item.id} onBack={() => setExpandedHistoryId(null)} />
+                                    {item.is_batch ? (
+                                      <BatchAnalyticsView batchId={item.id} />
+                                    ) : (
+                                      <Results evaluationId={item.id} onBack={() => setExpandedHistoryId(null)} />
+                                    )}
                                   </div>
                                 </td>
                               </tr>

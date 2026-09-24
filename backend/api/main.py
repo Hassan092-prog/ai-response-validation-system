@@ -253,7 +253,10 @@ def get_batch_status(batch_id: str, db: Session = Depends(database.get_db)):
             "status": r.status,
             "question": r.question,
             "ai_response": r.ai_response,
-            "final_score": r.final_score
+            "final_score": r.final_score,
+            "score_accuracy": r.score_accuracy,
+            "score_relevance": r.score_relevance,
+            "score_hallucination": r.score_hallucination
         })
         
     return {
@@ -293,40 +296,65 @@ def get_evaluation_result(eval_id: int, db: Session = Depends(database.get_db)):
 @app.get("/api/evaluations/history")
 def get_evaluation_history(page: int = 1, limit: int = 10, db: Session = Depends(database.get_db)):
     offset = (page - 1) * limit
-    total_count = db.query(models.EvaluationRecord).count()
-    total_pages = (total_count + limit - 1) // limit
     
-    # Query only specific columns for memory efficiency
-    records = db.query(
-        models.EvaluationRecord.id,
-        models.EvaluationRecord.question,
-        models.EvaluationRecord.status,
-        models.EvaluationRecord.final_score,
-        models.EvaluationRecord.score_accuracy,
-        models.EvaluationRecord.score_relevance,
-        models.EvaluationRecord.score_hallucination,
-        models.EvaluationRecord.ai_response,
-        models.EvaluationRecord.created_at
-    ).order_by(models.EvaluationRecord.created_at.desc()).offset(offset).limit(limit).all()
+    # Calculate KPI Stats
+    total_evals = db.query(models.EvaluationRecord).count()
+    total_singles = db.query(models.EvaluationRecord).filter(models.EvaluationRecord.batch_id == None).count()
+    total_batches = db.query(models.EvaluationRecord.batch_id).filter(models.EvaluationRecord.batch_id != None).distinct().count()
+
+    # Fetch all to group in memory
+    all_records = db.query(models.EvaluationRecord).order_by(models.EvaluationRecord.created_at.desc()).all()
     
-    history = []
-    for r in records:
-        history.append({
-            "id": r.id,
-            "question": r.question,
-            "status": r.status,
-            "score": r.final_score,
-            "accuracy": r.score_accuracy,
-            "relevance": r.score_relevance,
-            "hallucination": r.score_hallucination,
-            "ai_response": r.ai_response,
-            "created_at": r.created_at
-        })
+    events = []
+    seen_batches = set()
+    
+    for r in all_records:
+        if r.batch_id:
+            if r.batch_id not in seen_batches:
+                seen_batches.add(r.batch_id)
+                batch_records = [br for br in all_records if br.batch_id == r.batch_id]
+                completed_count = sum(1 for br in batch_records if br.status in ["completed", "failed"])
+                total_count = len(batch_records)
+                
+                events.append({
+                    "id": r.batch_id,
+                    "is_batch": True,
+                    "question": f"Batch CSV Upload",
+                    "ai_response": f"Processed {completed_count} out of {total_count} responses",
+                    "status": "completed" if completed_count == total_count else "processing",
+                    "score": round(sum(br.final_score or 0 for br in batch_records) / completed_count) if completed_count > 0 else 0,
+                    "accuracy": round(sum(br.score_accuracy or 0 for br in batch_records) / completed_count, 1) if completed_count > 0 else 0,
+                    "relevance": round(sum(br.score_relevance or 0 for br in batch_records) / completed_count, 1) if completed_count > 0 else 0,
+                    "hallucination": round(sum(br.score_hallucination or 0 for br in batch_records) / completed_count, 1) if completed_count > 0 else 0,
+                    "created_at": r.created_at
+                })
+        else:
+            events.append({
+                "id": r.id,
+                "is_batch": False,
+                "question": r.question,
+                "ai_response": r.ai_response,
+                "status": r.status,
+                "score": r.final_score,
+                "accuracy": r.score_accuracy,
+                "relevance": r.score_relevance,
+                "hallucination": r.score_hallucination,
+                "created_at": r.created_at
+            })
+            
+    total_pages = (len(events) + limit - 1) // limit
+    paginated_events = events[offset : offset + limit]
+    
     return {
-        "history": history,
+        "history": paginated_events,
         "total_pages": total_pages,
         "current_page": page,
-        "total_records": total_count
+        "total_records": len(events),
+        "kpis": {
+            "total_evaluations": total_evals,
+            "total_singles": total_singles,
+            "total_batches": total_batches
+        }
     }
 
 @app.get("/api/evaluations/analytics")

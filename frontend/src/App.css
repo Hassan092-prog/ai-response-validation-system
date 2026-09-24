@@ -30,6 +30,8 @@
   --chart-radar-fill: rgba(26, 26, 26, 0.2);
   --chart-radar-stroke: #1a1a1a;
   --chart-line: #2563eb;
+  --chart-bar-fill: #1a1a1a;
+  --tooltip-text-color: #b6f236;
 }
 
 [data-theme='dark'] {
@@ -55,6 +57,8 @@
   --chart-radar-fill: rgba(182, 242, 54, 0.35);
   --chart-radar-stroke: #b6f236;
   --chart-line: #60a5fa;
+  --chart-bar-fill: #b6f236;
+  --tooltip-text-color: #60a5fa;
 }
 
 * {
