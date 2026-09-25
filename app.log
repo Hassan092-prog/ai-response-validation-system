@@ -10954,3 +10954,144 @@ Please retry in 41.629493459s. [links {
 2026-09-24 14:58:38,527 - AI-Response-Validation - INFO - path=/api/batch/4f8a9338-8cda-49f7-a951-68bbdc6f1486 method=GET status_code=200 process_time=4.39ms
 2026-09-24 14:58:38,538 - AI-Response-Validation - INFO - path=/api/batch/4f8a9338-8cda-49f7-a951-68bbdc6f1486 method=GET status_code=200 process_time=2.95ms
 2026-09-24 15:00:02,827 - AI-Response-Validation - INFO - path=/api/batch/4f8a9338-8cda-49f7-a951-68bbdc6f1486 method=GET status_code=200 process_time=8.66ms
+2026-09-24 15:01:32,696 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=16.97ms
+2026-09-24 15:01:32,723 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=13.78ms
+2026-09-24 15:02:16,147 - AI-Response-Validation - INFO - path=/api/evaluate method=OPTIONS status_code=200 process_time=0.83ms
+2026-09-24 15:02:16,161 - AI-Response-Validation - INFO - Received evaluation submission: question='What is the capital of France?...'
+2026-09-24 15:02:16,186 - AI-Response-Validation - INFO - Successfully saved and queued evaluation ID 39
+2026-09-24 15:02:16,188 - AI-Response-Validation - INFO - path=/api/evaluate method=POST status_code=200 process_time=30.65ms
+2026-09-24 15:02:16,194 - AI-Response-Validation - INFO - Orchestrator started for evaluation 39
+2026-09-24 15:02:16,194 - AI-Response-Validation - INFO - Evaluation 39: Dispatching to Relevance, Accuracy, Completeness, and Hallucination agents...
+2026-09-24 15:02:16,228 - AI-Response-Validation - INFO - path=/api/results/39 method=GET status_code=200 process_time=19.44ms
+2026-09-24 15:02:16,233 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=25.03ms
+2026-09-24 15:02:16,243 - AI-Response-Validation - INFO - path=/api/results/39 method=GET status_code=200 process_time=2.33ms
+2026-09-24 15:02:16,748 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-09-24 15:02:16,987 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-09-24 15:02:17,106 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-09-24 15:02:17,184 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-09-24 15:02:17,188 - AI-Response-Validation - INFO - Evaluation 39: Generating final Verdict...
+2026-09-24 15:02:18,740 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-09-24 15:02:18,755 - AI-Response-Validation - INFO - Evaluation 39 completed successfully. Score: 100.0
+2026-09-24 15:02:19,221 - AI-Response-Validation - INFO - path=/api/results/39 method=GET status_code=200 process_time=7.37ms
+2026-09-24 15:03:46,766 - AI-Response-Validation - INFO - Received evaluation submission: question='Who is the CEO of Apple...'
+2026-09-24 15:03:46,779 - AI-Response-Validation - INFO - Successfully saved and queued evaluation ID 40
+2026-09-24 15:03:46,782 - AI-Response-Validation - INFO - path=/api/evaluate method=POST status_code=200 process_time=19.81ms
+2026-09-24 15:03:46,788 - AI-Response-Validation - INFO - Orchestrator started for evaluation 40
+2026-09-24 15:03:46,835 - AI-Response-Validation - INFO - path=/api/results/40 method=GET status_code=200 process_time=5.69ms
+2026-09-24 15:03:46,841 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=42.61ms
+2026-09-24 15:03:46,857 - AI-Response-Validation - INFO - path=/api/results/40 method=GET status_code=200 process_time=3.38ms
+2026-09-24 15:03:46,872 - chromadb.telemetry.product.posthog - INFO - Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2026-09-24 15:03:47,251 - chromadb.telemetry.product.posthog - ERROR - Failed to send telemetry event ClientStartEvent: capture() takes 1 positional argument but 3 were given
+2026-09-24 15:03:47,256 - sentence_transformers.SentenceTransformer - INFO - Use pytorch device_name: cpu
+2026-09-24 15:03:47,256 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2026-09-24 15:03:49,816 - AI-Response-Validation - INFO - path=/api/results/40 method=GET status_code=200 process_time=6.27ms
+2026-09-24 15:03:50,880 - chromadb.telemetry.product.posthog - ERROR - Failed to send telemetry event CollectionQueryEvent: capture() takes 1 positional argument but 3 were given
+2026-09-24 15:03:50,955 - AI-Response-Validation - INFO - Evaluation 40: Dispatching to Relevance, Accuracy, Completeness, and Hallucination agents...
+2026-09-24 15:03:51,590 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-09-24 15:03:51,828 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-09-24 15:03:52,083 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-09-24 15:03:52,520 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-09-24 15:03:52,524 - AI-Response-Validation - INFO - Evaluation 40: Generating final Verdict...
+2026-09-24 15:03:52,815 - AI-Response-Validation - INFO - path=/api/results/40 method=GET status_code=200 process_time=5.90ms
+2026-09-24 15:03:53,613 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-09-24 15:03:53,626 - AI-Response-Validation - INFO - Evaluation 40 completed successfully. Score: 60.0
+2026-09-24 15:03:55,816 - AI-Response-Validation - INFO - path=/api/results/40 method=GET status_code=200 process_time=7.71ms
+2026-09-24 15:05:26,128 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=19.43ms
+2026-09-24 15:05:29,000 - AI-Response-Validation - INFO - path=/api/results/40 method=GET status_code=200 process_time=7.73ms
+2026-09-24 15:05:29,020 - AI-Response-Validation - INFO - path=/api/results/40 method=GET status_code=200 process_time=11.37ms
+2026-09-24 15:05:31,722 - AI-Response-Validation - INFO - path=/api/evaluations/analytics method=GET status_code=200 process_time=13.04ms
+2026-09-24 15:05:31,738 - AI-Response-Validation - INFO - path=/api/evaluations/analytics method=GET status_code=200 process_time=5.13ms
+2026-09-24 15:05:41,267 - AI-Response-Validation - INFO - path=/api/results/40 method=GET status_code=200 process_time=19.26ms
+2026-09-24 15:05:41,279 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=33.46ms
+2026-09-24 15:05:41,289 - AI-Response-Validation - INFO - path=/api/results/40 method=GET status_code=200 process_time=12.46ms
+2026-09-24 15:05:56,326 - AI-Response-Validation - INFO - path=/api/evaluate/batch method=POST status_code=200 process_time=27.57ms
+2026-09-24 15:05:56,348 - AI-Response-Validation - INFO - Batch Orchestrator evaluating row 41...
+2026-09-24 15:05:56,359 - AI-Response-Validation - INFO - path=/api/batch/04429b5f-6853-4bf0-923a-d790ca4483dd method=GET status_code=200 process_time=22.59ms
+2026-09-24 15:05:57,698 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-09-24 15:06:01,378 - AI-Response-Validation - INFO - path=/api/batch/04429b5f-6853-4bf0-923a-d790ca4483dd method=GET status_code=200 process_time=7.65ms
+2026-09-24 15:06:02,723 - AI-Response-Validation - INFO - Batch Orchestrator evaluating row 42...
+2026-09-24 15:06:04,736 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-09-24 15:06:06,347 - AI-Response-Validation - INFO - path=/api/batch/04429b5f-6853-4bf0-923a-d790ca4483dd method=GET status_code=200 process_time=8.91ms
+2026-09-24 15:06:09,752 - AI-Response-Validation - INFO - Batch Orchestrator evaluating row 43...
+2026-09-24 15:06:11,345 - AI-Response-Validation - INFO - path=/api/batch/04429b5f-6853-4bf0-923a-d790ca4483dd method=GET status_code=200 process_time=7.37ms
+2026-09-24 15:06:11,510 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-09-24 15:06:16,346 - AI-Response-Validation - INFO - path=/api/batch/04429b5f-6853-4bf0-923a-d790ca4483dd method=GET status_code=200 process_time=6.81ms
+2026-09-24 15:06:16,534 - AI-Response-Validation - INFO - Batch Orchestrator evaluating row 44...
+2026-09-24 15:06:18,010 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-09-24 15:06:21,366 - AI-Response-Validation - INFO - path=/api/batch/04429b5f-6853-4bf0-923a-d790ca4483dd method=GET status_code=200 process_time=9.28ms
+2026-09-24 15:06:23,032 - AI-Response-Validation - INFO - Batch Orchestrator evaluating row 45...
+2026-09-24 15:06:25,247 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-09-24 15:06:26,350 - AI-Response-Validation - INFO - path=/api/batch/04429b5f-6853-4bf0-923a-d790ca4483dd method=GET status_code=200 process_time=11.93ms
+2026-09-24 15:06:30,290 - AI-Response-Validation - INFO - Batch Orchestrator evaluating row 46...
+2026-09-24 15:06:31,373 - AI-Response-Validation - INFO - path=/api/batch/04429b5f-6853-4bf0-923a-d790ca4483dd method=GET status_code=200 process_time=9.67ms
+2026-09-24 15:06:32,751 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-09-24 15:06:36,350 - AI-Response-Validation - INFO - path=/api/batch/04429b5f-6853-4bf0-923a-d790ca4483dd method=GET status_code=200 process_time=7.71ms
+2026-09-24 15:06:37,768 - AI-Response-Validation - INFO - Batch Orchestrator evaluating row 47...
+2026-09-24 15:06:39,533 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-09-24 15:06:41,357 - AI-Response-Validation - INFO - path=/api/batch/04429b5f-6853-4bf0-923a-d790ca4483dd method=GET status_code=200 process_time=8.55ms
+2026-09-24 15:06:48,303 - AI-Response-Validation - INFO - path=/api/results/40 method=GET status_code=200 process_time=13.16ms
+2026-09-24 15:06:48,314 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=31.49ms
+2026-09-24 15:06:48,325 - AI-Response-Validation - INFO - path=/api/results/40 method=GET status_code=200 process_time=6.31ms
+2026-09-24 15:06:52,528 - AI-Response-Validation - INFO - path=/api/batch/04429b5f-6853-4bf0-923a-d790ca4483dd method=GET status_code=200 process_time=4.62ms
+2026-09-24 15:06:52,543 - AI-Response-Validation - INFO - path=/api/batch/04429b5f-6853-4bf0-923a-d790ca4483dd method=GET status_code=200 process_time=6.67ms
+2026-09-24 15:06:58,856 - AI-Response-Validation - INFO - path=/api/results/41 method=GET status_code=200 process_time=2.71ms
+2026-09-24 15:06:58,865 - AI-Response-Validation - INFO - path=/api/results/41 method=GET status_code=200 process_time=3.07ms
+2026-09-24 15:07:02,105 - AI-Response-Validation - INFO - path=/api/results/45 method=GET status_code=200 process_time=2.26ms
+2026-09-24 15:07:02,114 - AI-Response-Validation - INFO - path=/api/results/45 method=GET status_code=200 process_time=2.39ms
+2026-09-25 13:10:03,308 - AI-Response-Validation - INFO - Initializing database connection...
+2026-09-25 13:10:03,328 - AI-Response-Validation - INFO - Database engine created at sqlite:////home/hassan/Documents/Hassan/coding_projects/Infosys Springboard Internship 7.0/ai-response-validation-system/data/evaluations.db
+2026-09-25 13:10:16,243 - datasets - INFO - PyTorch version 2.13.0 available.
+2026-09-25 13:10:16,696 - AI-Response-Validation - INFO - Starting AI Response Validation API...
+2026-09-25 13:10:16,698 - AI-Response-Validation - INFO - Database tables verified/created.
+2026-09-25 13:19:30,044 - AI-Response-Validation - INFO - path=/api/evaluate method=OPTIONS status_code=200 process_time=1.37ms
+2026-09-25 13:19:30,062 - AI-Response-Validation - INFO - Received evaluation submission: question='What is the capital of France?...'
+2026-09-25 13:19:30,095 - AI-Response-Validation - INFO - Successfully saved and queued evaluation ID 48
+2026-09-25 13:19:30,097 - AI-Response-Validation - INFO - path=/api/evaluate method=POST status_code=200 process_time=39.89ms
+2026-09-25 13:19:30,101 - AI-Response-Validation - INFO - Orchestrator started for evaluation 48
+2026-09-25 13:19:30,101 - AI-Response-Validation - INFO - Evaluation 48: Dispatching to Relevance, Accuracy, Completeness, and Hallucination agents...
+2026-09-25 13:19:30,140 - AI-Response-Validation - INFO - path=/api/results/48 method=GET status_code=200 process_time=29.96ms
+2026-09-25 13:19:30,146 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=37.22ms
+2026-09-25 13:19:30,151 - AI-Response-Validation - INFO - path=/api/results/48 method=GET status_code=200 process_time=2.18ms
+2026-09-25 13:19:30,785 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-09-25 13:19:30,910 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-09-25 13:19:30,956 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-09-25 13:19:31,022 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-09-25 13:19:31,026 - AI-Response-Validation - INFO - Evaluation 48: Generating final Verdict...
+2026-09-25 13:19:31,867 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-09-25 13:19:31,873 - AI-Response-Validation - INFO - Evaluation 48 completed successfully. Score: 100.0
+2026-09-25 13:19:33,131 - AI-Response-Validation - INFO - path=/api/results/48 method=GET status_code=200 process_time=7.47ms
+2026-09-25 13:19:37,808 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=9.10ms
+2026-09-25 13:19:47,745 - AI-Response-Validation - INFO - path=/api/results/40 method=GET status_code=200 process_time=6.95ms
+2026-09-25 13:19:47,761 - AI-Response-Validation - INFO - path=/api/results/40 method=GET status_code=200 process_time=8.03ms
+2026-09-25 13:20:08,351 - AI-Response-Validation - INFO - path=/api/evaluations/analytics method=GET status_code=200 process_time=15.87ms
+2026-09-25 13:20:08,363 - AI-Response-Validation - INFO - path=/api/evaluations/analytics method=GET status_code=200 process_time=6.77ms
+2026-09-25 13:20:18,180 - AI-Response-Validation - INFO - path=/api/evaluate/batch method=POST status_code=200 process_time=27.17ms
+2026-09-25 13:20:18,208 - AI-Response-Validation - INFO - Batch Orchestrator evaluating row 49...
+2026-09-25 13:20:18,223 - AI-Response-Validation - INFO - path=/api/batch/4e142ef0-b755-43c0-b76e-e3bb07c8060a method=GET status_code=200 process_time=25.36ms
+2026-09-25 13:20:19,462 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-09-25 13:20:23,340 - AI-Response-Validation - INFO - path=/api/batch/4e142ef0-b755-43c0-b76e-e3bb07c8060a method=GET status_code=200 process_time=2.96ms
+2026-09-25 13:20:24,488 - AI-Response-Validation - INFO - Batch Orchestrator evaluating row 50...
+2026-09-25 13:20:26,451 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-09-25 13:20:28,515 - AI-Response-Validation - INFO - path=/api/batch/4e142ef0-b755-43c0-b76e-e3bb07c8060a method=GET status_code=200 process_time=13.38ms
+2026-09-25 13:20:31,478 - AI-Response-Validation - INFO - Batch Orchestrator evaluating row 51...
+2026-09-25 13:20:33,376 - AI-Response-Validation - INFO - path=/api/batch/4e142ef0-b755-43c0-b76e-e3bb07c8060a method=GET status_code=200 process_time=7.62ms
+2026-09-25 13:20:33,425 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-09-25 13:20:38,376 - AI-Response-Validation - INFO - path=/api/batch/4e142ef0-b755-43c0-b76e-e3bb07c8060a method=GET status_code=200 process_time=7.35ms
+2026-09-25 13:20:38,442 - AI-Response-Validation - INFO - Batch Orchestrator evaluating row 52...
+2026-09-25 13:20:40,384 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-09-25 13:20:43,403 - AI-Response-Validation - INFO - path=/api/batch/4e142ef0-b755-43c0-b76e-e3bb07c8060a method=GET status_code=200 process_time=8.74ms
+2026-09-25 13:20:45,403 - AI-Response-Validation - INFO - Batch Orchestrator evaluating row 53...
+2026-09-25 13:20:47,315 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-09-25 13:20:48,376 - AI-Response-Validation - INFO - path=/api/batch/4e142ef0-b755-43c0-b76e-e3bb07c8060a method=GET status_code=200 process_time=7.78ms
+2026-09-25 13:20:52,338 - AI-Response-Validation - INFO - Batch Orchestrator evaluating row 54...
+2026-09-25 13:20:53,381 - AI-Response-Validation - INFO - path=/api/batch/4e142ef0-b755-43c0-b76e-e3bb07c8060a method=GET status_code=200 process_time=9.39ms
+2026-09-25 13:20:53,987 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-09-25 13:20:58,362 - AI-Response-Validation - INFO - path=/api/batch/4e142ef0-b755-43c0-b76e-e3bb07c8060a method=GET status_code=200 process_time=5.77ms
+2026-09-25 13:20:59,013 - AI-Response-Validation - INFO - Batch Orchestrator evaluating row 55...
+2026-09-25 13:21:00,745 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-09-25 13:21:03,210 - AI-Response-Validation - INFO - path=/api/batch/4e142ef0-b755-43c0-b76e-e3bb07c8060a method=GET status_code=200 process_time=10.31ms
+2026-09-25 13:21:13,969 - AI-Response-Validation - INFO - path=/api/evaluations/analytics method=GET status_code=200 process_time=8.03ms
+2026-09-25 13:21:13,986 - AI-Response-Validation - INFO - path=/api/evaluations/analytics method=GET status_code=200 process_time=6.13ms
+2026-09-25 13:21:15,298 - AI-Response-Validation - INFO - path=/api/evaluations/history method=GET status_code=200 process_time=18.00ms
+2026-09-25 13:21:17,853 - AI-Response-Validation - INFO - path=/api/batch/4e142ef0-b755-43c0-b76e-e3bb07c8060a method=GET status_code=200 process_time=7.62ms
+2026-09-25 13:21:17,873 - AI-Response-Validation - INFO - path=/api/batch/4e142ef0-b755-43c0-b76e-e3bb07c8060a method=GET status_code=200 process_time=11.57ms
