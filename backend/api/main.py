@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Depends, Request, BackgroundTasks, HTTPException, UploadFile, File
 from fastapi.responses import StreamingResponse, JSONResponse
+from typing import Optional, List
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from sqlalchemy import func
@@ -358,19 +359,42 @@ def get_evaluation_history(page: int = 1, limit: int = 10, db: Session = Depends
     }
 
 @app.get("/api/evaluations/analytics")
-def get_analytics(db: Session = Depends(database.get_db)):
-    total_evals = db.query(models.EvaluationRecord).filter(models.EvaluationRecord.status == "completed").count()
+def get_analytics(
+    batch_id: Optional[str] = None,
+    min_score: Optional[int] = None,
+    max_score: Optional[int] = None,
+    db: Session = Depends(database.get_db)
+):
+    base_query = db.query(models.EvaluationRecord).filter(models.EvaluationRecord.status == "completed")
+    
+    if batch_id:
+        base_query = base_query.filter(models.EvaluationRecord.batch_id == batch_id)
+    if min_score is not None:
+        base_query = base_query.filter(models.EvaluationRecord.final_score >= min_score)
+    if max_score is not None:
+        base_query = base_query.filter(models.EvaluationRecord.final_score <= max_score)
+
+    total_evals = base_query.count()
     
     if total_evals == 0:
         return {"total_evaluations": 0, "average_score": 0, "radar_data": [], "time_series": []}
         
-    avg_stats = db.query(
+    avg_stats_query = db.query(
         func.avg(models.EvaluationRecord.final_score).label("avg_final"),
         func.avg(models.EvaluationRecord.score_relevance).label("avg_rel"),
         func.avg(models.EvaluationRecord.score_accuracy).label("avg_acc"),
         func.avg(models.EvaluationRecord.score_completeness).label("avg_comp"),
         func.avg(models.EvaluationRecord.score_hallucination).label("avg_hal")
-    ).filter(models.EvaluationRecord.status == "completed").first()
+    ).filter(models.EvaluationRecord.status == "completed")
+    
+    if batch_id:
+        avg_stats_query = avg_stats_query.filter(models.EvaluationRecord.batch_id == batch_id)
+    if min_score is not None:
+        avg_stats_query = avg_stats_query.filter(models.EvaluationRecord.final_score >= min_score)
+    if max_score is not None:
+        avg_stats_query = avg_stats_query.filter(models.EvaluationRecord.final_score <= max_score)
+
+    avg_stats = avg_stats_query.first()
     
     avg_final = round(avg_stats.avg_final or 0, 1)
     
@@ -381,10 +405,7 @@ def get_analytics(db: Session = Depends(database.get_db)):
         {"metric": "Hallucination", "score": round((avg_stats.avg_hal or 0) * 20, 1)}
     ]
     
-    time_series_records = db.query(
-        models.EvaluationRecord.created_at,
-        models.EvaluationRecord.final_score
-    ).filter(models.EvaluationRecord.status == "completed").order_by(models.EvaluationRecord.created_at.asc()).all()
+    time_series_records = base_query.order_by(models.EvaluationRecord.created_at.asc()).all()
     
     time_series = [
         {"date": r.created_at.strftime("%b %d, %H:%M"), "score": r.final_score} 

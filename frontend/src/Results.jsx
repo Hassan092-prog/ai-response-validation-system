@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { diffWords } from 'diff';
-import { Copy, Check, Download, ChevronDown, ChevronRight, FileSpreadsheet, FileJson } from 'lucide-react';
+import { Copy, Check, Download, ChevronDown, ChevronRight, FileSpreadsheet, FileJson, FileText } from 'lucide-react';
+import jsPDF from 'jspdf';
 
 const Results = ({ evaluationId, onBack }) => {
   const [data, setData] = useState(null);
@@ -153,6 +154,59 @@ ${breakdown.hallucination.reasoning}
     setIsExportMenuOpen(false);
   };
 
+  const handleDownloadPDF = () => {
+    const doc = new jsPDF();
+    
+    // Header background (dark themed or vibrant depending on preference, we'll use a premium dark gray here)
+    doc.setFillColor(30, 30, 30); 
+    doc.rect(0, 0, 210, 30, 'F');
+    doc.setFontSize(20);
+    doc.setTextColor(200, 255, 100); // Neon green text
+    doc.setFont(undefined, 'bold');
+    doc.text("Evaluation Validation Report", 14, 20);
+    
+    // Status & Score
+    doc.setFontSize(12);
+    doc.setTextColor(100, 100, 100);
+    doc.setFont(undefined, 'normal');
+    doc.text(`Evaluation ID: ${data.id}`, 14, 40);
+    doc.text(`Status: ${String(data.status).toUpperCase()}`, 14, 47);
+    
+    doc.setFontSize(14);
+    doc.setTextColor(0, 0, 0);
+    doc.setFont(undefined, 'bold');
+    doc.text(`Final Score: ${final_score} / 100`, 150, 40);
+    
+    let yPos = 60;
+    
+    const addSection = (title, content) => {
+      doc.setFontSize(14);
+      doc.setTextColor(0, 0, 0);
+      doc.setFont(undefined, 'bold');
+      doc.text(title, 14, yPos);
+      yPos += 8;
+      
+      doc.setFontSize(11);
+      doc.setTextColor(60, 60, 60);
+      doc.setFont(undefined, 'normal');
+      const lines = doc.splitTextToSize(content || "N/A", 180);
+      doc.text(lines, 14, yPos);
+      yPos += (lines.length * 5) + 10;
+      
+      if (yPos > 270) {
+        doc.addPage();
+        yPos = 20;
+      }
+    };
+    
+    addSection("Question:", data.question);
+    addSection("AI Response:", data.ai_response);
+    addSection("Verdict & Final Reasoning:", consolidated_reasoning);
+    
+    doc.save(`evaluation_report_${data.id}.pdf`);
+    setIsExportMenuOpen(false);
+  };
+
   const renderDiff = () => {
     if (!data.reference_answer) return null;
     
@@ -224,10 +278,16 @@ ${breakdown.hallucination.reasoning}
                     <FileSpreadsheet size={14} /> Export as CSV
                   </button>
                   <button 
-                    onClick={() => { handleDownloadJSON(); setIsExportMenuOpen(false); }} 
-                    style={{ width: '100%', padding: '0.6rem 1rem', textAlign: 'left', background: 'none', border: 'none', color: 'var(--text-primary)', cursor: 'pointer', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '8px', whiteSpace: 'nowrap' }}
+                    onClick={handleDownloadJSON} 
+                    style={{ width: '100%', padding: '0.6rem 1rem', textAlign: 'left', background: 'none', border: 'none', borderBottom: '1px solid var(--input-border)', color: 'var(--text-primary)', cursor: 'pointer', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '8px', whiteSpace: 'nowrap' }}
                   >
                     <FileJson size={14} /> Export as JSON
+                  </button>
+                  <button 
+                    onClick={handleDownloadPDF} 
+                    style={{ width: '100%', padding: '0.6rem 1rem', textAlign: 'left', background: 'none', border: 'none', color: 'var(--text-primary)', cursor: 'pointer', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '8px', whiteSpace: 'nowrap' }}
+                  >
+                    <FileText size={14} /> Export as PDF
                   </button>
                 </div>
               )}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { PlusCircle, History, BarChart3, Moon, Sun, ChevronDown, ChevronRight, Paperclip, Download, FileSpreadsheet, FileJson, Eye, EyeOff } from 'lucide-react'
+import { PlusCircle, History, BarChart3, Moon, Sun, ChevronDown, ChevronRight, Paperclip, Download, FileSpreadsheet, FileJson, Eye, EyeOff, Database } from 'lucide-react'
 import './App.css'
 import Results from './Results'
 import BatchAnalyticsView from './BatchAnalyticsView'
@@ -293,9 +293,14 @@ function App() {
           {/* TAB: NEW EVALUATION */}
           {activeTab === 'new' && (
             <div className="tab-container">
-              <div className="header-text">
-                <h1>Evaluation Module</h1>
-                <p>Submit responses for AI validation</p>
+              <div className="header-text" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                <div>
+                  <h1>Evaluation Module</h1>
+                  <p>Submit responses for AI validation</p>
+                </div>
+                <button onClick={fillTestData} className="secondary-btn" style={{ padding: '0.5rem 1rem', display: 'flex', alignItems: 'center', gap: '0.5rem', borderRadius: '6px' }}>
+                  <Database size={16} /> Load Test Case {testCaseIndex + 1}/7
+                </button>
               </div>
                   
               <form onSubmit={handleSubmit} onKeyDown={handleKeyDown} className="form-layout">
@@ -350,9 +355,8 @@ function App() {
                       </div>
                     </div>
 
-                    <div className="submit-container" style={{ gap: '1rem', display: 'flex' }}>
-                      <button type="button" className="submit-btn secondary-btn" onClick={fillTestData}>Test Data</button>
-                      <button type="button" className="submit-btn secondary-btn" onClick={clearInput}>Clear Input</button>
+                    <div className="submit-container" style={{ gap: '1rem', display: 'flex', justifyContent: 'center' }}>
+                      <button type="button" className="submit-btn secondary-btn" onClick={clearInput} style={{ minWidth: '150px' }}>Clear Input</button>
                       <button type="submit" className="submit-btn" disabled={isSubmitting}>
                         {isSubmitting ? 'Evaluating...' : 'Submit Evaluation'}
                       </button>

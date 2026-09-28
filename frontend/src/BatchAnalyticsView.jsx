@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Loader2, CheckCircle2, BarChart3, Download, Eye, EyeOff } from 'lucide-react';
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 import Results from './Results';
 import './App.css';
 
@@ -92,6 +94,47 @@ const BatchAnalyticsView = ({ batchId }) => {
     document.body.removeChild(link);
   };
 
+  const handleExportPDF = () => {
+    if (!batchData || !batchData.records) return;
+    const doc = new jsPDF();
+    
+    // Title & Summary
+    doc.setFontSize(18);
+    doc.text(`AI Response Evaluation Report`, 14, 22);
+    
+    doc.setFontSize(11);
+    doc.text(`Batch ID: ${batchId}`, 14, 30);
+    doc.text(`Total Responses Evaluated: ${batchAnalytics.count}`, 14, 36);
+    doc.text(`Average Batch Score: ${batchAnalytics.averageScore} / 100`, 14, 42);
+    doc.text(`Pass Rate: ${batchAnalytics.passRate}%`, 14, 48);
+    
+    const tableColumn = ["Question", "AI Response", "Status", "Score", "Scores (Acc/Rel/Hal)"];
+    const tableRows = [];
+
+    batchData.records.forEach(r => {
+      const q = r.question || '';
+      const a = r.ai_response || '';
+      const rowData = [
+        q.length > 80 ? q.substring(0, 80) + '...' : q,
+        a.length > 80 ? a.substring(0, 80) + '...' : a,
+        r.status,
+        r.final_score ? r.final_score.toString() : '0',
+        `${r.score_accuracy || 0} / ${r.score_relevance || 0} / ${r.score_hallucination || 0}`
+      ];
+      tableRows.push(rowData);
+    });
+
+    doc.autoTable({
+      head: [tableColumn],
+      body: tableRows,
+      startY: 55,
+      styles: { fontSize: 8 },
+      headStyles: { fillColor: [182, 242, 54], textColor: [0, 0, 0] } // Theme primary color
+    });
+    
+    doc.save(`batch_evaluation_report_${batchId}.pdf`);
+  };
+
   if (loading) return <div style={{ padding: '2rem', textAlign: 'center' }}><Loader2 className="spinner" size={24} /></div>;
   if (!batchData) return <div style={{ padding: '2rem', textAlign: 'center' }}>Batch data not found.</div>;
 
@@ -105,9 +148,14 @@ const BatchAnalyticsView = ({ batchId }) => {
               <BarChart3 size={20} color="var(--accent-color)" />
               Batch Results Analytics
             </h3>
-            <button onClick={handleExportBatch} className="secondary-btn" style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '0.5rem 1rem', borderRadius: '6px' }}>
-              <Download size={16} /> Export CSV
-            </button>
+            <div style={{ display: 'flex', gap: '1rem' }}>
+              <button onClick={handleExportPDF} className="secondary-btn" style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '0.5rem 1rem', borderRadius: '6px' }}>
+                <Download size={16} /> Export PDF Report
+              </button>
+              <button onClick={handleExportBatch} className="secondary-btn" style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '0.5rem 1rem', borderRadius: '6px' }}>
+                <Download size={16} /> Export CSV
+              </button>
+            </div>
           </div>
           
           <div className="stats-grid" style={{ marginBottom: '2rem', gridTemplateColumns: 'repeat(3, 1fr)' }}>

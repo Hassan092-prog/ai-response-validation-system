@@ -3,29 +3,44 @@ import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer,
   Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis
 } from 'recharts';
-import { Activity, Target } from 'lucide-react';
+import { Activity, Target, Filter } from 'lucide-react';
 
 const AnalyticsDashboard = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const [minScore, setMinScore] = useState('');
+  const [maxScore, setMaxScore] = useState('');
+  const [batchId, setBatchId] = useState('');
+
+  const fetchAnalytics = async () => {
+    setLoading(true);
+    try {
+      let url = 'http://192.168.1.92:8005/api/evaluations/analytics?';
+      if (minScore) url += `min_score=${minScore}&`;
+      if (maxScore) url += `max_score=${maxScore}&`;
+      if (batchId) url += `batch_id=${batchId}&`;
+      
+      const response = await fetch(url);
+      if (!response.ok) throw new Error('Failed to fetch analytics');
+      const json = await response.json();
+      setData(json);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchAnalytics = async () => {
-      try {
-        const response = await fetch('http://192.168.1.92:8005/api/evaluations/analytics');
-        if (!response.ok) throw new Error('Failed to fetch analytics');
-        const json = await response.json();
-        setData(json);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-    
     fetchAnalytics();
   }, []);
+
+  const handleFilterSubmit = (e) => {
+    e.preventDefault();
+    fetchAnalytics();
+  };
 
   if (loading) {
     return (
@@ -56,11 +71,32 @@ const AnalyticsDashboard = () => {
 
   return (
     <div className="analytics-dashboard">
-      <div className="header-text" style={{ marginBottom: '2rem' }}>
+      <div className="header-text" style={{ marginBottom: '1rem' }}>
         <h1>Analytics Overview</h1>
         <p>Monitor your AI grading performance over time</p>
       </div>
-      
+
+      <form onSubmit={handleFilterSubmit} style={{ display: 'flex', gap: '1rem', marginBottom: '2rem', padding: '1rem', background: 'var(--input-bg)', borderRadius: '12px', border: '1px solid var(--border-color)', alignItems: 'flex-end' }}>
+        <div style={{ flex: 1 }}>
+          <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Min Score (0-100)</label>
+          <input type="number" min="0" max="100" value={minScore} onChange={e => setMinScore(e.target.value)} className="form-input" placeholder="e.g. 50" style={{ padding: '0.5rem', width: '100%' }} />
+        </div>
+        <div style={{ flex: 1 }}>
+          <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Max Score (0-100)</label>
+          <input type="number" min="0" max="100" value={maxScore} onChange={e => setMaxScore(e.target.value)} className="form-input" placeholder="e.g. 80" style={{ padding: '0.5rem', width: '100%' }} />
+        </div>
+        <div style={{ flex: 2 }}>
+          <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Batch ID Filter</label>
+          <input type="text" value={batchId} onChange={e => setBatchId(e.target.value)} className="form-input" placeholder="Enter Batch ID" style={{ padding: '0.5rem', width: '100%' }} />
+        </div>
+        <div>
+          <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.85rem', visibility: 'hidden' }}>Submit</label>
+          <button type="submit" className="submit-btn" style={{ padding: '0 1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem', height: '39px', width: 'auto', minWidth: 'auto', fontSize: '0.9rem' }}>
+            <Filter size={16} /> Apply Filters
+          </button>
+        </div>
+      </form>
+
       <div className="stats-grid">
         <div className="stat-card" style={{ position: 'relative', overflow: 'hidden' }}>
           <Activity size={120} color="var(--border-color)" style={{ position: 'absolute', right: '-20px', bottom: '-20px', opacity: 0.15 }} />
