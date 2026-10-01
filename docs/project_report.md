@@ -96,7 +96,12 @@ Based on the final roadmap, the following standout Tier 1 and Tier 2 features we
 2. **GitHub-Style Heatmap Calendar:** Developed a 365-day contribution heatmap graph mapped to historical evaluations, complete with dynamic month labels, density-based color grading, and an interactive side-menu for historical year selection.
 3. **Agent Confidence Visualization:** Implemented a real-time linguistic parser that analyzes the reasoning output of the LLM judges for "hedging" language (e.g., "might", "perhaps"). The UI now tags evaluations with High, Medium, or Low confidence badges.
 4. **Animated Score Counters & Portal Toasts:** Integrated fluid number-counting animations for final scores, and completely detached background batch progress notifications using React Portals to guarantee they always gracefully pop out of the browser window edge regardless of user scroll position.
-5. **Re-evaluate Engine:** Added a 1-click loop allowing users to seamlessly fetch a historical evaluation, reload it into the prompt staging area, modify it, and fire a fresh evaluation.
+9. **Re-evaluate Engine:** Added a 1-click loop allowing users to seamlessly fetch a historical evaluation, reload it into the prompt staging area, modify it, and fire a fresh evaluation.
+
+### 8.3 Docker Containerization
+To ensure a highly portable and seamless deployment process, the entire application was containerized using Docker. 
+- **Multi-Stage Build:** A highly optimized `Dockerfile` uses a two-stage process. Stage 1 utilizes a Node environment to compile the Vite React frontend. Stage 2 utilizes a lightweight Python environment to install the AI and backend dependencies.
+- **Unified Port Serving:** Instead of running separate servers for the frontend and backend, the compiled static frontend files are surgically copied into the FastAPI backend. FastAPI natively mounts and serves these static files, meaning the entire system (API + UI) operates completely on a single unified port (8005). This eliminates complex CORS configurations and greatly simplifies reverse-proxy forwarding (e.g., NGINX).
 
 The system is now fully complete, rigorously tested, and ready for demonstration.
 

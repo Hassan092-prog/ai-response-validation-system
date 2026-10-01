@@ -72,6 +72,13 @@
 - **Embeddings**: `sentence-transformers` (`all-MiniLM-L6-v2`) for local, fast text vectorization.
 - **Datasets**: Hugging Face Datasets (`squad`, `truthful_qa`).
 
+## Deployment Architecture (Docker)
+*To ensure a seamless, production-ready deployment, the application utilizes a multi-stage Docker containerization strategy.*
+
+- **Stage 1 (Frontend Build)**: A `Node.js` environment compiles the Vite React application into static HTML/CSS/JS files.
+- **Stage 2 (Backend Integration)**: A lightweight `Python 3.10-slim` environment installs the AI dependencies (FastAPI, Langchain, ChromaDB). It then copies the compiled static frontend files from Stage 1 into the backend's directory structure.
+- **Unified Port Delivery**: The FastAPI server is configured using `StaticFiles` to natively mount and serve the React frontend alongside its API routes. This means the entire application—frontend UI and backend API—is seamlessly exposed over a single unified port (**8005**). This heavily simplifies network routing and proxy configurations (like NGINX).
+
 ## Agent Responsibilities
 *The specialized AI judges responsible for independently analyzing different dimensions of the response.*
 

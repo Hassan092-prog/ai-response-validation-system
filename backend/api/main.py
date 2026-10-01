@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Depends, Request, BackgroundTasks, HTTPException, UploadFile, File
+from fastapi.staticfiles import StaticFiles
 from fastapi.responses import StreamingResponse, JSONResponse
 from typing import Optional, List
 from fastapi.middleware.cors import CORSMiddleware
@@ -489,3 +490,11 @@ def export_evaluations(format: str = "csv", db: Session = Depends(database.get_d
     
     else:
         raise HTTPException(status_code=400, detail="Invalid format. Use 'csv' or 'json'.")
+
+import os
+# Mount static frontend
+frontend_dist = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "frontend", "dist")
+if os.path.exists(frontend_dist):
+    app.mount("/", StaticFiles(directory=frontend_dist, html=True), name="frontend")
+else:
+    logger.warning(f"Frontend dist directory not found at {frontend_dist}. Please build the React app to serve it from FastAPI.")

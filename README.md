@@ -91,7 +91,35 @@ You must configure your Groq API key for the AI Evaluation Engine to function.
    GROQ_API_KEY=your_groq_api_key_here
    ```
 
-### 1. Backend Setup (Terminal 1)
+### 1. Docker Setup (Recommended / Unified Port)
+We have containerized the application using a multi-stage build. The React frontend is served statically by the FastAPI backend, meaning the entire system operates seamlessly on a single port (**8005**). 
+
+Because we use `docker-compose`, it automatically injects your API key from the `.env` file, so you don't need to pass it manually in the terminal.
+
+#### Starting the Application
+Navigate to the root directory of the project and simply run:
+```bash
+docker compose up --build -d
+```
+*This single command automatically builds the image (using cache when possible), stops any old containers, and starts the new one in the background.*
+
+#### Accessing the Application
+The entire system is now live on a single unified port:
+- **Web UI (Frontend):** `http://localhost:8005`
+- **Interactive API Docs (Backend):** `http://localhost:8005/docs`
+
+#### Stopping or Checking Logs
+To watch the live API logs:
+```bash
+docker compose logs -f
+```
+To shut everything down:
+```bash
+docker compose down
+```
+
+
+### 2. Manual Local Setup (Terminal 1 - Backend)
 First, set up the Python virtual environment and start the FastAPI server.
 
 ```bash
@@ -115,7 +143,7 @@ uvicorn backend.api.main:app --host 0.0.0.0 --port 8005 --reload
 The backend API will be running at: `http://localhost:8005`
 Interactive API Docs (Swagger): `http://localhost:8005/docs`
 
-### 2. Frontend Setup (Terminal 2 - If running manually)
+### 3. Manual Local Setup (Terminal 2 - Frontend)
 Leave the backend running and open a new terminal.
 
 ```bash
