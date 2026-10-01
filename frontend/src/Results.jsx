@@ -1,11 +1,63 @@
 import React, { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { diffWords } from 'diff';
-import { Copy, Check, Download, ChevronDown, ChevronRight, FileSpreadsheet, FileJson, FileText } from 'lucide-react';
+import { Copy, Check, Download, ChevronDown, ChevronRight, FileSpreadsheet, FileJson, FileText, RefreshCw } from 'lucide-react';
 import jsPDF from 'jspdf';
 import { API_BASE } from './config';
 
-const Results = ({ evaluationId, onBack }) => {
+const AnimatedScore = ({ targetScore }) => {
+  const [score, setScore] = useState(0);
+
+  useEffect(() => {
+    const duration = 1500; // 1.5s
+    const startTime = performance.now();
+    let frameId;
+    
+    const animate = (currentTime) => {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const ease = 1 - Math.pow(1 - progress, 4);
+      setScore(Math.floor(targetScore * ease));
+      
+      if (progress < 1) {
+        frameId = requestAnimationFrame(animate);
+      }
+    };
+    
+    frameId = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(frameId);
+  }, [targetScore]);
+
+  return <span>{score}</span>;
+};
+
+const getConfidence = (score, reasoning) => {
+  if (!reasoning) return { level: 'High', color: '#22c55e' };
+  const hedgingWords = ['might', 'perhaps', 'could be', 'possibly', 'somewhat', 'partially', 'unclear', 'maybe', 'not entirely', 'seems', 'appears'];
+  const lowerReasoning = reasoning.toLowerCase();
+  
+  const hasHedging = hedgingWords.some(word => lowerReasoning.includes(word));
+  
+  if (score === 3 || score === 2) {
+    if (hasHedging) return { level: 'Low', color: '#ef4444' };
+    return { level: 'Medium', color: '#f59e0b' };
+  }
+  
+  if (hasHedging) return { level: 'Medium', color: '#f59e0b' };
+  return { level: 'High', color: '#22c55e' };
+};
+
+const ConfidenceBadge = ({ score, reasoning }) => {
+  const conf = getConfidence(score, reasoning);
+  return (
+    <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '0.7rem', background: 'var(--input-bg)', padding: '2px 8px', borderRadius: '12px', border: '1px solid var(--border-color)', marginLeft: '12px', verticalAlign: 'middle', fontWeight: '500' }}>
+       <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: conf.color, boxShadow: `0 0 4px ${conf.color}` }}></span>
+       <span style={{ color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{conf.level} Conf</span>
+    </div>
+  );
+};
+
+const Results = ({ evaluationId, onBack, onReevaluate }) => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -261,6 +313,11 @@ ${breakdown.hallucination.reasoning}
               {copied ? <Check size={14} /> : <Copy size={14} />} 
               {copied ? 'Copied!' : 'Copy as Markdown'}
             </button>
+            {onReevaluate && (
+              <button onClick={() => onReevaluate(data)} className="secondary-btn" style={{ padding: '0.4rem 0.8rem', fontSize: '0.85rem', borderRadius: '6px', cursor: 'pointer', border: '1px solid var(--input-border)', background: 'var(--input-bg)', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <RefreshCw size={14} /> Re-evaluate
+              </button>
+            )}
             <div className="results-export-dropdown" style={{ position: 'relative' }}>
               <button onClick={() => setIsExportMenuOpen(!isExportMenuOpen)} className="secondary-btn" style={{ padding: '0.4rem 0.8rem', fontSize: '0.85rem', borderRadius: '6px', cursor: 'pointer', border: '1px solid var(--input-border)', background: 'var(--input-bg)', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
                 <Download size={14} /> Export <ChevronDown size={14} />
@@ -296,7 +353,7 @@ ${breakdown.hallucination.reasoning}
           </div>
         </div>
         <div className={`score-badge ${final_score >= 80 ? 'high' : final_score >= 50 ? 'medium' : 'low'}`}>
-          {final_score} / 100
+          <AnimatedScore targetScore={final_score} /> / 100
         </div>
       </div>
 
@@ -339,7 +396,10 @@ ${breakdown.hallucination.reasoning}
       <div className="breakdown-grid">
         <div className="breakdown-card">
           <div className="card-header">
-            <h3>Relevance</h3>
+            <h3>
+              Relevance 
+              <ConfidenceBadge score={breakdown.relevance.score} reasoning={breakdown.relevance.reasoning} />
+            </h3>
             <span className="score">{breakdown.relevance.score}/5</span>
           </div>
           <div className="markdown-body">
@@ -349,7 +409,10 @@ ${breakdown.hallucination.reasoning}
 
         <div className="breakdown-card">
           <div className="card-header">
-            <h3>Accuracy</h3>
+            <h3>
+              Accuracy
+              <ConfidenceBadge score={breakdown.accuracy.score} reasoning={breakdown.accuracy.reasoning} />
+            </h3>
             <span className="score">{breakdown.accuracy.score}/5</span>
           </div>
           <div className="markdown-body">
@@ -359,7 +422,10 @@ ${breakdown.hallucination.reasoning}
 
         <div className="breakdown-card">
           <div className="card-header">
-            <h3>Completeness</h3>
+            <h3>
+              Completeness
+              <ConfidenceBadge score={breakdown.completeness.score} reasoning={breakdown.completeness.reasoning} />
+            </h3>
             <span className="score">{breakdown.completeness.score}/5</span>
           </div>
           <div className="markdown-body">
@@ -369,7 +435,10 @@ ${breakdown.hallucination.reasoning}
 
         <div className="breakdown-card hallucination">
           <div className="card-header">
-            <h3>Hallucination Penalty</h3>
+            <h3>
+              Hallucination Penalty
+              <ConfidenceBadge score={breakdown.hallucination.score} reasoning={breakdown.hallucination.reasoning} />
+            </h3>
             <span className="score">{breakdown.hallucination.score}/5</span>
           </div>
           <div className="markdown-body">

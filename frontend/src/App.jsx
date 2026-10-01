@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { PlusCircle, History, BarChart3, Moon, Sun, ChevronDown, ChevronRight, Paperclip, Download, FileSpreadsheet, FileJson, Eye, EyeOff, Database } from 'lucide-react'
+import { PlusCircle, History, BarChart3, Moon, Sun, ChevronDown, ChevronRight, Paperclip, Download, FileSpreadsheet, FileJson, Eye, EyeOff, Database, ShieldCheck, Inbox } from 'lucide-react'
 import './App.css'
 import Results from './Results'
 import BatchAnalyticsView from './BatchAnalyticsView'
@@ -81,6 +81,19 @@ function App() {
   const handleExport = (format) => {
     window.open(`${API_BASE}/api/evaluations/export?format=${format}`, '_blank')
     setIsExportMenuOpen(false)
+  }
+
+  const handleReevaluate = (data) => {
+    setFormData({
+      question: data.question || '',
+      ai_response: data.ai_response || '',
+      reference_answer: data.reference_answer || '',
+      source_document: data.source_document || ''
+    })
+    setActiveTab('new')
+    setEvaluationId(null)
+    setExpandedHistoryId(null)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   const handleChange = (e) => {
@@ -243,7 +256,9 @@ function App() {
       {/* Sidebar Navigation */}
       <aside className="sidebar">
         <div className="sidebar-header">
-          <h2>Validation AI</h2>
+          <h2 style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <ShieldCheck size={26} color="var(--btn-bg)" /> Validation AI
+          </h2>
           <button onClick={toggleTheme} className="theme-toggle-btn" aria-label="Toggle Theme">
             {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
           </button>
@@ -304,55 +319,54 @@ function App() {
                 </button>
               </div>
                   
-              <form onSubmit={handleSubmit} onKeyDown={handleKeyDown} className="form-layout">
-                    <div className="form-grid">
-                      <div className="grid-col">
-                        <div className="input-wrapper">
-                          <div className="input-header"><label>Original Question</label></div>
-                          <textarea 
-                            name="question" value={formData.question} onChange={handleChange}
-                            className="form-control" placeholder="e.g., What is the capital of France?" required
-                          />
-                        </div>
-                        <div className="input-wrapper flex-grow">
-                          <div className="input-header"><label>AI Response</label></div>
-                          <textarea 
-                            name="ai_response" value={formData.ai_response} onChange={handleChange}
-                            className="form-control large" placeholder="The generated response to evaluate..." required
-                          />
-                        </div>
-                      </div>
+              <form onSubmit={handleSubmit} onKeyDown={handleKeyDown} className="form-layout" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                    <div className="input-wrapper">
+                      <div className="input-header"><label>Original Question</label></div>
+                      <textarea 
+                        name="question" value={formData.question} onChange={handleChange}
+                        className="form-control" placeholder="e.g., What is the capital of France?" required
+                        style={{ minHeight: '80px' }}
+                      />
+                    </div>
 
-                      <div className="grid-col">
-                        <div className="input-wrapper">
-                          <div className="input-header">
-                            <label>Reference Answer</label><span className="badge">Optional</span>
-                          </div>
-                          <textarea 
-                            name="reference_answer" value={formData.reference_answer} onChange={handleChange}
-                            className="form-control" placeholder="Ground truth answer for accuracy comparison"
-                          />
+                    <div className="input-wrapper">
+                      <div className="input-header"><label>AI Response</label></div>
+                      <textarea 
+                        name="ai_response" value={formData.ai_response} onChange={handleChange}
+                        className="form-control large" placeholder="The generated response to evaluate..." required
+                        style={{ minHeight: '160px' }}
+                      />
+                    </div>
+
+                    <div className="form-grid" style={{ gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
+                      <div className="input-wrapper">
+                        <div className="input-header">
+                          <label>Reference Answer</label><span className="badge">Optional</span>
                         </div>
-                        <div className="input-wrapper flex-grow">
-                          <div className="input-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <div>
-                              <label>Source Context</label><span className="badge">Optional</span>
-                            </div>
-                            <label className="secondary-btn" style={{ cursor: 'pointer', fontSize: '0.8rem', padding: '0.2rem 0.6rem', borderRadius: '6px', fontWeight: '500', display: 'flex', alignItems: 'center', gap: '6px', background: 'var(--input-bg)', border: '1px solid var(--input-border)', color: 'var(--text-primary)' }}>
-                              {isUploading ? '⏳ Extracting...' : (
-                                <>
-                                  <Paperclip size={14} />
-                                  Upload PDF/Doc
-                                </>
-                              )}
-                              <input type="file" accept=".pdf,.docx,.txt,.md" style={{ display: 'none' }} onChange={handleFileUpload} disabled={isUploading} />
-                            </label>
+                        <textarea 
+                          name="reference_answer" value={formData.reference_answer} onChange={handleChange}
+                          className="form-control" placeholder="Ground truth answer for accuracy comparison"
+                        />
+                      </div>
+                      <div className="input-wrapper">
+                        <div className="input-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <div>
+                            <label>Source Context</label><span className="badge">Optional</span>
                           </div>
-                          <textarea 
-                            name="source_document" value={formData.source_document} onChange={handleChange}
-                            className="form-control large" placeholder="Paste source context or RAG chunks here"
-                          />
+                          <label className="secondary-btn" style={{ cursor: 'pointer', fontSize: '0.8rem', padding: '0.2rem 0.6rem', borderRadius: '6px', fontWeight: '500', display: 'flex', alignItems: 'center', gap: '6px', background: 'var(--input-bg)', border: '1px solid var(--input-border)', color: 'var(--text-primary)' }}>
+                            {isUploading ? '⏳ Extracting...' : (
+                              <>
+                                <Paperclip size={14} />
+                                Upload PDF/Doc
+                              </>
+                            )}
+                            <input type="file" accept=".pdf,.docx,.txt,.md" style={{ display: 'none' }} onChange={handleFileUpload} disabled={isUploading} />
+                          </label>
                         </div>
+                        <textarea 
+                          name="source_document" value={formData.source_document} onChange={handleChange}
+                          className="form-control large" placeholder="Paste source context or RAG chunks here"
+                        />
                       </div>
                     </div>
 
@@ -366,7 +380,7 @@ function App() {
               
               {evaluationId && (
                 <div style={{ marginTop: '3rem', paddingTop: '2rem', borderTop: '1px solid var(--border-color)' }}>
-                  <Results evaluationId={evaluationId} onBack={() => setEvaluationId(null)} />
+                  <Results evaluationId={evaluationId} onBack={() => setEvaluationId(null)} onReevaluate={handleReevaluate} />
                 </div>
               )}
             </div>
@@ -416,7 +430,11 @@ function App() {
               </div>
               
               {history.length === 0 ? (
-                <p>No evaluations yet.</p>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '6rem 2rem', color: 'var(--text-secondary)', textAlign: 'center', background: 'var(--input-bg)', borderRadius: '12px', border: '1px dashed var(--input-border)' }}>
+                  <Inbox size={48} style={{ opacity: 0.5, marginBottom: '1rem', color: 'var(--text-secondary)' }} />
+                  <h3 style={{ fontSize: '1.2rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '0.5rem' }}>No evaluations yet</h3>
+                  <p style={{ maxWidth: '300px', lineHeight: 1.5 }}>Your evaluation history will appear here once you submit your first AI response for validation.</p>
+                </div>
               ) : (
                 <>
                   <div className="stats-grid" style={{ marginBottom: '2rem', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
@@ -546,7 +564,7 @@ function App() {
                                     {item.is_batch ? (
                                       <BatchAnalyticsView batchId={item.id} />
                                     ) : (
-                                      <Results evaluationId={item.id} onBack={() => setExpandedHistoryId(null)} />
+                                      <Results evaluationId={item.id} onBack={() => setExpandedHistoryId(null)} onReevaluate={handleReevaluate} />
                                     )}
                                   </div>
                                 </td>

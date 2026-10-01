@@ -2,6 +2,7 @@ import json
 import time
 from backend.core.agents.utils import _call_llm_json, logger
 from backend.kb.retrieve import retrieve_context
+from backend.core.config_weights import get_global_weights
 
 def evaluate_batch_row(record_id: int, question: str, ai_response: str, reference_answer: str = None, source_document: str = None) -> dict:
     """Evaluates a single row using a Consolidated Master Prompt to save API quota."""
@@ -40,7 +41,13 @@ def evaluate_batch_row(record_id: int, question: str, ai_response: str, referenc
         c_score = res.get("completeness", {}).get("score", 0)
         h_score = res.get("hallucination", {}).get("score", 0)
         
-        final_score = round(((r_score/5)*20) + ((a_score/5)*40) + ((c_score/5)*20) + ((h_score/5)*20), 1)
+        weights = get_global_weights()
+        w_acc = weights.get("accuracy", 40)
+        w_rel = weights.get("relevance", 20)
+        w_com = weights.get("completeness", 20)
+        w_hal = weights.get("hallucination", 20)
+        
+        final_score = round(((r_score/5)*w_rel) + ((a_score/5)*w_acc) + ((c_score/5)*w_com) + ((h_score/5)*w_hal), 1)
         
         verdict = "Pass"
         if final_score < 50 or h_score <= 2 or a_score <= 1:

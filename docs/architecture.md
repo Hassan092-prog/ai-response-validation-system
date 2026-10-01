@@ -86,14 +86,16 @@
 ## Scoring Dimensions and Verdict Formula
 *The mathematical logic used to calculate the final reliability score, which heavily penalizes any detected hallucinations.*
 
-- **Relevance**: 1 (Completely Irrelevant) to 5 (Highly Relevant) - *20% Weight*
-- **Accuracy**: 1 (Completely Incorrect) to 5 (Highly Accurate) - *40% Weight*
-- **Completeness**: 1 (Incomplete) to 5 (Comprehensive) - *20% Weight*
-- **Hallucination Penalty**: 1 (Severe Hallucination) to 5 (No Hallucination) - *20% Weight*
+*Note: The weights listed below are the system defaults. These weights are globally dynamic and can be configured in real-time via the Analytics Dashboard Configuration API (`/api/config/weights`), which will instantly override the mathematical logic for all subsequent single and batch evaluations.*
+
+- **Accuracy**: 1 (Completely Incorrect) to 5 (Highly Accurate) - *Default 40% Weight*
+- **Relevance**: 1 (Completely Irrelevant) to 5 (Highly Relevant) - *Default 20% Weight*
+- **Completeness**: 1 (Incomplete) to 5 (Comprehensive) - *Default 20% Weight*
+- **Hallucination Penalty**: 1 (Severe Hallucination) to 5 (No Hallucination) - *Default 20% Weight*
 
 **Verdict Aggregation Formula**:
-`Final Score = ((Relevance / 5) * 20) + ((Accuracy / 5) * 40) + ((Completeness / 5) * 20) + ((Hallucination / 5) * 20)`
-*(Final score capped between 0 and 100)*
+`Final Score = ((Relevance / 5) * Weight) + ((Accuracy / 5) * Weight) + ((Completeness / 5) * Weight) + ((Hallucination / 5) * Weight)`
+*(Final score capped dynamically based on total configured weights up to 100)*
 
 **Automatic Fail Conditions**:
 If `Final Score < 50` OR `Hallucination <= 2` OR `Accuracy <= 1`, the Verdict is automatically set to **FAIL**.

@@ -78,16 +78,25 @@ The platform successfully evaluated distinct external AI systems by processing t
 - **Context Window:** Extremely large source documents may exceed the context window if not properly chunked by the RAG pipeline.
 
 ### 7.2 Future Scope
-- **Customizable Weights:** Allow users to tweak the weighting of Accuracy vs. Relevance from the UI.
 - **Web Scraping:** Allow the system to automatically scrape URLs to build the reference knowledge base dynamically.
 - **Feedback Loop:** Provide an API endpoint to feed the "FAIL" verdicts back into the original AI system for continuous reinforcement learning (RLHF).
 
-## 8. Final Pre-Submission Audit (October)
-Prior to final submission, a comprehensive codebase audit was conducted to ensure robustness and production-readiness:
-- **Dynamic Network Resolution**: Hardcoded IPs were refactored into a dynamic frontend configuration, allowing the application to be seamlessly deployed and accessed across any local or network environment without breaking.
+## 8. Final Pre-Submission Upgrades & Audit (October)
+Prior to final submission, a comprehensive codebase audit and feature expansion was conducted to ensure robust, production-ready polish:
+
+### 8.1 Bug Fixes & Optimizations
+- **Dynamic Network Resolution**: Hardcoded IPs were refactored into a dynamic frontend configuration, allowing the application to be seamlessly deployed and accessed across any local or network environment.
+- **Memory Leak Prevention**: Patched unmounted animation frame memory leaks in the Animated Score counter UI.
 - **Error Handling Fortification**: Strengthened the backend orchestration layer against unexpected LLM outputs (e.g., malformed JSON) with robust fallback mechanisms and safe parsing.
-- **Reporting Optimizations**: Fixed minor data reference issues in the batch PDF export engine and ensured flawless metric aggregation.
-- **UI/UX Polish**: Cleaned up the CSS architecture by removing duplicate theme variables, ensuring the glassmorphic dark/light design remains highly consistent.
+- **UI/UX Polish**: Expanded the main viewport width to utilize modern monitors optimally, completely redesigned the Heatmap grid for perfect row-alignment, and added light-mode specific borders to secondary buttons to prevent "floating text" effects. 
+
+### 8.2 Premium Feature Implementations
+Based on the final roadmap, the following standout Tier 1 and Tier 2 features were successfully engineered:
+1. **Configurable Scoring Weights Engine:** Built a real-time sandbox in the Analytics dashboard where users can adjust the penalty weights for Accuracy, Relevance, Completeness, and Hallucination. A new backend configuration API allows these adjusted weights to be saved globally, dynamically altering the Verdict math for all future single and batch evaluations.
+2. **GitHub-Style Heatmap Calendar:** Developed a 365-day contribution heatmap graph mapped to historical evaluations, complete with dynamic month labels, density-based color grading, and an interactive side-menu for historical year selection.
+3. **Agent Confidence Visualization:** Implemented a real-time linguistic parser that analyzes the reasoning output of the LLM judges for "hedging" language (e.g., "might", "perhaps"). The UI now tags evaluations with High, Medium, or Low confidence badges.
+4. **Animated Score Counters & Portal Toasts:** Integrated fluid number-counting animations for final scores, and completely detached background batch progress notifications using React Portals to guarantee they always gracefully pop out of the browser window edge regardless of user scroll position.
+5. **Re-evaluate Engine:** Added a 1-click loop allowing users to seamlessly fetch a historical evaluation, reload it into the prompt staging area, modify it, and fire a fresh evaluation.
 
 The system is now fully complete, rigorously tested, and ready for demonstration.
 

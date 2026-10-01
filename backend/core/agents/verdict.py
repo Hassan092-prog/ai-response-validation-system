@@ -1,4 +1,5 @@
 from .utils import _call_llm_json, logger
+from backend.core.config_weights import get_global_weights
 
 def generate_verdict(question: str, ai_response: str, relevance_res: dict, accuracy_res: dict, completeness_res: dict, hallucination_res: dict) -> dict:
     """Combines all agent evaluations into a final weighted verdict with a consolidated reasoning summary."""
@@ -10,12 +11,17 @@ def generate_verdict(question: str, ai_response: str, relevance_res: dict, accur
         h_score = hallucination_res.get("score", 0)
         
         # 2. Weighted Scoring Model (out of 100)
-        # Relevance: 20%, Accuracy: 40%, Completeness: 20%, Hallucination: 20%
+        weights = get_global_weights()
+        w_acc = weights.get("accuracy", 40)
+        w_rel = weights.get("relevance", 20)
+        w_com = weights.get("completeness", 20)
+        w_hal = weights.get("hallucination", 20)
+        
         # (Score / 5) * Weight
-        r_points = (r_score / 5.0) * 20
-        a_points = (a_score / 5.0) * 40
-        c_points = (c_score / 5.0) * 20
-        h_points = (h_score / 5.0) * 20
+        r_points = (r_score / 5.0) * w_rel
+        a_points = (a_score / 5.0) * w_acc
+        c_points = (c_score / 5.0) * w_com
+        h_points = (h_score / 5.0) * w_hal
         
         final_score = round(r_points + a_points + c_points + h_points, 1)
         

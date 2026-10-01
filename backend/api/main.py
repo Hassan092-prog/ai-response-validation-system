@@ -23,6 +23,7 @@ from backend.api import models, schemas, database
 from backend.core.config import logger
 from backend.core.orchestrator import process_evaluation_task
 from backend.core.batch_orchestrator import evaluate_batch_row
+from backend.core.config_weights import get_global_weights, set_global_weights
 import uuid
 
 logger.info("Starting AI Response Validation API...")
@@ -56,6 +57,15 @@ async def log_requests(request: Request, call_next):
 def health_check():
     logger.info("Health check endpoint called.")
     return {"status": "healthy", "version": "1.0.0"}
+
+@app.get("/api/config/weights")
+def api_get_weights():
+    return get_global_weights()
+
+@app.post("/api/config/weights")
+def api_set_weights(weights: dict):
+    set_global_weights(weights)
+    return {"status": "success", "weights": weights}
 
 @app.post("/api/extract-text")
 async def extract_text(file: UploadFile = File(...)):
@@ -412,11 +422,20 @@ def get_analytics(
         for r in time_series_records if r.final_score is not None
     ]
     
+    from collections import defaultdict
+    heatmap_counts = defaultdict(int)
+    for r in time_series_records:
+        day_str = r.created_at.strftime("%Y-%m-%d")
+        heatmap_counts[day_str] += 1
+        
+    heatmap_data = [{"date": k, "count": v} for k, v in heatmap_counts.items()]
+    
     return {
         "total_evaluations": total_evals,
         "average_score": avg_final,
         "radar_data": radar_data,
-        "time_series": time_series
+        "time_series": time_series,
+        "heatmap_data": heatmap_data
     }
 
 @app.get("/api/evaluations/export")

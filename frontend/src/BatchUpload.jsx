@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { FileSpreadsheet, Loader2, CheckCircle2, BarChart3, Download, RefreshCw } from 'lucide-react';
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import './App.css';
@@ -10,6 +11,8 @@ const BatchUpload = () => {
   const [batchId, setBatchId] = useState(null);
   const [batchData, setBatchData] = useState(null);
   const [isPolling, setIsPolling] = useState(false);
+  const lastCompletedCount = useRef(0);
+  const [toastState, setToastState] = useState({ show: false, message: '' });
 
   const batchAnalytics = useMemo(() => {
     if (!batchData || !batchData.records || isPolling || batchData.progress.completed !== batchData.progress.total || batchData.progress.total === 0) {
@@ -143,6 +146,16 @@ const BatchUpload = () => {
           if (res.ok) {
             const data = await res.json();
             setBatchData(data);
+            
+            if (data.progress.completed > lastCompletedCount.current) {
+              const completedRecords = data.records.filter(r => r.status === 'completed');
+              const latestRecord = completedRecords[completedRecords.length - 1];
+              if (latestRecord) {
+                setToastState({ show: true, message: `Row ${data.progress.completed}/${data.progress.total} evaluated — Score: ${latestRecord.final_score}` });
+                setTimeout(() => setToastState(prev => ({ ...prev, show: false })), 3000);
+              }
+              lastCompletedCount.current = data.progress.completed;
+            }
             
             if (data.progress.completed === data.progress.total) {
               setIsPolling(false);
@@ -346,6 +359,25 @@ const BatchUpload = () => {
             </div>
           )}
         </div>
+      )}
+      {createPortal(
+        <div style={{
+          position: 'fixed',
+          bottom: '2rem',
+          right: toastState.show ? '2rem' : '-20rem',
+          opacity: toastState.show ? 1 : 0,
+          transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+          background: 'var(--btn-bg)',
+          color: 'var(--btn-text)',
+          padding: '1rem 1.5rem',
+          borderRadius: '8px',
+          boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+          fontWeight: '500',
+          zIndex: 100000,
+        }}>
+          {toastState.message}
+        </div>,
+        document.body
       )}
     </div>
   );

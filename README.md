@@ -59,6 +59,11 @@ In addition to the core mentor requirements, we have significantly enhanced the 
 * **Analytics Module**: A dedicated Analytics Tab aggregates metrics from the database and visualizes the average performance over time using Recharts, fully filterable by batch or score thresholds.
 * **History & Data Exports**: A server-side paginated History Tab that allows users to export their evaluation datasets to `CSV`, `JSON`, and heavily customized `PDF` formats.
 * **Backend Performance Optimization**: Refactored the SQLite database to extract nested JSON scores into indexed `Float` columns. Used native SQLAlchemy `func.avg()` aggregations and `.yield_per(100)` streaming generators to ensure the application scales safely without running out of memory.
+* **Configurable Scoring Weights Engine**: A real-time sandbox in the Analytics dashboard where users can dynamically adjust the penalty weights for Accuracy, Relevance, Completeness, and Hallucination globally.
+* **GitHub-Style Heatmap Calendar**: A 365-day contribution heatmap graph mapped to historical evaluations with dynamic month labels and density-based color grading.
+* **Agent Confidence Visualization**: A real-time linguistic parser that analyzes the reasoning output of the LLM judges for "hedging" language and tags evaluations with High/Medium/Low confidence badges.
+* **1-Click Re-Evaluate Engine**: Seamlessly fetch a historical evaluation, reload it into the prompt staging area, modify it, and fire a fresh evaluation.
+* **Animated UI Elements & Portals**: Fluid number-counting animations for final scores and completely detached background batch progress notifications using React Portals.
 * **Dynamic Test Data Engine**: Included a "Load Test Case" button in the UI that cycles sequentially through **7 distinct edge-case testing scenarios** (Perfect Score, Dangerous Hallucination, Subtle Contradiction, Irrelevant, Incomplete, etc.) for rapid debugging and edge-case validation.
 
 ---
