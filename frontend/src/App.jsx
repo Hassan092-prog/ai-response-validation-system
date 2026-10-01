@@ -5,6 +5,7 @@ import Results from './Results'
 import BatchAnalyticsView from './BatchAnalyticsView'
 import AnalyticsDashboard from './AnalyticsDashboard'
 import BatchUpload from './BatchUpload'
+import { API_BASE } from './config'
 
 function App() {
   const [formData, setFormData] = useState({
@@ -56,7 +57,7 @@ function App() {
 
   const fetchHistory = async (page = 1) => {
     try {
-      const response = await fetch(`http://192.168.1.92:8005/api/evaluations/history?page=${page}&limit=10`)
+      const response = await fetch(`${API_BASE}/api/evaluations/history?page=${page}&limit=10`)
       if (response.ok) {
         const data = await response.json()
         setHistory(data.history)
@@ -78,7 +79,7 @@ function App() {
   }
 
   const handleExport = (format) => {
-    window.open(`http://192.168.1.92:8005/api/evaluations/export?format=${format}`, '_blank')
+    window.open(`${API_BASE}/api/evaluations/export?format=${format}`, '_blank')
     setIsExportMenuOpen(false)
   }
 
@@ -174,7 +175,7 @@ function App() {
     setStatus({ type: '', message: '' })
 
     try {
-      const response = await fetch('http://192.168.1.92:8005/api/evaluate', {
+      const response = await fetch(`${API_BASE}/api/evaluate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -212,7 +213,7 @@ function App() {
     formData.append('file', file)
 
     try {
-      const response = await fetch('http://192.168.1.92:8005/api/extract-text', {
+      const response = await fetch(`${API_BASE}/api/extract-text`, {
         method: 'POST',
         body: formData
       })

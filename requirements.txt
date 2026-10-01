@@ -9,3 +9,6 @@ pydantic==2.8.2
 python-multipart==0.0.9
 groq
 httpx<0.28.0
+python-dotenv
+pypdf
+python-docx

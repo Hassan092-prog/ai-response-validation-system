@@ -4,6 +4,7 @@ import {
   Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis
 } from 'recharts';
 import { Activity, Target, Filter } from 'lucide-react';
+import { API_BASE } from './config';
 
 const AnalyticsDashboard = () => {
   const [data, setData] = useState(null);
@@ -17,7 +18,7 @@ const AnalyticsDashboard = () => {
   const fetchAnalytics = async () => {
     setLoading(true);
     try {
-      let url = 'http://192.168.1.92:8005/api/evaluations/analytics?';
+      let url = `${API_BASE}/api/evaluations/analytics?`;
       if (minScore) url += `min_score=${minScore}&`;
       if (maxScore) url += `max_score=${maxScore}&`;
       if (batchId) url += `batch_id=${batchId}&`;

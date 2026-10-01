@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { FileSpreadsheet, Loader2, CheckCircle2, BarChart3, Download, RefreshCw } from 'lucide-react';
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import './App.css';
+import { API_BASE } from './config';
 
 const BatchUpload = () => {
   const [file, setFile] = useState(null);
@@ -113,7 +114,7 @@ const BatchUpload = () => {
     formData.append('file', file);
 
     try {
-      const response = await fetch('http://192.168.1.92:8005/api/evaluate/batch', {
+      const response = await fetch(`${API_BASE}/api/evaluate/batch`, {
         method: 'POST',
         body: formData,
       });
@@ -138,7 +139,7 @@ const BatchUpload = () => {
     if (isPolling && batchId) {
       const fetchStatus = async () => {
         try {
-          const res = await fetch(`http://192.168.1.92:8005/api/batch/${batchId}`);
+          const res = await fetch(`${API_BASE}/api/batch/${batchId}`);
           if (res.ok) {
             const data = await res.json();
             setBatchData(data);

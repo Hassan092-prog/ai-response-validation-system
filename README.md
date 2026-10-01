@@ -40,14 +40,26 @@ The goal of Milestone 3 was to refine the evaluation metrics, introduce batch pr
 
 ---
 
+## 🏆 Milestone 4 Overview (Final)
+
+The goal of Milestone 4 was to wrap up the project by building comprehensive analytics dashboards, PDF reporting engines, and an end-to-end testing suite for the final demonstration.
+
+### Objectives Achieved:
+1. **Evaluation Scoring Dashboard (M4.1)**: Built a dynamic analytics dashboard aggregating global pass/fail rates and dimension scores, complete with an interactive filtering system (by Min/Max Score and Batch ID) that perfectly adapts to the UI's dark/light theme.
+2. **Evaluation Report Export (M4.2)**: Integrated `jsPDF` to generate highly styled, premium PDF Validation Reports natively in the browser for both Batch processing and Single evaluations.
+3. **End-to-End Testing Suite (M4.3)**: Added an integrated "Load Test Case" button in the frontend that cycles through 7 predefined testing scenarios (Perfect, Hallucination, Incomplete, etc.) to immediately validate system robustness and agent accuracy during demonstrations.
+4. **Documentation & Demonstration (M4.4)**: Finalized all architectural markdown files, generated the Final Project Report, and polished the frontend CSS elements to ensure a premium UI/UX for the final project submission.
+
+---
+
 ## ✨ Extra Features & UI Updates
 
 In addition to the core mentor requirements, we have significantly enhanced the application with the following features:
 * **Interactive UI Dashboard**: The frontend dynamically renders an interactive Radar Chart breakdown and evaluation report immediately upon submission.
-* **Analytics Module**: A dedicated Analytics Tab aggregates metrics from the database and visualizes the average performance over time using Recharts.
-* **History & Data Exports**: A server-side paginated History Tab that allows users to export their evaluation datasets to `CSV` and `JSON` formats.
+* **Analytics Module**: A dedicated Analytics Tab aggregates metrics from the database and visualizes the average performance over time using Recharts, fully filterable by batch or score thresholds.
+* **History & Data Exports**: A server-side paginated History Tab that allows users to export their evaluation datasets to `CSV`, `JSON`, and heavily customized `PDF` formats.
 * **Backend Performance Optimization**: Refactored the SQLite database to extract nested JSON scores into indexed `Float` columns. Used native SQLAlchemy `func.avg()` aggregations and `.yield_per(100)` streaming generators to ensure the application scales safely without running out of memory.
-* **Dynamic Test Data Engine**: Included a "Test Data" button in the UI that cycles sequentially through **7 distinct edge-case testing scenarios** (Perfect Score, Dangerous Hallucination, Subtle Contradiction, Irrelevant, Incomplete, etc.) for rapid debugging and edge-case validation.
+* **Dynamic Test Data Engine**: Included a "Load Test Case" button in the UI that cycles sequentially through **7 distinct edge-case testing scenarios** (Perfect Score, Dangerous Hallucination, Subtle Contradiction, Irrelevant, Incomplete, etc.) for rapid debugging and edge-case validation.
 
 ---
 
@@ -64,7 +76,7 @@ In addition to the core mentor requirements, we have significantly enhanced the 
 
 ## 🚀 How to Run the Application
 
-The application consists of a Python backend and a React frontend. You will need two terminal windows to run both simultaneously.
+The application consists of a Python backend and a React frontend. You can run both simultaneously using the provided startup script, or run them manually in separate terminals.
 
 ### 0. Prerequisites
 You must configure your Groq API key for the AI Evaluation Engine to function.
@@ -89,13 +101,16 @@ source venv/bin/activate  # On Windows use: venv\Scripts\activate
 # Install dependencies
 pip install -r requirements.txt
 
-# Start the FastAPI server
+# Start the application using the start script (runs both frontend and backend)
+python start.py
+
+# OR start the FastAPI server manually:
 uvicorn backend.api.main:app --host 0.0.0.0 --port 8005 --reload
 ```
 The backend API will be running at: `http://localhost:8005`
 Interactive API Docs (Swagger): `http://localhost:8005/docs`
 
-### 2. Frontend Setup (Terminal 2)
+### 2. Frontend Setup (Terminal 2 - If running manually)
 Leave the backend running and open a new terminal.
 
 ```bash
@@ -124,7 +139,7 @@ This script will pump varied test cases through the agents and output their spec
 
 ### 2. Test the UI and Database
 1. Open `http://localhost:5173` in your browser.
-2. Click **Test Data** to automatically inject a randomized testing scenario, or manually fill out the "Original Question" and "AI Generated Response" fields.
+2. Click **Load Test Case** to automatically inject a randomized testing scenario, or manually fill out the "Original Question" and "AI Generated Response" fields.
 3. Click **Submit Evaluation**.
 4. The React app will communicate with FastAPI and trigger the agent orchestrator. Once completed, the UI will dynamically render the detailed evaluation breakdown, including the final score and Radar Chart.
 5. Navigate to the **Analytics** and **History** tabs to view aggregated metrics and export your records to CSV/JSON.

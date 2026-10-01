@@ -109,4 +109,5 @@ If `Final Score < 50` OR `Hallucination <= 2` OR `Accuracy <= 1`, the Verdict is
 6. Each agent returns a structured JSON output (score and rationale).
 7. The Verdict Agent aggregates the scores and generates the final Evaluation Report.
 8. The SQLite record is updated (status: "completed") with the final JSON results.
-9. The Results Dashboard displays the final evaluation.
+9. The Results Dashboard displays the final evaluation, allowing the user to view the interactive breakdown or export a styled PDF Validation Report.
+10. The Analytics Engine asynchronously aggregates these results, updating the global filtering dashboard and tracking overarching AI performance metrics.

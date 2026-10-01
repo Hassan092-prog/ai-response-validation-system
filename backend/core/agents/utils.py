@@ -42,6 +42,9 @@ def _call_llm_json(system_prompt: str, user_prompt: str, default_score: int = 0,
                 "major_issues": ["API Connection Error"],
                 "consolidated_reasoning": error_msg
             }
+
+# [DEPRECATED] This function is no longer used. Verdict logic has been moved to verdict.py 
+# using a different scoring formula. Keeping this for reference.
 def compute_final_verdict(relevance: dict, accuracy: dict, completeness: dict, hallucination: dict) -> dict:
     """Aggregates scores and computes final verdict report, formatting complex json into markdown for the UI."""
     try:

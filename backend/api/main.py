@@ -32,7 +32,7 @@ logger.info("Database tables verified/created.")
 
 app = FastAPI(
     title="AI Response Validation API",
-    description="Backend API for Milestone 1.3"
+    description="Backend API for AI Response Validation System"
 )
 
 app.add_middleware(
@@ -280,7 +280,7 @@ def get_evaluation_result(eval_id: int, db: Session = Depends(database.get_db)):
     if record.result_json:
         try:
             result_data = json.loads(record.result_json)
-        except:
+        except (json.JSONDecodeError, TypeError):
             result_data = {"error": "Failed to parse result JSON"}
 
     return {

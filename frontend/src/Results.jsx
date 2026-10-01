@@ -3,6 +3,7 @@ import ReactMarkdown from 'react-markdown';
 import { diffWords } from 'diff';
 import { Copy, Check, Download, ChevronDown, ChevronRight, FileSpreadsheet, FileJson, FileText } from 'lucide-react';
 import jsPDF from 'jspdf';
+import { API_BASE } from './config';
 
 const Results = ({ evaluationId, onBack }) => {
   const [data, setData] = useState(null);
@@ -28,7 +29,7 @@ const Results = ({ evaluationId, onBack }) => {
 
     const fetchResult = async () => {
       try {
-        const response = await fetch(`http://192.168.1.92:8005/api/results/${evaluationId}`);
+        const response = await fetch(`${API_BASE}/api/results/${evaluationId}`);
         if (!response.ok) throw new Error("Result not found");
         const json = await response.json();
         

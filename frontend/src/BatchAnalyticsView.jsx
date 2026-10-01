@@ -5,6 +5,7 @@ import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import Results from './Results';
 import './App.css';
+import { API_BASE } from './config';
 
 const BatchAnalyticsView = ({ batchId }) => {
   const [batchData, setBatchData] = useState(null);
@@ -14,7 +15,7 @@ const BatchAnalyticsView = ({ batchId }) => {
   useEffect(() => {
     const fetchBatch = async () => {
       try {
-        const res = await fetch(`http://192.168.1.92:8005/api/batch/${batchId}`);
+        const res = await fetch(`${API_BASE}/api/batch/${batchId}`);
         if (res.ok) {
           const data = await res.json();
           setBatchData(data);
@@ -104,7 +105,7 @@ const BatchAnalyticsView = ({ batchId }) => {
     
     doc.setFontSize(11);
     doc.text(`Batch ID: ${batchId}`, 14, 30);
-    doc.text(`Total Responses Evaluated: ${batchAnalytics.count}`, 14, 36);
+    doc.text(`Total Responses Evaluated: ${batchData.records.length}`, 14, 36);
     doc.text(`Average Batch Score: ${batchAnalytics.averageScore} / 100`, 14, 42);
     doc.text(`Pass Rate: ${batchAnalytics.passRate}%`, 14, 48);
     
