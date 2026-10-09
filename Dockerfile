@@ -35,4 +35,4 @@ COPY --from=frontend-builder /app/frontend/dist /app/frontend/dist
 EXPOSE 8005
 
 # Start FastAPI server on port 8005
-CMD ["uvicorn", "backend.api.main:app", "--host", "0.0.0.0", "--port", "8005"]
+CMD ["uvicorn", "backend.api.main:app", "--host", "0.0.0.0", "--port", "8005", "--proxy-headers", "--forwarded-allow-ips", "*"]

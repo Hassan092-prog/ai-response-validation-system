@@ -260,15 +260,25 @@ def get_batch_status(batch_id: str, db: Session = Depends(database.get_db)):
     
     results = []
     for r in records:
+        result_data = None
+        if r.result_json:
+            try:
+                result_data = json.loads(r.result_json)
+            except:
+                pass
+                
         results.append({
             "id": r.id,
             "status": r.status,
             "question": r.question,
             "ai_response": r.ai_response,
+            "reference_answer": r.reference_answer,
             "final_score": r.final_score,
             "score_accuracy": r.score_accuracy,
             "score_relevance": r.score_relevance,
-            "score_hallucination": r.score_hallucination
+            "score_completeness": r.score_completeness,
+            "score_hallucination": r.score_hallucination,
+            "result": result_data
         })
         
     return {

@@ -3,6 +3,7 @@ import ReactMarkdown from 'react-markdown';
 import { diffWords } from 'diff';
 import { Copy, Check, Download, ChevronDown, ChevronRight, FileSpreadsheet, FileJson, FileText, RefreshCw } from 'lucide-react';
 import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 import { API_BASE } from './config';
 
 const AnimatedScore = ({ targetScore }) => {
@@ -210,51 +211,91 @@ ${breakdown.hallucination.reasoning}
   const handleDownloadPDF = () => {
     const doc = new jsPDF();
     
-    // Header background (dark themed or vibrant depending on preference, we'll use a premium dark gray here)
+    // Header
     doc.setFillColor(30, 30, 30); 
     doc.rect(0, 0, 210, 30, 'F');
     doc.setFontSize(20);
-    doc.setTextColor(200, 255, 100); // Neon green text
+    doc.setTextColor(200, 255, 100);
     doc.setFont(undefined, 'bold');
     doc.text("Evaluation Validation Report", 14, 20);
     
-    // Status & Score
-    doc.setFontSize(12);
-    doc.setTextColor(100, 100, 100);
-    doc.setFont(undefined, 'normal');
-    doc.text(`Evaluation ID: ${data.id}`, 14, 40);
-    doc.text(`Status: ${String(data.status).toUpperCase()}`, 14, 47);
+    // Metadata Table
+    autoTable(doc, {
+      startY: 40,
+      head: [["Evaluation ID", "Date", "Final Score", "Status"]],
+      body: [[
+        String(data.id),
+        new Date(data.created_at).toLocaleDateString(),
+        `${final_score} / 100`,
+        String(data.status).toUpperCase()
+      ]],
+      theme: 'grid',
+      headStyles: { fillColor: [50, 50, 50], textColor: [255, 255, 255] },
+      bodyStyles: { textColor: String(data.status).toUpperCase() === 'PASS' ? [34, 197, 94] : String(data.status).toUpperCase() === 'FAIL' ? [220, 38, 38] : [0, 0, 0], fontStyle: 'bold' }
+    });
+
+    // Breakdown Table
+    const bd = data.result?.breakdown || {};
+    const breakdownCols = ["Metric", "Score", "Agent Reasoning"];
+    const breakdownRows = [
+      ["Accuracy", `${bd.accuracy?.score || 0}/5`, bd.accuracy?.reasoning || "N/A"],
+      ["Relevance", `${bd.relevance?.score || 0}/5`, bd.relevance?.reasoning || "N/A"],
+      ["Completeness", `${bd.completeness?.score || 0}/5`, bd.completeness?.reasoning || "N/A"],
+      ["Hallucination", `${bd.hallucination?.score || 0}/5`, bd.hallucination?.reasoning || "N/A"]
+    ];
     
-    doc.setFontSize(14);
-    doc.setTextColor(0, 0, 0);
-    doc.setFont(undefined, 'bold');
-    doc.text(`Final Score: ${final_score} / 100`, 150, 40);
+    autoTable(doc, {
+      startY: doc.lastAutoTable.finalY + 10,
+      head: [breakdownCols],
+      body: breakdownRows,
+      styles: { fontSize: 9 },
+      headStyles: { fillColor: [80, 80, 80], textColor: [255, 255, 255] },
+      columnStyles: {
+        0: { cellWidth: 30, fontStyle: 'bold' },
+        1: { cellWidth: 20 },
+        2: { cellWidth: 130 }
+      }
+    });
     
-    let yPos = 60;
+    let yPos = doc.lastAutoTable.finalY + 15;
     
-    const addSection = (title, content) => {
-      doc.setFontSize(14);
+    const addTextSection = (title, content) => {
+      if (yPos > 270) { doc.addPage(); yPos = 20; }
+      
+      doc.setFontSize(12);
       doc.setTextColor(0, 0, 0);
       doc.setFont(undefined, 'bold');
       doc.text(title, 14, yPos);
-      yPos += 8;
+      yPos += 7;
       
-      doc.setFontSize(11);
+      doc.setFontSize(10);
       doc.setTextColor(60, 60, 60);
       doc.setFont(undefined, 'normal');
       const lines = doc.splitTextToSize(content || "N/A", 180);
-      doc.text(lines, 14, yPos);
-      yPos += (lines.length * 5) + 10;
       
-      if (yPos > 270) {
+      if (yPos + (lines.length * 5) > 280) {
         doc.addPage();
         yPos = 20;
       }
+      
+      doc.text(lines, 14, yPos);
+      yPos += (lines.length * 5) + 10;
     };
     
-    addSection("Question:", data.question);
-    addSection("AI Response:", data.ai_response);
-    addSection("Verdict & Final Reasoning:", consolidated_reasoning);
+    addTextSection("User Question:", data.question);
+    addTextSection("AI Response:", data.ai_response);
+    if (data.reference_answer) addTextSection("Reference Answer:", data.reference_answer);
+    if (data.source_document) addTextSection("Source Context Provided:", "Yes");
+    addTextSection("Final Verdict Reasoning:", consolidated_reasoning);
+    
+    // Add page numbers
+    const pageCount = doc.internal.getNumberOfPages();
+    for (let i = 1; i <= pageCount; i++) {
+      doc.setPage(i);
+      doc.setFontSize(8);
+      doc.setTextColor(150, 150, 150);
+      doc.text(`Page ${i} of ${pageCount}`, 196, 290, { align: 'right' });
+    }
     
     doc.save(`evaluation_report_${data.id}.pdf`);
     setIsExportMenuOpen(false);

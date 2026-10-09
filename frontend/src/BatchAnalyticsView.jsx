@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Loader2, CheckCircle2, BarChart3, Download, Eye, EyeOff } from 'lucide-react';
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import jsPDF from 'jspdf';
-import 'jspdf-autotable';
+import autoTable from 'jspdf-autotable';
 import Results from './Results';
 import './App.css';
 import { API_BASE } from './config';
@@ -99,15 +99,21 @@ const BatchAnalyticsView = ({ batchId }) => {
     if (!batchData || !batchData.records) return;
     const doc = new jsPDF();
     
-    // Title & Summary
-    doc.setFontSize(18);
-    doc.text(`AI Response Evaluation Report`, 14, 22);
+    // Page 1: Title & Summary
+    doc.setFillColor(30, 30, 30); 
+    doc.rect(0, 0, 210, 30, 'F');
+    doc.setFontSize(20);
+    doc.setTextColor(200, 255, 100);
+    doc.setFont(undefined, 'bold');
+    doc.text(`AI Response Batch Evaluation Report`, 14, 20);
     
-    doc.setFontSize(11);
-    doc.text(`Batch ID: ${batchId}`, 14, 30);
-    doc.text(`Total Responses Evaluated: ${batchData.records.length}`, 14, 36);
-    doc.text(`Average Batch Score: ${batchAnalytics.averageScore} / 100`, 14, 42);
-    doc.text(`Pass Rate: ${batchAnalytics.passRate}%`, 14, 48);
+    doc.setFontSize(12);
+    doc.setTextColor(0, 0, 0);
+    doc.setFont(undefined, 'normal');
+    doc.text(`Batch ID: ${batchId}`, 14, 40);
+    doc.text(`Total Responses Evaluated: ${batchData.records.length}`, 14, 48);
+    doc.text(`Average Batch Score: ${batchAnalytics.averageScore} / 100`, 14, 56);
+    doc.text(`Pass Rate: ${batchAnalytics.passRate}%`, 14, 64);
     
     const tableColumn = ["Question", "AI Response", "Status", "Score", "Scores (Acc/Rel/Hal)"];
     const tableRows = [];
@@ -125,13 +131,106 @@ const BatchAnalyticsView = ({ batchId }) => {
       tableRows.push(rowData);
     });
 
-    doc.autoTable({
+    autoTable(doc, {
       head: [tableColumn],
       body: tableRows,
-      startY: 55,
+      startY: 75,
       styles: { fontSize: 8 },
-      headStyles: { fillColor: [182, 242, 54], textColor: [0, 0, 0] } // Theme primary color
+      headStyles: { fillColor: [30, 30, 30], textColor: [255, 255, 255] }
     });
+
+    // Detailed Records from Page 2 onwards
+    batchData.records.forEach((r, index) => {
+      doc.addPage();
+      
+      // Header
+      doc.setFillColor(30, 30, 30); 
+      doc.rect(0, 0, 210, 30, 'F');
+      doc.setFontSize(20);
+      doc.setTextColor(200, 255, 100);
+      doc.setFont(undefined, 'bold');
+      doc.text(`Evaluation Validation Report - Record #${index + 1}`, 14, 20);
+      
+      // Metadata Table
+      autoTable(doc, {
+        startY: 40,
+        head: [["Record ID", "Batch ID", "Final Score", "Status"]],
+        body: [[
+          String(r.id),
+          String(batchId).substring(0, 8) + '...',
+          `${r.final_score || 0} / 100`,
+          String(r.status).toUpperCase()
+        ]],
+        theme: 'grid',
+        headStyles: { fillColor: [50, 50, 50], textColor: [255, 255, 255] },
+        bodyStyles: { textColor: String(r.status).toUpperCase() === 'PASS' ? [34, 197, 94] : String(r.status).toUpperCase() === 'FAIL' ? [220, 38, 38] : [0, 0, 0], fontStyle: 'bold' }
+      });
+      
+      // Breakdown Table
+      const bd = r.result?.breakdown || {};
+      const breakdownCols = ["Metric", "Score", "Agent Reasoning"];
+      const breakdownRows = [
+        ["Accuracy", `${r.score_accuracy || 0}/5`, bd.accuracy?.reasoning || "N/A"],
+        ["Relevance", `${r.score_relevance || 0}/5`, bd.relevance?.reasoning || "N/A"],
+        ["Completeness", `${r.score_completeness || 0}/5`, bd.completeness?.reasoning || "N/A"],
+        ["Hallucination", `${r.score_hallucination || 0}/5`, bd.hallucination?.reasoning || "N/A"]
+      ];
+      
+      autoTable(doc, {
+        startY: doc.lastAutoTable.finalY + 10,
+        head: [breakdownCols],
+        body: breakdownRows,
+        styles: { fontSize: 9 },
+        headStyles: { fillColor: [80, 80, 80], textColor: [255, 255, 255] },
+        columnStyles: {
+          0: { cellWidth: 30, fontStyle: 'bold' },
+          1: { cellWidth: 20 },
+          2: { cellWidth: 130 }
+        }
+      });
+      
+      let yPos = doc.lastAutoTable.finalY + 15;
+      
+      const addTextSection = (title, content) => {
+        if (yPos > 270) { doc.addPage(); yPos = 20; }
+        
+        doc.setFontSize(12);
+        doc.setTextColor(0, 0, 0);
+        doc.setFont(undefined, 'bold');
+        doc.text(title, 14, yPos);
+        yPos += 7;
+        
+        doc.setFontSize(10);
+        doc.setTextColor(60, 60, 60);
+        doc.setFont(undefined, 'normal');
+        const lines = doc.splitTextToSize(content || "N/A", 180);
+        
+        if (yPos + (lines.length * 5) > 280) {
+          doc.addPage();
+          yPos = 20;
+        }
+        
+        doc.text(lines, 14, yPos);
+        yPos += (lines.length * 5) + 10;
+      };
+      
+      addTextSection("User Question:", r.question);
+      addTextSection("AI Response:", r.ai_response);
+      if (r.reference_answer) addTextSection("Reference Answer:", r.reference_answer);
+      if (r.source_document) addTextSection("Source Context Provided:", "Yes");
+      
+      const consolidated_reasoning = r.result?.consolidated_reasoning || r.result?.major_issues || "N/A";
+      addTextSection("Final Verdict Reasoning:", consolidated_reasoning);
+    });
+    
+    // Add page numbers
+    const pageCount = doc.internal.getNumberOfPages();
+    for (let i = 1; i <= pageCount; i++) {
+      doc.setPage(i);
+      doc.setFontSize(8);
+      doc.setTextColor(150, 150, 150);
+      doc.text(`Page ${i} of ${pageCount}`, 196, 290, { align: 'right' });
+    }
     
     doc.save(`batch_evaluation_report_${batchId}.pdf`);
   };
