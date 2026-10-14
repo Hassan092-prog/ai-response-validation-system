@@ -78,7 +78,11 @@ Hallucination Penalty (Score {h_score}/5): {hallucination_res.get('reasoning', '
                 "relevance": {"score": r_score, "reasoning": relevance_res.get("reasoning", "")},
                 "accuracy": {"score": a_score, "reasoning": a_reasoning},
                 "completeness": {"score": c_score, "reasoning": c_reasoning},
-                "hallucination": {"score": h_score, "reasoning": hallucination_res.get("reasoning", "")}
+                "hallucination": {
+                    "score": h_score,
+                    "reasoning": hallucination_res.get("reasoning", ""),
+                    "flagged_claims": hallucination_res.get("flagged_claims", [])
+                }
             }
         }
     except Exception as e:

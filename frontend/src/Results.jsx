@@ -5,6 +5,7 @@ import { Copy, Check, Download, ChevronDown, ChevronRight, FileSpreadsheet, File
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { API_BASE } from './config';
+import SentenceHeatmap from './SentenceHeatmap';
 
 const AnimatedScore = ({ targetScore }) => {
   const [score, setScore] = useState(0);
@@ -58,7 +59,7 @@ const ConfidenceBadge = ({ score, reasoning }) => {
   );
 };
 
-const Results = ({ evaluationId, onBack, onReevaluate }) => {
+const Results = ({ evaluationId, onBack, onReevaluate, onComplete }) => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -90,11 +91,13 @@ const Results = ({ evaluationId, onBack, onReevaluate }) => {
           setData(json);
           setLoading(false);
           clearInterval(intervalId);
+          onComplete?.(json);
         }
       } catch (err) {
         setError(err.message);
         setLoading(false);
         clearInterval(intervalId);
+        onComplete?.(null);
       }
     };
 
@@ -287,6 +290,13 @@ ${breakdown.hallucination.reasoning}
     if (data.reference_answer) addTextSection("Reference Answer:", data.reference_answer);
     if (data.source_document) addTextSection("Source Context Provided:", "Yes");
     addTextSection("Final Verdict Reasoning:", consolidated_reasoning);
+
+    if (bd.hallucination?.flagged_claims && bd.hallucination.flagged_claims.length > 0) {
+      const claimsText = bd.hallucination.flagged_claims.map((fc, i) => 
+        `[Claim ${i+1} - ${fc.status ? fc.status.toUpperCase() : 'FLAGGED'}]: "${fc.statement}" -> ${fc.explanation || ''}`
+      ).join("\n\n");
+      addTextSection("Detected Hallucinations & Questionable Claims:", claimsText);
+    }
     
     // Add page numbers
     const pageCount = doc.internal.getNumberOfPages();
@@ -487,6 +497,15 @@ ${breakdown.hallucination.reasoning}
           </div>
         </div>
       </div>
+      
+      {/* Interactive Sentence Hallucination Heatmap */}
+      <SentenceHeatmap 
+        aiResponse={data.ai_response}
+        sourceDocument={data.source_document}
+        referenceAnswer={data.reference_answer}
+        hallucinationScore={breakdown?.hallucination?.score ?? 5}
+        flaggedClaims={breakdown?.hallucination?.flagged_claims || []}
+      />
       
       {/* Visual Diff Tool */}
       {data.reference_answer && (

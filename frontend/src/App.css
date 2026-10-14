@@ -782,3 +782,151 @@ body {
 .recharts-polar-grid-concentric polygon {
   stroke: var(--input-border);
 }
+
+/* Sidebar Telemetry Footer */
+.sidebar-footer {
+  padding: 1rem 1rem 1.2rem;
+  border-top: 1px solid var(--sidebar-border);
+  background: var(--sidebar-bg);
+}
+
+.telemetry-card {
+  padding: 0.75rem 0.9rem;
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: var(--radius);
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  transition: all 0.25s ease;
+}
+
+.telemetry-card:hover {
+  border-color: var(--input-focus);
+  box-shadow: 0 0 12px var(--input-glow);
+}
+
+.telemetry-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary);
+}
+
+.telemetry-status-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.telemetry-pulse-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: inline-block;
+  transition: all 0.3s ease;
+}
+
+.telemetry-pulse-dot.healthy {
+  background-color: var(--btn-bg);
+  box-shadow: 0 0 8px var(--btn-bg);
+  animation: pulseGlowHealthy 2.2s infinite;
+}
+
+.telemetry-pulse-dot.busy {
+  background-color: #f59e0b;
+  box-shadow: 0 0 8px #f59e0b;
+  animation: pulseGlowBusy 1s infinite;
+}
+
+.telemetry-pulse-dot.offline {
+  background-color: #ef4444;
+  box-shadow: 0 0 6px #ef4444;
+}
+
+@keyframes pulseGlowHealthy {
+  0% { transform: scale(0.92); box-shadow: 0 0 0 0 rgba(182, 242, 54, 0.7); }
+  70% { transform: scale(1.1); box-shadow: 0 0 0 7px rgba(182, 242, 54, 0); }
+  100% { transform: scale(0.92); box-shadow: 0 0 0 0 rgba(182, 242, 54, 0); }
+}
+
+@keyframes pulseGlowBusy {
+  0% { transform: scale(0.92); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7); }
+  70% { transform: scale(1.15); box-shadow: 0 0 0 7px rgba(245, 158, 11, 0); }
+  100% { transform: scale(0.92); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+}
+
+.telemetry-metric {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.spin-animation {
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Document Dropzone & Extracted File Chip */
+.context-dropzone-container {
+  position: relative;
+  border-radius: var(--radius);
+  transition: all 0.25s ease;
+}
+
+.context-dropzone-container.dragging {
+  outline: 2px dashed var(--btn-bg);
+  outline-offset: -2px;
+  background: var(--input-glow);
+}
+
+.context-dropzone-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+  border-radius: var(--radius);
+  z-index: 10;
+  color: var(--btn-bg);
+  font-weight: 600;
+  font-size: 0.95rem;
+  pointer-events: none;
+  animation: fadeIn 0.2s ease;
+}
+
+[data-theme='light'] .context-dropzone-overlay {
+  background: rgba(255, 255, 255, 0.88);
+  color: #1a1a1a;
+}
+
+.extracted-file-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px;
+  background: var(--input-bg);
+  border: 1px solid var(--btn-bg);
+  border-radius: 6px;
+  font-size: 0.8rem;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+  box-shadow: 0 0 8px var(--btn-glow);
+}

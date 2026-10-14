@@ -310,6 +310,7 @@ def get_evaluation_result(eval_id: int, db: Session = Depends(database.get_db)):
         "question": record.question,
         "ai_response": record.ai_response,
         "reference_answer": record.reference_answer,
+        "source_document": record.source_document,
         "created_at": record.created_at,
         "updated_at": record.updated_at,
         "result": result_data

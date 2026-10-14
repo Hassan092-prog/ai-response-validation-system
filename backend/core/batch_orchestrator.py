@@ -24,7 +24,7 @@ def evaluate_batch_row(record_id: int, question: str, ai_response: str, referenc
         "  \"relevance\": {\"score\": <1-5>, \"reasoning\": \"<str>\"},\n"
         "  \"accuracy\": {\"score\": <1-5>, \"reasoning\": \"<str>\", \"supporting_evidence\": \"<str>\"},\n"
         "  \"completeness\": {\"score\": <1-5>, \"reasoning\": \"<str>\", \"addressed_aspects\": [\"<str>\"], \"missing_aspects\": [\"<str>\"]},\n"
-        "  \"hallucination\": {\"score\": <1-5>, \"reasoning\": \"<str>\"},\n"
+        "  \"hallucination\": {\"score\": <1-5>, \"reasoning\": \"<str>\", \"flagged_claims\": [{\"statement\": \"<str>\", \"status\": \"unsupported|contradicted\", \"explanation\": \"<str>\", \"context_quote\": \"<str>\"}]},\n"
         "  \"major_issues\": [\"<str>\"],\n"
         "  \"consolidated_reasoning\": \"<2-3 sentence executive summary>\"\n"
         "}\n"

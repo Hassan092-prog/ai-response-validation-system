@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { PlusCircle, History, BarChart3, Moon, Sun, ChevronDown, ChevronRight, Paperclip, Download, FileSpreadsheet, FileJson, Eye, EyeOff, Database, ShieldCheck, Inbox } from 'lucide-react'
+import React, { useState, useEffect, useRef } from 'react'
+import { PlusCircle, History, BarChart3, Moon, Sun, ChevronDown, ChevronRight, Paperclip, Download, FileSpreadsheet, FileJson, Eye, EyeOff, Database, ShieldCheck, Inbox, Activity, Zap, RefreshCw, UploadCloud, FileText, X } from 'lucide-react'
 import './App.css'
 import Results from './Results'
 import BatchAnalyticsView from './BatchAnalyticsView'
@@ -21,9 +21,71 @@ function App() {
   const [evaluationId, setEvaluationId] = useState(null)
   const [testCaseIndex, setTestCaseIndex] = useState(0)
   
+  // Phase 4: Document Ingestion & Drag-Drop State
+  const [isDraggingContext, setIsDraggingContext] = useState(false)
+  const [extractedFileInfo, setExtractedFileInfo] = useState(null)
+  
   const [theme, setTheme] = useState('light')
   const [history, setHistory] = useState([])
   const [kpis, setKpis] = useState({ total_evaluations: 0, total_singles: 0, total_batches: 0 })
+  
+  // Real-Time System Telemetry State
+  const [telemetry, setTelemetry] = useState({
+    status: 'healthy',
+    pingLatency: null,
+    lastEvalLatency: null,
+    version: '1.0.0'
+  })
+  const [isCheckingHealth, setIsCheckingHealth] = useState(false)
+
+  // Real-Time Evaluation Stopwatch
+  const [isEvaluating, setIsEvaluating] = useState(false)
+  const [evalDuration, setEvalDuration] = useState('0.0')
+  const [lastEvalDuration, setLastEvalDuration] = useState(null)
+  const evalDurationRef = useRef('0.0')
+
+  useEffect(() => {
+    let timerId
+    if (isEvaluating) {
+      const startTime = performance.now()
+      timerId = setInterval(() => {
+        const val = ((performance.now() - startTime) / 1000).toFixed(1)
+        evalDurationRef.current = val
+        setEvalDuration(val)
+      }, 100)
+    }
+    return () => clearInterval(timerId)
+  }, [isEvaluating])
+
+  const checkHealth = async () => {
+    setIsCheckingHealth(true)
+    const t0 = performance.now()
+    try {
+      const res = await fetch(`${API_BASE}/api/health`)
+      const t1 = performance.now()
+      if (res.ok) {
+        const json = await res.json()
+        setTelemetry(prev => ({
+          ...prev,
+          status: 'healthy',
+          pingLatency: Math.max(1, Math.round(t1 - t0)),
+          version: json.version || '1.0.0'
+        }))
+      } else {
+        setTelemetry(prev => ({ ...prev, status: 'offline', pingLatency: null }))
+      }
+    } catch {
+      setTelemetry(prev => ({ ...prev, status: 'offline', pingLatency: null }))
+    } finally {
+      setIsCheckingHealth(false)
+    }
+  }
+
+  useEffect(() => {
+    checkHealth()
+    const interval = setInterval(checkHealth, 20000)
+    return () => clearInterval(interval)
+  }, [])
   
   // Layout Navigation State
   const [activeTab, setActiveTab] = useState('new') // 'new' | 'history' | 'analytics'
@@ -169,6 +231,7 @@ function App() {
     
     setFormData(testCases[testCaseIndex]);
     setTestCaseIndex((prevIndex) => (prevIndex + 1) % testCases.length);
+    setExtractedFileInfo(null);
   }
 
   const clearInput = () => {
@@ -179,15 +242,21 @@ function App() {
       source_document: ''
     })
     setEvaluationId(null)
+    setIsEvaluating(false)
+    setExtractedFileInfo(null)
     setStatus({ type: '', message: '' })
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setIsSubmitting(true)
+    setIsEvaluating(true)
+    evalDurationRef.current = '0.0'
+    setEvalDuration('0.0')
     setStatus({ type: '', message: '' })
 
     try {
+      const startTime = performance.now()
       const response = await fetch(`${API_BASE}/api/evaluate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -202,43 +271,51 @@ function App() {
       const data = await response.json()
 
       if (response.ok) {
+        const elapsed = Math.round(performance.now() - startTime)
+        setTelemetry(prev => ({ ...prev, lastEvalLatency: elapsed }))
         setEvaluationId(data.id)
         fetchHistory()
       } else {
+        setIsEvaluating(false)
         setStatus({ type: 'error', message: `Error: ${data.detail ? JSON.stringify(data.detail) : 'Failed to submit'}` })
       }
     } catch (error) {
+      setIsEvaluating(false)
       console.error(error)
-      setStatus({ type: 'error', message: 'Failed to connect to the backend server. Is it running on port 8005?' })
+      setStatus({ type: 'error', message: 'Failed to connect to the backend server. Please ensure start.py is running.' })
     } finally {
       setIsSubmitting(false)
     }
   }
 
-  const handleFileUpload = async (e) => {
-    const file = e.target.files[0]
+  const processDocumentFile = async (file) => {
     if (!file) return
 
     setIsUploading(true)
-    setStatus({ type: '', message: 'Extracting text from document...' })
+    setStatus({ type: '', message: `Extracting text from ${file.name}...` })
     
-    const formData = new FormData()
-    formData.append('file', file)
+    const uploadData = new FormData()
+    uploadData.append('file', file)
 
     try {
       const response = await fetch(`${API_BASE}/api/extract-text`, {
         method: 'POST',
-        body: formData
+        body: uploadData
       })
 
       const data = await response.json()
 
       if (response.ok) {
+        const text = data.extracted_text || ''
+        const wordCount = text.split(/\s+/).filter(Boolean).length
+        const sizeKb = (file.size / 1024).toFixed(1) + ' KB'
+
         setFormData(prev => ({
           ...prev,
-          source_document: prev.source_document ? prev.source_document + "\n\n" + data.extracted_text : data.extracted_text
+          source_document: prev.source_document ? prev.source_document + "\n\n" + text : text
         }))
-        setStatus({ type: 'success', message: 'Text extracted successfully!' })
+        setExtractedFileInfo({ name: file.name, size: sizeKb, wordCount })
+        setStatus({ type: 'success', message: `Extracted ${wordCount} words from ${file.name}!` })
       } else {
         setStatus({ type: 'error', message: `Error: ${data.detail || 'Failed to extract text'}` })
       }
@@ -247,7 +324,36 @@ function App() {
       setStatus({ type: 'error', message: 'Failed to connect to the backend server.' })
     } finally {
       setIsUploading(false)
-      e.target.value = null
+    }
+  }
+
+  const handleFileUpload = async (e) => {
+    const file = e.target.files[0]
+    if (file) {
+      await processDocumentFile(file)
+    }
+    e.target.value = null
+  }
+
+  const handleContextDragOver = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setIsDraggingContext(true)
+  }
+
+  const handleContextDragLeave = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setIsDraggingContext(false)
+  }
+
+  const handleContextDrop = async (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setIsDraggingContext(false)
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      const file = e.dataTransfer.files[0]
+      await processDocumentFile(file)
     }
   }
 
@@ -290,6 +396,60 @@ function App() {
             <FileSpreadsheet className="icon" size={18} /> Batch Process
           </button>
         </nav>
+
+        {/* Real-Time Telemetry Footer */}
+        <div className="sidebar-footer">
+          <div className="telemetry-card">
+            <div className="telemetry-header">
+              <span style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <Activity size={13} color="var(--btn-bg)" /> System Telemetry
+              </span>
+              <button
+                onClick={checkHealth}
+                title="Ping Backend API"
+                style={{ background: 'none', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', padding: 0, display: 'flex', alignItems: 'center' }}
+              >
+                <RefreshCw size={11} className={isCheckingHealth ? 'spin-animation' : ''} />
+              </button>
+            </div>
+            
+            <div className="telemetry-status-row">
+              <span className={`telemetry-pulse-dot ${isEvaluating ? 'busy' : telemetry.status}`} />
+              <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-primary)' }}>
+                {isEvaluating ? `Evaluating (${evalDuration}s)...` : telemetry.status === 'healthy' ? 'API Online' : telemetry.status === 'offline' ? 'API Offline' : 'Connecting...'}
+              </span>
+            </div>
+
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '2px', borderTop: '1px solid var(--input-border)', paddingTop: '4px' }}>
+              <span style={{ fontSize: '0.7rem', color: 'var(--text-secondary)' }}>Latency</span>
+              <span className="telemetry-metric">
+                <Zap size={11} color="var(--btn-bg)" />
+                {telemetry.pingLatency !== null ? `${telemetry.pingLatency}ms` : '--'}
+              </span>
+            </div>
+
+            {isEvaluating ? (
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ fontSize: '0.7rem', color: 'var(--text-secondary)' }}>Stopwatch</span>
+                <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#f59e0b' }}>
+                  ⏱️ {evalDuration}s
+                </span>
+              </div>
+            ) : lastEvalDuration ? (
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ fontSize: '0.7rem', color: 'var(--text-secondary)' }}>Last Eval</span>
+                <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--btn-bg)' }}>
+                  ⏱️ {lastEvalDuration}s
+                </span>
+              </div>
+            ) : null}
+
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <span style={{ fontSize: '0.7rem', color: 'var(--text-secondary)' }}>Judge Agents</span>
+              <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-primary)' }}>4 Active</span>
+            </div>
+          </div>
+        </div>
       </aside>
 
       {/* Main Content Area */}
@@ -363,10 +523,53 @@ function App() {
                             <input type="file" accept=".pdf,.docx,.txt,.md" style={{ display: 'none' }} onChange={handleFileUpload} disabled={isUploading} />
                           </label>
                         </div>
-                        <textarea 
-                          name="source_document" value={formData.source_document} onChange={handleChange}
-                          className="form-control large" placeholder="Paste source context or RAG chunks here"
-                        />
+
+                        {/* Extracted File Badge Chip */}
+                        {extractedFileInfo && (
+                          <div className="extracted-file-chip">
+                            <FileText size={14} color="var(--btn-bg)" />
+                            <span>
+                              <strong>{extractedFileInfo.name}</strong> ({extractedFileInfo.size}) • {extractedFileInfo.wordCount} words extracted
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setExtractedFileInfo(null)
+                                setFormData(prev => ({ ...prev, source_document: '' }))
+                              }}
+                              title="Clear extracted document"
+                              style={{ background: 'none', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', padding: 0, display: 'flex', alignItems: 'center' }}
+                            >
+                              <X size={13} />
+                            </button>
+                          </div>
+                        )}
+
+                        {/* Drag and Drop Container */}
+                        <div 
+                          className={`context-dropzone-container ${isDraggingContext ? 'dragging' : ''}`}
+                          onDragOver={handleContextDragOver}
+                          onDragLeave={handleContextDragLeave}
+                          onDrop={handleContextDrop}
+                        >
+                          {isDraggingContext && (
+                            <div className="context-dropzone-overlay">
+                              <UploadCloud size={32} />
+                              <span>Drop PDF, DOCX, or TXT file to extract</span>
+                            </div>
+                          )}
+                          <textarea 
+                            name="source_document" value={formData.source_document} onChange={handleChange}
+                            className="form-control large" placeholder="Paste source context or drag & drop a PDF/TXT document here..."
+                            style={{ minHeight: '160px' }}
+                          />
+                        </div>
+
+                        {formData.source_document && (
+                          <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textAlign: 'right', marginTop: '4px' }}>
+                            {formData.source_document.length} characters • {formData.source_document.split(/\s+/).filter(Boolean).length} words
+                          </div>
+                        )}
                       </div>
                     </div>
 
@@ -380,7 +583,15 @@ function App() {
               
               {evaluationId && (
                 <div style={{ marginTop: '3rem', paddingTop: '2rem', borderTop: '1px solid var(--border-color)' }}>
-                  <Results evaluationId={evaluationId} onBack={() => setEvaluationId(null)} onReevaluate={handleReevaluate} />
+                  <Results 
+                    evaluationId={evaluationId} 
+                    onBack={() => { setEvaluationId(null); setIsEvaluating(false); }} 
+                    onReevaluate={handleReevaluate} 
+                    onComplete={() => {
+                      setIsEvaluating(false);
+                      setLastEvalDuration(evalDurationRef.current);
+                    }}
+                  />
                 </div>
               )}
             </div>

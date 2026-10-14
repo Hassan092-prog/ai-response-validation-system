@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Loader2, CheckCircle2, BarChart3, Download, Eye, EyeOff } from 'lucide-react';
+import { Loader2, CheckCircle2, BarChart3, Download, Eye, EyeOff, Search, AlertTriangle, XCircle, Filter } from 'lucide-react';
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
@@ -11,6 +11,10 @@ const BatchAnalyticsView = ({ batchId }) => {
   const [batchData, setBatchData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [expandedRecordId, setExpandedRecordId] = useState(null);
+
+  // Phase 3: Smart Risk Filtering State
+  const [filterMode, setFilterMode] = useState('all'); // 'all' | 'hallucinations' | 'failed' | 'passed'
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     const fetchBatch = async () => {
@@ -70,6 +74,53 @@ const BatchAnalyticsView = ({ batchId }) => {
         { name: 'Hallucination', score: Math.round((totalHallucination / count) * 20) }
       ]
     };
+  }, [batchData]);
+
+  // Phase 3: Filtered Records Calculation
+  const filteredRecords = useMemo(() => {
+    if (!batchData?.records) return [];
+    return batchData.records.filter(r => {
+      if (filterMode === 'hallucinations') {
+        const hasHallucination = (r.score_hallucination !== null && r.score_hallucination <= 2) || 
+          r.result?.breakdown?.hallucination?.flagged_claims?.length > 0;
+        if (!hasHallucination) return false;
+      } else if (filterMode === 'failed') {
+        const isFailed = r.status === 'failed' || (r.final_score !== null && r.final_score < 50) || 
+          (r.score_hallucination !== null && r.score_hallucination <= 2) || (r.score_accuracy !== null && r.score_accuracy <= 1);
+        if (!isFailed) return false;
+      } else if (filterMode === 'passed') {
+        const isPassed = r.final_score !== null && r.final_score >= 80 && (r.score_hallucination === null || r.score_hallucination > 2);
+        if (!isPassed) return false;
+      }
+
+      if (searchTerm.trim()) {
+        const term = searchTerm.toLowerCase();
+        const qMatch = (r.question || '').toLowerCase().includes(term);
+        const aMatch = (r.ai_response || '').toLowerCase().includes(term);
+        if (!qMatch && !aMatch) return false;
+      }
+
+      return true;
+    });
+  }, [batchData, filterMode, searchTerm]);
+
+  // Phase 3: Dynamic Filter Counts
+  const filterCounts = useMemo(() => {
+    if (!batchData?.records) return { all: 0, hallucinations: 0, failed: 0, passed: 0 };
+    let hallucinations = 0;
+    let failed = 0;
+    let passed = 0;
+    for (const r of batchData.records) {
+      if ((r.score_hallucination !== null && r.score_hallucination <= 2) || r.result?.breakdown?.hallucination?.flagged_claims?.length > 0) {
+        hallucinations++;
+      }
+      if (r.status === 'failed' || (r.final_score !== null && r.final_score < 50) || (r.score_hallucination !== null && r.score_hallucination <= 2) || (r.score_accuracy !== null && r.score_accuracy <= 1)) {
+        failed++;
+      } else if (r.final_score !== null && r.final_score >= 80) {
+        passed++;
+      }
+    }
+    return { all: batchData.records.length, hallucinations, failed, passed };
   }, [batchData]);
 
   const handleExportBatch = () => {
@@ -307,8 +358,107 @@ const BatchAnalyticsView = ({ batchId }) => {
         </div>
       )}
 
-      {/* Individual Records Table */}
-      <h3 style={{ marginBottom: '1rem' }}>Individual Batch Responses</h3>
+      {/* Individual Records Table Header & Filters */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', marginBottom: '1.2rem' }}>
+        <h3 style={{ margin: 0 }}>Individual Batch Responses</h3>
+
+        {/* Quick Filter Buttons & Search */}
+        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
+          <button
+            onClick={() => setFilterMode('all')}
+            style={{
+              padding: '4px 10px',
+              fontSize: '0.8rem',
+              borderRadius: '20px',
+              cursor: 'pointer',
+              border: '1px solid var(--input-border)',
+              background: filterMode === 'all' ? 'var(--text-primary)' : 'var(--input-bg)',
+              color: filterMode === 'all' ? 'var(--bg-color)' : 'var(--text-primary)',
+              fontWeight: 600
+            }}
+          >
+            All ({filterCounts.all})
+          </button>
+
+          <button
+            onClick={() => setFilterMode('hallucinations')}
+            style={{
+              padding: '4px 10px',
+              fontSize: '0.8rem',
+              borderRadius: '20px',
+              cursor: 'pointer',
+              border: '1px solid rgba(239, 68, 68, 0.4)',
+              background: filterMode === 'hallucinations' ? '#ef4444' : 'rgba(239, 68, 68, 0.1)',
+              color: filterMode === 'hallucinations' ? '#ffffff' : '#ef4444',
+              fontWeight: 600,
+              display: 'flex',
+              alignItems: 'center',
+              gap: '4px'
+            }}
+          >
+            <AlertTriangle size={12} /> Hallucinations ({filterCounts.hallucinations})
+          </button>
+
+          <button
+            onClick={() => setFilterMode('failed')}
+            style={{
+              padding: '4px 10px',
+              fontSize: '0.8rem',
+              borderRadius: '20px',
+              cursor: 'pointer',
+              border: '1px solid rgba(245, 158, 11, 0.4)',
+              background: filterMode === 'failed' ? '#f59e0b' : 'rgba(245, 158, 11, 0.1)',
+              color: filterMode === 'failed' ? '#000000' : '#f59e0b',
+              fontWeight: 600,
+              display: 'flex',
+              alignItems: 'center',
+              gap: '4px'
+            }}
+          >
+            <XCircle size={12} /> Failed ({filterCounts.failed})
+          </button>
+
+          <button
+            onClick={() => setFilterMode('passed')}
+            style={{
+              padding: '4px 10px',
+              fontSize: '0.8rem',
+              borderRadius: '20px',
+              cursor: 'pointer',
+              border: '1px solid rgba(34, 197, 94, 0.4)',
+              background: filterMode === 'passed' ? 'var(--btn-bg)' : 'rgba(34, 197, 94, 0.1)',
+              color: filterMode === 'passed' ? 'var(--btn-text)' : '#22c55e',
+              fontWeight: 600,
+              display: 'flex',
+              alignItems: 'center',
+              gap: '4px'
+            }}
+          >
+            <CheckCircle2 size={12} /> Passed ({filterCounts.passed})
+          </button>
+
+          <div style={{ position: 'relative', minWidth: '180px', marginLeft: '6px' }}>
+            <Search size={13} style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)' }} />
+            <input
+              type="text"
+              placeholder="Search queries..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              style={{
+                width: '100%',
+                padding: '5px 10px 5px 28px',
+                background: 'var(--input-bg)',
+                border: '1px solid var(--input-border)',
+                borderRadius: '16px',
+                color: 'var(--text-primary)',
+                fontSize: '0.8rem',
+                outline: 'none'
+              }}
+            />
+          </div>
+        </div>
+      </div>
+
       <div style={{ overflowX: 'auto', background: 'var(--bg-color)', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
           <thead>
@@ -320,7 +470,14 @@ const BatchAnalyticsView = ({ batchId }) => {
             </tr>
           </thead>
           <tbody>
-            {batchData.records.map(record => (
+            {filteredRecords.length === 0 ? (
+              <tr>
+                <td colSpan="4" style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
+                  No batch records match the active filter criteria.
+                </td>
+              </tr>
+            ) : (
+              filteredRecords.map(record => (
               <React.Fragment key={record.id}>
                 <tr style={{ borderBottom: '1px solid var(--border-color)' }}>
                   <td style={{ padding: '1rem' }}>
@@ -357,7 +514,7 @@ const BatchAnalyticsView = ({ batchId }) => {
                   </tr>
                 )}
               </React.Fragment>
-            ))}
+            )))}
           </tbody>
         </table>
       </div>

@@ -35,10 +35,12 @@ def _call_llm_json(system_prompt: str, user_prompt: str, default_score: int = 0,
             
             error_msg = f"Evaluation failed after {retries} attempts: {str(e)}"
             return {
+                "score": default_score,
+                "reasoning": error_msg,
                 "relevance": {"score": default_score, "reasoning": error_msg},
                 "accuracy": {"score": default_score, "reasoning": error_msg, "supporting_evidence": ""},
                 "completeness": {"score": default_score, "reasoning": error_msg, "addressed_aspects": [], "missing_aspects": []},
-                "hallucination": {"score": default_score, "reasoning": error_msg},
+                "hallucination": {"score": default_score, "reasoning": error_msg, "flagged_claims": []},
                 "major_issues": ["API Connection Error"],
                 "consolidated_reasoning": error_msg
             }

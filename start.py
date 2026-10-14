@@ -5,6 +5,20 @@ import time
 import signal
 from pathlib import Path
 
+def kill_process_on_port(port):
+    try:
+        if os.name == 'nt':
+            output = subprocess.check_output(f"netstat -ano | findstr :{port}", shell=True).decode()
+            for line in output.strip().split("\n"):
+                parts = line.split()
+                if len(parts) >= 5 and f":{port}" in parts[1]:
+                    pid = parts[-1]
+                    subprocess.call(["taskkill", "/F", "/PID", pid], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        else:
+            subprocess.run(["fuser", "-k", f"{port}/tcp"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    except Exception:
+        pass
+
 def main():
     root_dir = Path(__file__).resolve().parent
     frontend_dir = root_dir / "frontend"
@@ -14,6 +28,10 @@ def main():
     if not frontend_dir.exists():
         print(f"Error: Frontend directory not found at {frontend_dir}")
         sys.exit(1)
+
+    # Free up port 8005 if a previous server was left running
+    kill_process_on_port(8005)
+    time.sleep(1)
 
     processes = []
     

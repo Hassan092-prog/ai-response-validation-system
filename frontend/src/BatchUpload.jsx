@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import { FileSpreadsheet, Loader2, CheckCircle2, BarChart3, Download, RefreshCw } from 'lucide-react';
+import { FileSpreadsheet, Loader2, CheckCircle2, BarChart3, Download, RefreshCw, Eye, EyeOff, Search, AlertTriangle, XCircle, Filter } from 'lucide-react';
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import Results from './Results';
 import './App.css';
 import { API_BASE } from './config';
 
@@ -13,6 +14,11 @@ const BatchUpload = () => {
   const [isPolling, setIsPolling] = useState(false);
   const lastCompletedCount = useRef(0);
   const [toastState, setToastState] = useState({ show: false, message: '' });
+
+  // Phase 3: Smart Risk Filtering & In-Row Claim Inspector State
+  const [filterMode, setFilterMode] = useState('all'); // 'all' | 'hallucinations' | 'failed' | 'passed'
+  const [searchTerm, setSearchTerm] = useState('');
+  const [expandedRecordId, setExpandedRecordId] = useState(null);
 
   const batchAnalytics = useMemo(() => {
     if (!batchData || !batchData.records || isPolling || batchData.progress.completed !== batchData.progress.total || batchData.progress.total === 0) {
@@ -58,6 +64,53 @@ const BatchUpload = () => {
       ]
     };
   }, [batchData, isPolling]);
+
+  // Phase 3: Filtered Records Calculation
+  const filteredRecords = useMemo(() => {
+    if (!batchData?.records) return [];
+    return batchData.records.filter(r => {
+      if (filterMode === 'hallucinations') {
+        const hasHallucination = (r.score_hallucination !== null && r.score_hallucination <= 2) || 
+          r.result?.breakdown?.hallucination?.flagged_claims?.length > 0;
+        if (!hasHallucination) return false;
+      } else if (filterMode === 'failed') {
+        const isFailed = r.status === 'failed' || (r.final_score !== null && r.final_score < 50) || 
+          (r.score_hallucination !== null && r.score_hallucination <= 2) || (r.score_accuracy !== null && r.score_accuracy <= 1);
+        if (!isFailed) return false;
+      } else if (filterMode === 'passed') {
+        const isPassed = r.final_score !== null && r.final_score >= 80 && (r.score_hallucination === null || r.score_hallucination > 2);
+        if (!isPassed) return false;
+      }
+
+      if (searchTerm.trim()) {
+        const term = searchTerm.toLowerCase();
+        const qMatch = (r.question || '').toLowerCase().includes(term);
+        const aMatch = (r.ai_response || '').toLowerCase().includes(term);
+        if (!qMatch && !aMatch) return false;
+      }
+
+      return true;
+    });
+  }, [batchData, filterMode, searchTerm]);
+
+  // Phase 3: Dynamic Filter Counts
+  const filterCounts = useMemo(() => {
+    if (!batchData?.records) return { all: 0, hallucinations: 0, failed: 0, passed: 0 };
+    let hallucinations = 0;
+    let failed = 0;
+    let passed = 0;
+    for (const r of batchData.records) {
+      if ((r.score_hallucination !== null && r.score_hallucination <= 2) || r.result?.breakdown?.hallucination?.flagged_claims?.length > 0) {
+        hallucinations++;
+      }
+      if (r.status === 'failed' || (r.final_score !== null && r.final_score < 50) || (r.score_hallucination !== null && r.score_hallucination <= 2) || (r.score_accuracy !== null && r.score_accuracy <= 1)) {
+        failed++;
+      } else if (r.final_score !== null && r.final_score >= 80) {
+        passed++;
+      }
+    }
+    return { all: batchData.records.length, hallucinations, failed, passed };
+  }, [batchData]);
 
   const handleExportBatch = () => {
     if (!batchData || !batchData.records) return;
@@ -249,36 +302,190 @@ const BatchUpload = () => {
           </div>
 
           {batchData && batchData.records && (
-            <div style={{ marginTop: '2rem', overflowX: 'auto' }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
-                <thead>
-                  <tr style={{ borderBottom: '2px solid var(--border-color)' }}>
-                    <th style={{ padding: '1rem', color: 'var(--text-secondary)' }}>Status</th>
-                    <th style={{ padding: '1rem', color: 'var(--text-secondary)' }}>Question Preview</th>
-                    <th style={{ padding: '1rem', color: 'var(--text-secondary)' }}>Final Score</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {batchData.records.map(record => (
-                    <tr key={record.id} style={{ borderBottom: '1px solid var(--border-color)' }}>
-                      <td style={{ padding: '1rem' }}>
-                        <span className={`status-dot ${record.status}`}></span>
-                        <span style={{ marginLeft: '0.5rem', fontSize: '0.85rem', textTransform: 'capitalize' }}>{record.status}</span>
-                      </td>
-                      <td style={{ padding: '1rem', maxWidth: '300px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        {record.question}
-                      </td>
-                      <td style={{ padding: '1rem' }}>
-                        {record.final_score !== null ? (
-                          <span className={`score-badge ${record.final_score >= 80 ? 'high' : record.final_score >= 50 ? 'medium' : 'low'}`} style={{ fontSize: '0.8rem', padding: '0.2rem 0.5rem' }}>
-                            {record.final_score}/100
-                          </span>
-                        ) : '-'}
-                      </td>
+            <div style={{ marginTop: '2rem' }}>
+              {/* Smart Quick-Filter Bar & Search */}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', marginBottom: '1.2rem' }}>
+                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
+                  <button
+                    onClick={() => setFilterMode('all')}
+                    style={{
+                      padding: '5px 12px',
+                      fontSize: '0.85rem',
+                      borderRadius: '20px',
+                      cursor: 'pointer',
+                      border: '1px solid var(--input-border)',
+                      background: filterMode === 'all' ? 'var(--text-primary)' : 'var(--input-bg)',
+                      color: filterMode === 'all' ? 'var(--bg-color)' : 'var(--text-primary)',
+                      fontWeight: 600,
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '5px'
+                    }}
+                  >
+                    All Records ({filterCounts.all})
+                  </button>
+
+                  <button
+                    onClick={() => setFilterMode('hallucinations')}
+                    style={{
+                      padding: '5px 12px',
+                      fontSize: '0.85rem',
+                      borderRadius: '20px',
+                      cursor: 'pointer',
+                      border: '1px solid rgba(239, 68, 68, 0.4)',
+                      background: filterMode === 'hallucinations' ? '#ef4444' : 'rgba(239, 68, 68, 0.1)',
+                      color: filterMode === 'hallucinations' ? '#ffffff' : '#ef4444',
+                      fontWeight: 600,
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '5px'
+                    }}
+                  >
+                    <AlertTriangle size={14} /> Hallucinations Only ({filterCounts.hallucinations})
+                  </button>
+
+                  <button
+                    onClick={() => setFilterMode('failed')}
+                    style={{
+                      padding: '5px 12px',
+                      fontSize: '0.85rem',
+                      borderRadius: '20px',
+                      cursor: 'pointer',
+                      border: '1px solid rgba(245, 158, 11, 0.4)',
+                      background: filterMode === 'failed' ? '#f59e0b' : 'rgba(245, 158, 11, 0.1)',
+                      color: filterMode === 'failed' ? '#000000' : '#f59e0b',
+                      fontWeight: 600,
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '5px'
+                    }}
+                  >
+                    <XCircle size={14} /> Failed Only ({filterCounts.failed})
+                  </button>
+
+                  <button
+                    onClick={() => setFilterMode('passed')}
+                    style={{
+                      padding: '5px 12px',
+                      fontSize: '0.85rem',
+                      borderRadius: '20px',
+                      cursor: 'pointer',
+                      border: '1px solid rgba(34, 197, 94, 0.4)',
+                      background: filterMode === 'passed' ? 'var(--btn-bg)' : 'rgba(34, 197, 94, 0.1)',
+                      color: filterMode === 'passed' ? 'var(--btn-text)' : '#22c55e',
+                      fontWeight: 600,
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '5px'
+                    }}
+                  >
+                    <CheckCircle2 size={14} /> Passed Only ({filterCounts.passed})
+                  </button>
+                </div>
+
+                {/* Keyword Search */}
+                <div style={{ position: 'relative', minWidth: '220px' }}>
+                  <Search size={14} style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)' }} />
+                  <input
+                    type="text"
+                    placeholder="Search batch queries..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    style={{
+                      width: '100%',
+                      padding: '6px 12px 6px 32px',
+                      background: 'var(--input-bg)',
+                      border: '1px solid var(--input-border)',
+                      borderRadius: '20px',
+                      color: 'var(--text-primary)',
+                      fontSize: '0.85rem',
+                      outline: 'none'
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* Filterable Table */}
+              <div style={{ overflowX: 'auto', background: 'var(--input-bg)', borderRadius: '10px', border: '1px solid var(--input-border)' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+                  <thead>
+                    <tr style={{ borderBottom: '1px solid var(--input-border)', color: 'var(--text-secondary)', fontSize: '0.8rem', textTransform: 'uppercase' }}>
+                      <th style={{ padding: '1rem' }}>Status</th>
+                      <th style={{ padding: '1rem' }}>Question Preview</th>
+                      <th style={{ padding: '1rem' }}>Score</th>
+                      <th style={{ padding: '1rem' }}>Hallucination Risk</th>
+                      <th style={{ padding: '1rem', textAlign: 'right' }}>Claim Inspector</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {filteredRecords.length === 0 ? (
+                      <tr>
+                        <td colSpan="5" style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
+                          No records match the active filter criteria.
+                        </td>
+                      </tr>
+                    ) : (
+                      filteredRecords.map(record => {
+                        const isExpanded = expandedRecordId === record.id;
+                        const hasHallucination = (record.score_hallucination !== null && record.score_hallucination <= 2) || 
+                          record.result?.breakdown?.hallucination?.flagged_claims?.length > 0;
+
+                        return (
+                          <React.Fragment key={record.id}>
+                            <tr style={{ borderBottom: '1px solid var(--input-border)', background: isExpanded ? 'var(--sidebar-hover)' : 'transparent' }}>
+                              <td style={{ padding: '1rem' }}>
+                                <span className={`status-dot ${record.status}`}></span>
+                                <span style={{ marginLeft: '0.5rem', fontSize: '0.85rem', textTransform: 'capitalize' }}>{record.status}</span>
+                              </td>
+                              <td style={{ padding: '1rem', maxWidth: '320px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                {record.question}
+                              </td>
+                              <td style={{ padding: '1rem' }}>
+                                {record.final_score !== null ? (
+                                  <span className={`score-badge ${record.final_score >= 80 ? 'high' : record.final_score >= 50 ? 'medium' : 'low'}`} style={{ fontSize: '0.8rem', padding: '0.2rem 0.5rem' }}>
+                                    {record.final_score}/100
+                                  </span>
+                                ) : '-'}
+                              </td>
+                              <td style={{ padding: '1rem' }}>
+                                {hasHallucination ? (
+                                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '3px 8px', borderRadius: '4px', background: 'rgba(239, 68, 68, 0.15)', color: '#ef4444', fontSize: '0.75rem', fontWeight: 700 }}>
+                                    <AlertTriangle size={12} /> HIGH RISK
+                                  </span>
+                                ) : record.score_hallucination !== null ? (
+                                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '3px 8px', borderRadius: '4px', background: 'rgba(34, 197, 94, 0.12)', color: '#22c55e', fontSize: '0.75rem', fontWeight: 700 }}>
+                                    <CheckCircle2 size={12} /> GROUNDED
+                                  </span>
+                                ) : '-'}
+                              </td>
+                              <td style={{ padding: '1rem', textAlign: 'right' }}>
+                                <button
+                                  className="secondary-btn"
+                                  onClick={() => setExpandedRecordId(isExpanded ? null : record.id)}
+                                  title={isExpanded ? "Collapse Claims" : "Inspect Sentence Heatmap & Claims"}
+                                  style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem', borderRadius: '6px', display: 'inline-flex', alignItems: 'center', gap: '5px' }}
+                                >
+                                  {isExpanded ? <EyeOff size={14} /> : <Eye size={14} />}
+                                  {isExpanded ? 'Close' : 'Inspect'}
+                                </button>
+                              </td>
+                            </tr>
+                            {isExpanded && (
+                              <tr style={{ background: 'var(--bg-color)' }}>
+                                <td colSpan="5" style={{ padding: '0' }}>
+                                  <div style={{ padding: '1.5rem', borderBottom: '1px solid var(--input-border)' }}>
+                                    <Results evaluationId={record.id} onBack={() => setExpandedRecordId(null)} />
+                                  </div>
+                                </td>
+                              </tr>
+                            )}
+                          </React.Fragment>
+                        );
+                      })
+                    )}
+                  </tbody>
+                </table>
+              </div>
             </div>
           )}
           {batchAnalytics && (
