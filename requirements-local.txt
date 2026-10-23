@@ -1,0 +1,4 @@
+# Optional dependencies for local offline vector database and sentence-transformer embeddings
+-r requirements.txt
+chromadb==0.5.3
+sentence-transformers==3.0.1

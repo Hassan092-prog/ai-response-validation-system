@@ -9,8 +9,12 @@ def retrieve_context(question: str, top_k: int = 3) -> str:
     """
     try:
         client = get_chroma_client()
+        if not client:
+            return "Knowledge base vector store is running in lightweight cloud mode. Please provide reference context or upload a source document."
         collection = client.get_collection("knowledge_base")
         model = get_embedding_model()
+        if not model:
+            return "Knowledge base embedding model is not initialized."
         
         # 1. Embed the query
         query_embedding = model.encode(question).tolist()
