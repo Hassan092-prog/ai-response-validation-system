@@ -4,7 +4,6 @@ from sqlalchemy.orm import Session
 from backend.api import models, database
 from backend.core import agents
 from backend.core.config import logger
-from backend.kb.retrieve import retrieve_context
 
 def process_evaluation_task(evaluation_id: int):
     """Background task to orchestrate the AI evaluation pipeline using distributed agents."""
@@ -24,8 +23,12 @@ def process_evaluation_task(evaluation_id: int):
         if record.source_document:
             context += f"\nUser Provided Source: {record.source_document}"
         elif not record.reference_answer:
-            rag_context = retrieve_context(record.question)
-            context += f"\nRetrieved Knowledge Base Context:\n{rag_context}"
+            try:
+                from backend.kb.retrieve import retrieve_context
+                rag_context = retrieve_context(record.question)
+                context += f"\nRetrieved Knowledge Base Context:\n{rag_context}"
+            except Exception as e:
+                logger.warning(f"Knowledge base retrieval skipped: {e}")
             
         full_context = record.reference_answer or context
 
