@@ -183,3 +183,43 @@ To verify that the vector store correctly retrieves semantically relevant inform
 python tests/test_retrieval.py
 ```
 This will query the ChromaDB vector store with predefined questions and print out the closest matching document chunks along with their mathematical semantic distance scores.
+
+---
+
+## ☁️ Cloud Deployment (Docker)
+
+The application is containerized using a multi-stage Docker build that bundles the React frontend and FastAPI backend into a single container running on port `8005` (with dynamic `$PORT` evaluation for cloud hosts).
+
+### 1-Click Cloud Deployment (Render.com)
+1. Fork or push this repository to your GitHub account: `https://github.com/Hassan092-prog/ai-response-validation-system`.
+2. Sign up / Log in to [Render](https://render.com).
+3. Click **New +** > **Web Service**.
+4. Select this repository.
+5. In the service settings:
+   - **Environment:** `Docker`
+   - **Branch:** `main`
+   - **Region:** Any preferred region (e.g. Frankfurt, Oregon, Singapore)
+   - **Plan:** Free
+6. Add your Environment Variable:
+   - Key: `GROQ_API_KEY`
+   - Value: `your_groq_api_key`
+7. Click **Deploy Web Service**. Render will build the Docker container and provide a live public HTTPS URL (e.g., `https://ai-response-validation-system.onrender.com`).
+
+---
+
+## 📚 Project Documentation & Agile Artifacts
+
+All comprehensive project artifacts prepared for the **Infosys Springboard Internship 7.0** submission are available in the [`docs/`](docs/) directory:
+
+* 📋 **[Agile Scrum Documentation](docs/agile_documentation.md)**: Details the Agile framework, User Stories (US-101 through US-405), sprint breakdowns (Sprints 1–4 matching Milestones 1–4), velocity tracking, burndown metrics, and impediment log.
+* 📄 **[Final Project Report](docs/project_report.md)**: Complete academic & technical overview of problem statement, architecture, MoE scoring methodology, test scenarios, and final audit results.
+* 🏗️ **[System Architecture](docs/architecture.md)**: In-depth technical specifications of the decoupled React + FastAPI + ChromaDB architecture and multi-agent orchestration flows.
+* 🔬 **[Research Documentation](docs/research.md)**: Literature review and technical background on hallucination detection, RAG retrieval techniques, and LLM-as-a-Judge evaluations.
+* 🔮 **[Future Scope and Additions](docs/Future%20scope%20and%20additions.md)**: Strategic roadmap for continuous enterprise evolution (RLHF feedback loop, enterprise SSO, dynamic web scraping).
+
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
+
