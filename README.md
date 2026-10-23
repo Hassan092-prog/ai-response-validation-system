@@ -1,5 +1,7 @@
 # AI Response Validation System with Hallucination Detection Assistance
 
+🌐 **Live Deployed Application:** [https://ai-response-validation-system-ez6e.onrender.com/](https://ai-response-validation-system-ez6e.onrender.com/)
+
 This repository contains the implementation for the **Infosys Springboard Internship 7.0** project. 
 
 ## 🏆 Milestone 1 Overview
@@ -203,7 +205,7 @@ The application is containerized using a multi-stage Docker build that bundles t
 6. Add your Environment Variable:
    - Key: `GROQ_API_KEY`
    - Value: `your_groq_api_key`
-7. Click **Deploy Web Service**. Render will build the Docker container and provide a live public HTTPS URL (e.g., `https://ai-response-validation-system.onrender.com`).
+7. Click **Deploy Web Service**. Render builds the Docker container and provides the live public HTTPS URL: [https://ai-response-validation-system-ez6e.onrender.com/](https://ai-response-validation-system-ez6e.onrender.com/).
 
 ---
 
