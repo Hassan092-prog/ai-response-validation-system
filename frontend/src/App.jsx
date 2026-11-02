@@ -34,7 +34,9 @@ function App() {
     status: 'healthy',
     pingLatency: null,
     lastEvalLatency: null,
-    version: '1.0.0'
+    version: '1.0.0',
+    llm_provider: 'groq',
+    llm_model: 'openai/gpt-oss-120b'
   })
   const [isCheckingHealth, setIsCheckingHealth] = useState(false)
 
@@ -69,7 +71,9 @@ function App() {
           ...prev,
           status: 'healthy',
           pingLatency: Math.max(1, Math.round(t1 - t0)),
-          version: json.version || '1.0.0'
+          version: json.version || '1.0.0',
+          llm_provider: json.llm_provider || 'groq',
+          llm_model: json.llm_model || 'openai/gpt-oss-120b'
         }))
       } else {
         setTelemetry(prev => ({ ...prev, status: 'offline', pingLatency: null }))
@@ -447,6 +451,13 @@ function App() {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <span style={{ fontSize: '0.7rem', color: 'var(--text-secondary)' }}>Judge Agents</span>
               <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-primary)' }}>4 Active</span>
+            </div>
+
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <span style={{ fontSize: '0.7rem', color: 'var(--text-secondary)' }}>Judge Engine</span>
+              <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-primary)', textTransform: 'capitalize' }}>
+                {telemetry.llm_provider || 'Groq'}
+              </span>
             </div>
           </div>
         </div>

@@ -59,7 +59,14 @@ async def log_requests(request: Request, call_next):
 @app.get("/api/health")
 def health_check():
     logger.info("Health check endpoint called.")
-    return {"status": "healthy", "version": "1.0.0"}
+    from backend.core.providers import get_active_provider
+    provider = get_active_provider()
+    return {
+        "status": "healthy",
+        "version": "1.0.0",
+        "llm_provider": provider.provider_name,
+        "llm_model": provider.model_name,
+    }
 
 @app.get("/api/config/weights")
 def api_get_weights():

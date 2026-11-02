@@ -4,10 +4,14 @@ from unittest.mock import patch
 from backend.api import models
 
 def test_health_check(client):
-    """GET /api/health returns 200 with healthy status."""
+    """GET /api/health returns 200 with healthy status and active provider telemetry."""
     response = client.get("/api/health")
     assert response.status_code == 200
-    assert response.json() == {"status": "healthy", "version": "1.0.0"}
+    data = response.json()
+    assert data["status"] == "healthy"
+    assert data["version"] == "1.0.0"
+    assert "llm_provider" in data
+    assert "llm_model" in data
 
 def test_weights_config_endpoints(client):
     """GET and POST /api/config/weights dynamically read and update scoring weights."""
