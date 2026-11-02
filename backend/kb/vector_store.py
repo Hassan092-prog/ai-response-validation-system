@@ -17,3 +17,13 @@ def get_embedding_model():
         return SentenceTransformer(config.EMBEDDING_MODEL)
     except (ImportError, Exception):
         return None
+
+def get_kb_collection(collection_name: str = "knowledge_base"):
+    """Initializes and returns the ChromaDB collection."""
+    client = get_chroma_client()
+    if not client:
+        return None
+    try:
+        return client.get_or_create_collection(name=collection_name)
+    except Exception:
+        return None

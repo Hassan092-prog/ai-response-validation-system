@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Depends, Request, BackgroundTasks, HTTPException, UploadFile, File
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import StreamingResponse
+from fastapi.responses import StreamingResponse, JSONResponse
 from typing import Optional
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
@@ -21,7 +21,8 @@ try:
 except ImportError:
     docx = None
 
-from backend.api import models, schemas, database
+from backend.api import models, schemas, database, kb_schemas
+from backend.core import config
 from backend.core.config import logger
 from backend.core.orchestrator import process_evaluation_task
 from backend.core.batch_orchestrator import evaluate_batch_row
@@ -77,48 +78,43 @@ def api_set_weights(weights: dict):
     set_global_weights(weights)
     return {"status": "success", "weights": weights}
 
+def extract_text_from_bytes(filename: str, content: bytes) -> str:
+    """Helper to extract text from raw file bytes (PDF, DOCX, TXT, MD)."""
+    fn = filename.lower()
+    extracted_text = ""
+    if fn.endswith(".pdf"):
+        if pypdf is None:
+            raise HTTPException(status_code=500, detail="pypdf library is not installed on the server.")
+        pdf_reader = pypdf.PdfReader(io.BytesIO(content))
+        for page in pdf_reader.pages:
+            text = page.extract_text()
+            if text:
+                extracted_text += text + "\n"
+    elif fn.endswith(".docx"):
+        if docx is None:
+            raise HTTPException(status_code=500, detail="python-docx library is not installed on the server.")
+        doc = docx.Document(io.BytesIO(content))
+        for para in doc.paragraphs:
+            extracted_text += para.text + "\n"
+    elif fn.endswith(".txt") or fn.endswith(".md"):
+        extracted_text = content.decode("utf-8", errors="replace")
+    else:
+        raise HTTPException(status_code=400, detail="Unsupported file format. Please upload PDF, DOCX, TXT, or MD.")
+    return extracted_text.strip()
+
 @app.post("/api/extract-text")
 async def extract_text(file: UploadFile = File(...)):
     """Extracts text from uploaded PDF, DOCX, or TXT files."""
     if not file.filename:
         raise HTTPException(status_code=400, detail="No file uploaded")
-    
-    filename = file.filename.lower()
     content = await file.read()
-    
-    extracted_text = ""
-    
     try:
-        if filename.endswith(".pdf"):
-            if pypdf is None:
-                raise HTTPException(status_code=500, detail="pypdf library is not installed on the server.")
-            
-            pdf_reader = pypdf.PdfReader(io.BytesIO(content))
-            for page in pdf_reader.pages:
-                text = page.extract_text()
-                if text:
-                    extracted_text += text + "\n"
-                    
-        elif filename.endswith(".docx"):
-            if docx is None:
-                raise HTTPException(status_code=500, detail="python-docx library is not installed on the server.")
-            
-            doc = docx.Document(io.BytesIO(content))
-            for para in doc.paragraphs:
-                extracted_text += para.text + "\n"
-                
-        elif filename.endswith(".txt") or filename.endswith(".md"):
-            extracted_text = content.decode("utf-8")
-            
-        else:
-            raise HTTPException(status_code=400, detail="Unsupported file format. Please upload PDF, DOCX, or TXT.")
-            
-        return {"extracted_text": extracted_text.strip()}
-    
+        text = extract_text_from_bytes(file.filename, content)
+        return {"extracted_text": text}
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Error extracting text from {filename}: {e}")
+        logger.error(f"Error extracting text from {file.filename}: {e}")
         raise HTTPException(status_code=500, detail=f"Failed to process file: {str(e)}")
 
 @app.post("/api/evaluate", response_model=schemas.EvaluationResponse)
@@ -562,6 +558,242 @@ def export_evaluations(format: str = "csv", db: Session = Depends(database.get_d
     
     else:
         raise HTTPException(status_code=400, detail="Invalid format. Use 'csv' or 'json'.")
+
+# ==============================================================================
+# Knowledge Base Management API Endpoints (Phase 4)
+# ==============================================================================
+
+@app.get("/api/kb/status", response_model=kb_schemas.KBStatusResponse)
+def get_kb_status():
+    from backend.kb.vector_store import get_chroma_client, get_embedding_model, get_kb_collection
+    client = get_chroma_client()
+    model = get_embedding_model()
+    if not client or not model:
+        return JSONResponse(
+            status_code=503,
+            content={
+                "available": False,
+                "reason": "ChromaDB or SentenceTransformers is not available on this deployment tier."
+            }
+        )
+    collection = get_kb_collection()
+    if collection is None:
+        return JSONResponse(
+            status_code=503,
+            content={
+                "available": False,
+                "reason": "Failed to access ChromaDB knowledge_base collection."
+            }
+        )
+
+    total_chunks = collection.count()
+    data = collection.get(include=["metadatas"])
+    unique_docs = set()
+    for m in (data.get("metadatas") or []):
+        if m:
+            doc_key = m.get("doc_id") or m.get("dataset") or m.get("filename")
+            if doc_key:
+                unique_docs.add(doc_key)
+
+    return {
+        "available": True,
+        "collection_name": "knowledge_base",
+        "total_chunks": total_chunks,
+        "total_documents": len(unique_docs),
+        "embedding_model": getattr(config, "EMBEDDING_MODEL", "all-MiniLM-L6-v2")
+    }
+
+@app.get("/api/kb/documents", response_model=kb_schemas.KBDocumentsResponse)
+def list_kb_documents():
+    from backend.kb.vector_store import get_chroma_client, get_kb_collection
+    from collections import defaultdict
+
+    client = get_chroma_client()
+    if not client:
+        raise HTTPException(status_code=503, detail="ChromaDB vector store is not available on this tier.")
+    collection = get_kb_collection()
+    if collection is None:
+        raise HTTPException(status_code=503, detail="Knowledge base collection unavailable.")
+
+    data = collection.get(include=["metadatas", "documents"])
+    metas = data.get("metadatas") or []
+    docs = data.get("documents") or []
+
+    grouped = defaultdict(lambda: {"chunks": 0, "filename": "", "uploaded_at": None, "sample": ""})
+
+    for i, meta in enumerate(metas):
+        if not meta:
+            continue
+        doc_key = meta.get("doc_id") or meta.get("dataset") or meta.get("filename") or f"doc_{i}"
+        filename = meta.get("filename") or meta.get("dataset") or doc_key
+        grouped[doc_key]["chunks"] += 1
+        grouped[doc_key]["filename"] = filename
+        if meta.get("uploaded_at"):
+            grouped[doc_key]["uploaded_at"] = meta.get("uploaded_at")
+        if not grouped[doc_key]["sample"] and i < len(docs) and docs[i]:
+            sample_str = str(docs[i]).strip()
+            grouped[doc_key]["sample"] = sample_str[:150] + ("..." if len(sample_str) > 150 else "")
+
+    doc_items = [
+        kb_schemas.KBDocumentItem(
+            doc_id=k,
+            filename=v["filename"],
+            chunk_count=v["chunks"],
+            uploaded_at=v["uploaded_at"],
+            sample_preview=v["sample"]
+        )
+        for k, v in grouped.items()
+    ]
+    doc_items.sort(key=lambda x: (x.uploaded_at or "", x.chunk_count), reverse=True)
+
+    return {
+        "documents": doc_items,
+        "total_documents": len(doc_items),
+        "total_chunks": len(docs)
+    }
+
+@app.post("/api/kb/upload", response_model=kb_schemas.KBUploadResponse)
+async def upload_kb_document(file: UploadFile = File(...)):
+    from backend.kb.vector_store import get_chroma_client, get_embedding_model, get_kb_collection
+    from backend.kb.chunking import chunk_text
+    from datetime import datetime, timezone
+
+    client = get_chroma_client()
+    model = get_embedding_model()
+    if not client or not model:
+        raise HTTPException(status_code=503, detail="ChromaDB or embedding model is not initialized on this tier.")
+
+    collection = get_kb_collection()
+    if collection is None:
+        raise HTTPException(status_code=503, detail="Knowledge base collection unavailable.")
+
+    if not file.filename:
+        raise HTTPException(status_code=400, detail="No file uploaded.")
+
+    content = await file.read()
+    raw_text = extract_text_from_bytes(file.filename, content)
+    if not raw_text.strip():
+        raise HTTPException(status_code=400, detail="Uploaded file contained no extractable text.")
+
+    chunks = chunk_text(raw_text)
+    if not chunks:
+        raise HTTPException(status_code=400, detail="No text chunks generated.")
+
+    embeddings = model.encode(chunks).tolist()
+
+    doc_id = f"doc_{uuid.uuid4().hex[:12]}"
+    now_iso = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
+
+    chunk_ids = [f"{doc_id}_c{i}" for i in range(len(chunks))]
+    metadatas = [
+        {
+            "doc_id": doc_id,
+            "filename": file.filename,
+            "chunk_index": i,
+            "uploaded_at": now_iso
+        }
+        for i in range(len(chunks))
+    ]
+
+    collection.add(
+        ids=chunk_ids,
+        embeddings=embeddings,
+        documents=chunks,
+        metadatas=metadatas
+    )
+
+    logger.info(f"Ingested KB document '{file.filename}' ({doc_id}) with {len(chunks)} chunks.")
+    return {
+        "success": True,
+        "doc_id": doc_id,
+        "filename": file.filename,
+        "chunks_added": len(chunks),
+        "message": f"Successfully ingested {file.filename} ({len(chunks)} chunks)."
+    }
+
+@app.delete("/api/kb/documents/{doc_id}")
+def delete_kb_document(doc_id: str):
+    from backend.kb.vector_store import get_chroma_client, get_kb_collection
+    client = get_chroma_client()
+    if not client:
+        raise HTTPException(status_code=503, detail="ChromaDB vector store is not available on this tier.")
+    collection = get_kb_collection()
+    if collection is None:
+        raise HTTPException(status_code=503, detail="Knowledge base collection unavailable.")
+
+    try:
+        data = collection.get(include=["metadatas"])
+        ids_to_delete = []
+        for chunk_id, meta in zip(data.get("ids") or [], data.get("metadatas") or []):
+            if meta and (meta.get("doc_id") == doc_id or meta.get("dataset") == doc_id or meta.get("filename") == doc_id):
+                ids_to_delete.append(chunk_id)
+
+        if not ids_to_delete:
+            raise HTTPException(status_code=404, detail=f"Document '{doc_id}' not found in knowledge base.")
+
+        collection.delete(ids=ids_to_delete)
+        logger.info(f"Deleted {len(ids_to_delete)} chunks for doc_id '{doc_id}'.")
+        return {
+            "success": True,
+            "deleted_doc_id": doc_id,
+            "chunks_deleted": len(ids_to_delete),
+            "message": f"Successfully deleted document '{doc_id}' ({len(ids_to_delete)} chunks removed)."
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error deleting document {doc_id}: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/api/kb/search", response_model=kb_schemas.KBSearchResponse)
+def search_kb(req: kb_schemas.KBSearchRequest):
+    from backend.kb.vector_store import get_chroma_client, get_embedding_model, get_kb_collection
+    client = get_chroma_client()
+    model = get_embedding_model()
+    if not client or not model:
+        raise HTTPException(status_code=503, detail="ChromaDB or embedding model is not initialized on this tier.")
+
+    collection = get_kb_collection()
+    if collection is None or collection.count() == 0 or not (req.query and req.query.strip()):
+        return {
+            "query": req.query,
+            "results": [],
+            "count": 0
+        }
+
+    query_emb = model.encode(req.query).tolist()
+    k = min(req.top_k, collection.count())
+    raw_results = collection.query(
+        query_embeddings=[query_emb],
+        n_results=k,
+        include=["documents", "metadatas", "distances"]
+    )
+
+    items = []
+    if raw_results and raw_results.get("documents"):
+        docs = raw_results["documents"][0]
+        metas = raw_results["metadatas"][0] if raw_results.get("metadatas") else [{}] * len(docs)
+        dists = raw_results["distances"][0] if raw_results.get("distances") else [0.0] * len(docs)
+        ids = raw_results["ids"][0] if raw_results.get("ids") else [f"c_{i}" for i in range(len(docs))]
+
+        for doc, meta, dist, chunk_id in zip(docs, metas, dists, ids):
+            dist_val = float(dist)
+            sim = round(max(0.0, 1.0 - dist_val) * 100, 1)
+            items.append(
+                kb_schemas.KBSearchResultItem(
+                    chunk_id=chunk_id,
+                    text=doc,
+                    distance=round(dist_val, 4),
+                    similarity_score=sim,
+                    metadata=meta or {}
+                )
+            )
+
+    return {
+        "query": req.query,
+        "results": items,
+        "count": len(items)
+    }
 
 # Mount static frontend
 frontend_dist = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "frontend", "dist")

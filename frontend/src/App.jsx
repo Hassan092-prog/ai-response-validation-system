@@ -5,6 +5,7 @@ import Results from './Results'
 import BatchAnalyticsView from './BatchAnalyticsView'
 import AnalyticsDashboard from './AnalyticsDashboard'
 import BatchUpload from './BatchUpload'
+import KnowledgeBase from './KnowledgeBase'
 import { API_BASE } from './config'
 
 function App() {
@@ -392,6 +393,12 @@ function App() {
             onClick={() => setActiveTab('analytics')}
           >
             <BarChart3 className="icon" size={18} /> Analytics
+          </button>
+          <button 
+            className={`nav-btn ${activeTab === 'kb' ? 'active' : ''}`}
+            onClick={() => setActiveTab('kb')}
+          >
+            <Database className="icon" size={18} /> Knowledge Base
           </button>
           <button 
             className={`nav-btn ${activeTab === 'batch' ? 'active' : ''}`}
@@ -860,6 +867,11 @@ function App() {
           {/* TAB: BATCH UPLOAD */}
           {activeTab === 'batch' && (
             <BatchUpload />
+          )}
+
+          {/* TAB: KNOWLEDGE BASE */}
+          {activeTab === 'kb' && (
+            <KnowledgeBase />
           )}
 
         </div>
