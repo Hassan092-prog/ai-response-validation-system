@@ -1,0 +1,16 @@
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F"]
+ignore = [
+    "E501",   # line length
+    "EXE002", # executable bit without shebang
+    "W291",   # trailing whitespace
+    "W293",   # blank line contains whitespace
+]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]
+"scripts/*" = ["E402"]

@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { CheckCircle2, AlertTriangle, XCircle, Sparkles, BookOpen, ChevronRight, X, ExternalLink } from 'lucide-react';
+import { CheckCircle2, AlertTriangle, XCircle, Sparkles, BookOpen, X } from 'lucide-react';
 
 /**
  * Splits text into sentence tokens while preserving punctuation and spacing.

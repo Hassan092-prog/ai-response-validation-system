@@ -237,7 +237,7 @@ const AnalyticsDashboard = () => {
       if (!response.ok) throw new Error('Failed to save');
       setSaveStatus('Saved!');
       setTimeout(() => setSaveStatus(''), 3000);
-    } catch (err) {
+    } catch {
       setSaveStatus('Error saving');
     } finally {
       setIsSaving(false);

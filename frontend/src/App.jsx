@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { PlusCircle, History, BarChart3, Moon, Sun, ChevronDown, ChevronRight, Paperclip, Download, FileSpreadsheet, FileJson, Eye, EyeOff, Database, ShieldCheck, Inbox, Activity, Zap, RefreshCw, UploadCloud, FileText, X } from 'lucide-react'
+import { PlusCircle, History, BarChart3, Moon, Sun, ChevronDown, Paperclip, Download, FileSpreadsheet, FileJson, Eye, EyeOff, Database, ShieldCheck, Inbox, Activity, Zap, RefreshCw, UploadCloud, FileText, X } from 'lucide-react'
 import './App.css'
 import Results from './Results'
 import BatchAnalyticsView from './BatchAnalyticsView'

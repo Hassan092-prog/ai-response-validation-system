@@ -164,22 +164,40 @@ The frontend will be running at: `http://localhost:5173`
 
 ## 🧪 How to Test and Verify
 
-### 1. Test the AI Judge Agents (M2.4 Validation)
-To formally validate the consistency, reasoning quality, and scoring formats of the Relevance, Accuracy, and Hallucination agents, run the automated test script:
+### 1. Automated Test Suite & Coverage (Pytest)
+Run the full automated unit, integration, and mocking test suite covering API endpoints, agent reasoning, database operations, and text chunking:
+```bash
+# Run all tests with verbose output
+pytest tests/ -v
+
+# Run with coverage breakdown
+pytest tests/ -v --cov=backend/core --cov=backend/api --cov-report=term-missing
+```
+
+### 2. Code Linting & Static Analysis (Ruff & ESLint)
+```bash
+# Python backend and tests linting
+ruff check backend/ tests/ scripts/
+
+# React frontend linting
+cd frontend && npm run lint
+```
+
+### 3. Test the AI Judge Agents (M2.4 Validation Script)
+To formally validate the consistency, reasoning quality, and scoring formats of the Relevance, Accuracy, and Hallucination agents against baseline cases:
 ```bash
 # Ensure your venv is activated
 python scripts/validate_agents.py
 ```
-This script will pump varied test cases through the agents and output their specific JSON evaluations directly to the console.
 
-### 2. Test the UI and Database
+### 4. Test the UI and Database
 1. Open `http://localhost:5173` in your browser.
 2. Click **Load Test Case** to automatically inject a randomized testing scenario, or manually fill out the "Original Question" and "AI Generated Response" fields.
 3. Click **Submit Evaluation**.
 4. The React app will communicate with FastAPI and trigger the agent orchestrator. Once completed, the UI will dynamically render the detailed evaluation breakdown, including the final score and Radar Chart.
 5. Navigate to the **Analytics** and **History** tabs to view aggregated metrics and export your records to CSV/JSON.
 
-### 3. Test the RAG Knowledge Base Retrieval
+### 5. Test the RAG Knowledge Base Retrieval
 To verify that the vector store correctly retrieves semantically relevant information from the ingested datasets:
 ```bash
 python tests/test_retrieval.py

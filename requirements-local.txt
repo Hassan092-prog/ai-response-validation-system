@@ -2,3 +2,8 @@
 -r requirements.txt
 chromadb==0.5.3
 sentence-transformers==3.0.1
+
+# Development, testing, and linting tools
+pytest-cov>=5.0.0
+ruff>=0.4.9
+

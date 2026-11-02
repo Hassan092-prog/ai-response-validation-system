@@ -1,7 +1,6 @@
 import json
 import concurrent.futures
-from sqlalchemy.orm import Session
-from backend.api import models, database
+from backend.api import models
 from backend.core import agents
 from backend.core.config import logger
 

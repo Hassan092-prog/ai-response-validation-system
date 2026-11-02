@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import { FileSpreadsheet, Loader2, CheckCircle2, BarChart3, Download, RefreshCw, Eye, EyeOff, Search, AlertTriangle, XCircle, Filter } from 'lucide-react';
+import { FileSpreadsheet, Loader2, CheckCircle2, BarChart3, Download, RefreshCw, Eye, EyeOff, Search, AlertTriangle, XCircle } from 'lucide-react';
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import Results from './Results';
 import './App.css';

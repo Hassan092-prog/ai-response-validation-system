@@ -1,7 +1,6 @@
 import os
 import json
 import time
-import random
 from groq import Groq
 from backend.core.config import logger
 from dotenv import load_dotenv

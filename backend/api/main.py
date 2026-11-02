@@ -1,10 +1,11 @@
 from fastapi import FastAPI, Depends, Request, BackgroundTasks, HTTPException, UploadFile, File
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import StreamingResponse, JSONResponse
-from typing import Optional, List
+from fastapi.responses import StreamingResponse
+from typing import Optional
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from sqlalchemy import func
+import os
 import time
 import json
 import io
@@ -106,6 +107,8 @@ async def extract_text(file: UploadFile = File(...)):
             
         return {"extracted_text": extracted_text.strip()}
     
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Error extracting text from {filename}: {e}")
         raise HTTPException(status_code=500, detail=f"Failed to process file: {str(e)}")
@@ -264,7 +267,7 @@ def get_batch_status(batch_id: str, db: Session = Depends(database.get_db)):
         if r.result_json:
             try:
                 result_data = json.loads(r.result_json)
-            except:
+            except Exception:
                 pass
                 
         results.append({
@@ -322,8 +325,8 @@ def get_evaluation_history(page: int = 1, limit: int = 10, db: Session = Depends
     
     # Calculate KPI Stats
     total_evals = db.query(models.EvaluationRecord).count()
-    total_singles = db.query(models.EvaluationRecord).filter(models.EvaluationRecord.batch_id == None).count()
-    total_batches = db.query(models.EvaluationRecord.batch_id).filter(models.EvaluationRecord.batch_id != None).distinct().count()
+    total_singles = db.query(models.EvaluationRecord).filter(models.EvaluationRecord.batch_id.is_(None)).count()
+    total_batches = db.query(models.EvaluationRecord.batch_id).filter(models.EvaluationRecord.batch_id.isnot(None)).distinct().count()
 
     # Fetch all to group in memory
     all_records = db.query(models.EvaluationRecord).order_by(models.EvaluationRecord.created_at.desc()).all()
@@ -342,7 +345,7 @@ def get_evaluation_history(page: int = 1, limit: int = 10, db: Session = Depends
                 events.append({
                     "id": r.batch_id,
                     "is_batch": True,
-                    "question": f"Batch CSV Upload",
+                    "question": "Batch CSV Upload",
                     "ai_response": f"Processed {completed_count} out of {total_count} responses",
                     "status": "completed" if completed_count == total_count else "processing",
                     "score": round(sum(br.final_score or 0 for br in batch_records) / completed_count) if completed_count > 0 else 0,
@@ -502,7 +505,6 @@ def export_evaluations(format: str = "csv", db: Session = Depends(database.get_d
     else:
         raise HTTPException(status_code=400, detail="Invalid format. Use 'csv' or 'json'.")
 
-import os
 # Mount static frontend
 frontend_dist = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "frontend", "dist")
 if os.path.exists(frontend_dist):

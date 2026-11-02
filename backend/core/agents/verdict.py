@@ -67,7 +67,7 @@ Hallucination Penalty (Score {h_score}/5): {hallucination_res.get('reasoning', '
         c_reasoning = completeness_res.get("reasoning", "")
         missing = completeness_res.get("missing_aspects", [])
         if missing:
-            c_reasoning += f"\n\n**Missing Aspects:**\n- " + "\n- ".join(missing)
+            c_reasoning += "\n\n**Missing Aspects:**\n- " + "\n- ".join(missing)
 
         return {
             "final_score": final_score,

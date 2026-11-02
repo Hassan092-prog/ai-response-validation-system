@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Loader2, CheckCircle2, BarChart3, Download, Eye, EyeOff, Search, AlertTriangle, XCircle, Filter } from 'lucide-react';
+import { Loader2, CheckCircle2, BarChart3, Download, Eye, EyeOff, Search, AlertTriangle, XCircle } from 'lucide-react';
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';

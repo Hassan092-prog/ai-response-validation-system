@@ -19,5 +19,7 @@ knowledge_base/
 .DS_Store
 Thumbs.db
 
-# Logs
+# Logs & Coverage
 *.log
+.coverage
+htmlcov/
