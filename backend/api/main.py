@@ -594,6 +594,8 @@ def get_kb_status():
             doc_key = m.get("doc_id") or m.get("dataset") or m.get("filename")
             if doc_key:
                 unique_docs.add(doc_key)
+        elif total_chunks > 0:
+            unique_docs.add("unnamed_document")
 
     return {
         "available": True,
@@ -622,9 +624,8 @@ def list_kb_documents():
     grouped = defaultdict(lambda: {"chunks": 0, "filename": "", "uploaded_at": None, "sample": ""})
 
     for i, meta in enumerate(metas):
-        if not meta:
-            continue
-        doc_key = meta.get("doc_id") or meta.get("dataset") or meta.get("filename") or f"doc_{i}"
+        meta = meta or {}
+        doc_key = meta.get("doc_id") or meta.get("dataset") or meta.get("filename") or "unnamed_document"
         filename = meta.get("filename") or meta.get("dataset") or doc_key
         grouped[doc_key]["chunks"] += 1
         grouped[doc_key]["filename"] = filename

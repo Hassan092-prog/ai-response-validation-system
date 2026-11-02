@@ -1,5 +1,5 @@
 import logging
-from backend.kb.vector_store import get_chroma_client, get_embedding_model
+from backend.kb import vector_store
 
 logger = logging.getLogger(__name__)
 
@@ -8,21 +8,26 @@ def retrieve_context(question: str, top_k: int = 3) -> str:
     Retrieves the most relevant chunks from ChromaDB for a given question.
     """
     try:
-        client = get_chroma_client()
-        if not client:
+        collection = vector_store.get_kb_collection("knowledge_base")
+        if not collection:
             return "Knowledge base vector store is running in lightweight cloud mode. Please provide reference context or upload a source document."
-        collection = client.get_collection("knowledge_base")
-        model = get_embedding_model()
+
+        total_count = collection.count()
+        if total_count == 0:
+            return "No relevant context found in the knowledge base."
+
+        model = vector_store.get_embedding_model()
         if not model:
             return "Knowledge base embedding model is not initialized."
         
         # 1. Embed the query
         query_embedding = model.encode(question).tolist()
         
-        # 2. Query ChromaDB
+        # 2. Query ChromaDB with safe top_k bound by collection count
+        k = min(top_k, total_count)
         results = collection.query(
             query_embeddings=[query_embedding],
-            n_results=top_k
+            n_results=k
         )
         
         # 3. Format the retrieved documents into a single context string

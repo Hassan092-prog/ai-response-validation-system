@@ -61,8 +61,16 @@ const KnowledgeBase = () => {
   const handleFileChange = (e) => {
     const file = e.target.files?.[0];
     if (file) {
-      setUploadFile(file);
-      setUploadMessage(null);
+      const fn = file.name.toLowerCase();
+      if (fn.endsWith('.pdf') || fn.endsWith('.docx') || fn.endsWith('.txt') || fn.endsWith('.md')) {
+        setUploadFile(file);
+        setUploadMessage(null);
+      } else {
+        setUploadMessage({ type: 'error', text: 'Unsupported format. Please upload PDF, DOCX, TXT, or MD.' });
+      }
+    }
+    if (e.target) {
+      e.target.value = '';
     }
   };
 

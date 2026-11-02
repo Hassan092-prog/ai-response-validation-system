@@ -258,3 +258,51 @@ def test_kb_search_when_unavailable(client):
         res = client.post("/api/kb/search", json=payload)
         assert res.status_code == 503
 
+
+# ==============================================================================
+# 6. Fallback and Retrieval Defensive Edge Cases
+# ==============================================================================
+
+def test_kb_list_documents_missing_metadata(client, mock_kb):
+    """Gracefully handles chunks with empty or missing metadata dictionaries."""
+    mock_kb.ids.append("doc_orphan_c0")
+    mock_kb.documents.append("Orphan document text without metadata")
+    mock_kb.metadatas.append(None)
+
+    res = client.get("/api/kb/documents")
+    assert res.status_code == 200
+    data = res.json()
+    assert any(d["doc_id"] == "unnamed_document" for d in data["documents"])
+
+
+def test_retrieve_context_with_safe_bounding(mock_kb):
+    """retrieve_context bounds top_k by collection count without throwing."""
+    from backend.kb.retrieve import retrieve_context
+
+    # Top-K requested is 10, but mock collection only has 3 items
+    ctx = retrieve_context("Explain photosynthesis", top_k=10)
+    assert "--- Document 1 ---" in ctx
+    assert "Photosynthesis" in ctx
+
+
+def test_retrieve_context_empty_collection():
+    """retrieve_context returns friendly message when collection is empty."""
+    from backend.kb.retrieve import retrieve_context
+
+    empty_col = MagicMock()
+    empty_col.count.return_value = 0
+
+    with patch("backend.kb.vector_store.get_kb_collection", return_value=empty_col):
+        msg = retrieve_context("Any question")
+        assert "no relevant context found" in msg.lower()
+
+
+def test_retrieve_context_vector_store_unavailable():
+    """retrieve_context returns cloud fallback notice when vector store is unavailable."""
+    from backend.kb.retrieve import retrieve_context
+
+    with patch("backend.kb.vector_store.get_kb_collection", return_value=None):
+        msg = retrieve_context("Any question")
+        assert "lightweight cloud mode" in msg.lower()
+
+
