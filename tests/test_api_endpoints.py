@@ -131,6 +131,7 @@ def test_evaluation_exports(client, db_session):
     assert "application/json" in json_res.headers["content-type"]
     parsed = json.loads(json_res.text)
     assert isinstance(parsed, list)
+    assert "is_cached" in parsed[0]
     
     # Test Invalid Format
     invalid_res = client.get("/api/evaluations/export?format=xml")

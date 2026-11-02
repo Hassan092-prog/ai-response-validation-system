@@ -3,7 +3,7 @@ import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer,
   Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis
 } from 'recharts';
-import { Activity, Target, Filter, Inbox } from 'lucide-react';
+import { Activity, Target, Filter, Inbox, Zap } from 'lucide-react';
 import { API_BASE } from './config';
 
 const HeatmapCalendar = ({ data }) => {
@@ -323,6 +323,15 @@ const AnalyticsDashboard = () => {
             {dynamicAverageScore} / 100
           </span>
         </div>
+        {data.cache_stats && (
+          <div className="stat-card" style={{ position: 'relative', overflow: 'hidden' }}>
+            <Zap size={120} color="var(--border-color)" style={{ position: 'absolute', right: '-20px', bottom: '-20px', opacity: 0.15 }} />
+            <h3 style={{ position: 'relative', zIndex: 2 }}>Cache Hit Rate</h3>
+            <span className="stat-value" style={{ position: 'relative', zIndex: 2, color: '#60a5fa' }}>
+              {data.cache_stats.cache_hit_rate_percent}%
+            </span>
+          </div>
+        )}
       </div>
       
       <div className="charts-grid">

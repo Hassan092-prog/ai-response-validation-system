@@ -57,6 +57,15 @@ def process_evaluation_task(evaluation_id: int):
         )
         
         # 4. Save to Database
+        if not record.input_hash:
+            from backend.core.cache import compute_input_hash
+            record.input_hash = compute_input_hash(
+                record.question,
+                record.ai_response,
+                record.reference_answer,
+                record.source_document
+            )
+        record.is_cached = False
         record.status = "completed"
         record.result_json = json.dumps(final_verdict)
         record.final_score = final_verdict.get("final_score")

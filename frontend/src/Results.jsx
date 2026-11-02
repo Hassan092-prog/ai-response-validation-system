@@ -358,7 +358,26 @@ ${breakdown.hallucination.reasoning}
     <div className="results-container">
       <div className="results-header" style={{ alignItems: 'flex-start' }}>
         <div>
-          <h2>Evaluation Complete</h2>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <h2>Evaluation Complete</h2>
+            {(data.is_cached || data.cached) && (
+              <span className="cache-badge" style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '4px',
+                padding: '4px 10px',
+                borderRadius: '12px',
+                fontSize: '0.75rem',
+                fontWeight: '600',
+                background: 'rgba(59, 130, 246, 0.15)',
+                color: '#60a5fa',
+                border: '1px solid rgba(59, 130, 246, 0.3)',
+                letterSpacing: '0.3px'
+              }}>
+                ⚡ Cached Result
+              </span>
+            )}
+          </div>
           <div style={{ display: 'flex', gap: '0.8rem', marginTop: '1rem' }}>
             <button onClick={handleCopy} className="secondary-btn" style={{ padding: '0.4rem 0.8rem', fontSize: '0.85rem', borderRadius: '6px', cursor: 'pointer', border: '1px solid var(--input-border)', background: 'var(--input-bg)', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
               {copied ? <Check size={14} /> : <Copy size={14} />} 

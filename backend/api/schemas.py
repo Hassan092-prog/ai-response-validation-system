@@ -16,3 +16,4 @@ class EvaluationResponse(BaseModel):
     """
     id: int
     message: str
+    cached: bool = False

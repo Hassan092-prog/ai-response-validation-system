@@ -436,6 +436,11 @@ const BatchUpload = () => {
                               <td style={{ padding: '1rem' }}>
                                 <span className={`status-dot ${record.status}`}></span>
                                 <span style={{ marginLeft: '0.5rem', fontSize: '0.85rem', textTransform: 'capitalize' }}>{record.status}</span>
+                                {record.is_cached && (
+                                  <span style={{ marginLeft: '6px', fontSize: '0.7rem', padding: '1px 6px', borderRadius: '8px', background: 'rgba(59, 130, 246, 0.15)', color: '#60a5fa', border: '1px solid rgba(59, 130, 246, 0.3)', fontWeight: 600 }}>
+                                    ⚡ Cached
+                                  </span>
+                                )}
                               </td>
                               <td style={{ padding: '1rem', maxWidth: '320px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                                 {record.question}

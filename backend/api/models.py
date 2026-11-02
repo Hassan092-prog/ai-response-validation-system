@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Text, DateTime, Float
+from sqlalchemy import Boolean, Column, DateTime, Float, Integer, String, Text
 from sqlalchemy.sql import func
 from backend.api.database import Base
 
@@ -21,6 +21,10 @@ class EvaluationRecord(Base):
     # State and Results
     status = Column(String, default="pending", index=True)
     result_json = Column(Text, nullable=True)
+
+    # Caching Layer
+    input_hash = Column(String(64), index=True, nullable=True)
+    is_cached = Column(Boolean, default=False, nullable=False)
     
     # Batch Processing
     batch_id = Column(String, index=True, nullable=True)

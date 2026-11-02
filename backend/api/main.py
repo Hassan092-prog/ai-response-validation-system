@@ -26,6 +26,7 @@ from backend.core.config import logger
 from backend.core.orchestrator import process_evaluation_task
 from backend.core.batch_orchestrator import evaluate_batch_row
 from backend.core.config_weights import get_global_weights, set_global_weights
+from backend.core.cache import compute_input_hash, lookup_cache, clone_cached_record
 import uuid
 
 logger.info("Starting AI Response Validation API...")
@@ -117,30 +118,25 @@ async def extract_text(file: UploadFile = File(...)):
 def submit_evaluation(eval_input: schemas.EvaluationInput, background_tasks: BackgroundTasks, db: Session = Depends(database.get_db)):
     logger.info(f"Received evaluation submission: question='{eval_input.question[:30]}...'")
     try:
-        # 1. Semantic Caching (TEMPORARILY DISABLED)
-        # cached_record = db.query(models.EvaluationRecord).filter(
-        #     models.EvaluationRecord.question == eval_input.question,
-        #     models.EvaluationRecord.ai_response == eval_input.ai_response,
-        #     models.EvaluationRecord.reference_answer == eval_input.reference_answer,
-        #     models.EvaluationRecord.source_document == eval_input.source_document,
-        #     models.EvaluationRecord.status == "completed",
-        #     models.EvaluationRecord.final_score > 0
-        # ).first()
-        # 
-        # if cached_record:
-        #     logger.info("Semantic Cache HIT! Returning instant cached result.")
-        #     db_record = models.EvaluationRecord(
-        #         question=eval_input.question,
-        #         ai_response=eval_input.ai_response,
-        #         reference_answer=eval_input.reference_answer,
-        #         source_document=eval_input.source_document,
-        #         status="completed",
-        #         result_json=cached_record.result_json
-        #     )
-        #     db.add(db_record)
-        #     db.commit()
-        #     db.refresh(db_record)
-        #     return {"id": db_record.id, "message": "Evaluation returned instantly from cache."}
+        # 1. Exact-Match Smart Caching via canonical SHA-256 hash
+        input_hash = compute_input_hash(
+            eval_input.question,
+            eval_input.ai_response,
+            eval_input.reference_answer,
+            eval_input.source_document
+        )
+        cached = lookup_cache(db, input_hash)
+        if cached:
+            logger.info(f"Cache HIT for hash {input_hash[:12]}...! Returning instant evaluation.")
+            cached_record = clone_cached_record(cached)
+            db.add(cached_record)
+            db.commit()
+            db.refresh(cached_record)
+            return {
+                "id": cached_record.id,
+                "message": "Evaluation returned instantly from cache.",
+                "cached": True
+            }
 
         # 2. Save New Pending Record
         db_record = models.EvaluationRecord(
@@ -148,6 +144,8 @@ def submit_evaluation(eval_input: schemas.EvaluationInput, background_tasks: Bac
             ai_response=eval_input.ai_response,
             reference_answer=eval_input.reference_answer,
             source_document=eval_input.source_document,
+            input_hash=input_hash,
+            is_cached=False,
             status="pending"
         )
         
@@ -159,7 +157,7 @@ def submit_evaluation(eval_input: schemas.EvaluationInput, background_tasks: Bac
         background_tasks.add_task(process_evaluation_task, db_record.id)
         
         logger.info(f"Successfully saved and queued evaluation ID {db_record.id}")
-        return {"id": db_record.id, "message": "Evaluation queued for processing."}
+        return {"id": db_record.id, "message": "Evaluation queued for processing.", "cached": False}
     except Exception as e:
         logger.error(f"Error saving evaluation: {e}")
         db.rollback()
@@ -177,7 +175,30 @@ def process_batch_background(batch_id: str):
                 record.status = "processing"
                 db.commit()
                 
-                # 2. Process using Consolidated Batch Orchestrator
+                # 2. Check Cache
+                if not record.input_hash:
+                    record.input_hash = compute_input_hash(
+                        record.question,
+                        record.ai_response,
+                        record.reference_answer,
+                        record.source_document
+                    )
+                
+                cached = lookup_cache(db, record.input_hash, exclude_id=record.id)
+                if cached:
+                    logger.info(f"Batch row {record.id}: Cache HIT! Skipping LLM inference.")
+                    record.status = "completed"
+                    record.is_cached = True
+                    record.result_json = cached.result_json
+                    record.final_score = cached.final_score
+                    record.score_relevance = cached.score_relevance
+                    record.score_accuracy = cached.score_accuracy
+                    record.score_completeness = cached.score_completeness
+                    record.score_hallucination = cached.score_hallucination
+                    db.commit()
+                    continue
+                
+                # 3. Process using Consolidated Batch Orchestrator
                 result = evaluate_batch_row(
                     record_id=record.id,
                     question=record.question,
@@ -186,8 +207,9 @@ def process_batch_background(batch_id: str):
                     source_document=record.source_document
                 )
                 
-                # 3. Save result
+                # 4. Save result
                 record.status = "completed"
+                record.is_cached = False
                 record.result_json = json.dumps(result)
                 record.final_score = result.get("final_score")
                 
@@ -199,8 +221,7 @@ def process_batch_background(batch_id: str):
                 
                 db.commit()
                 
-                # 4. Optimized 5 second delay to utilize the 15 RPM Free Tier Limit safely
-                # (1 request per 5 seconds = 12 RPM, leaving a buffer of 3 RPM for simultaneous UI usage)
+                # 5. Optimized 5 second delay to utilize the 15 RPM Free Tier Limit safely
                 time.sleep(5)
                 
             except Exception as e:
@@ -231,12 +252,21 @@ async def submit_batch(file: UploadFile = File(...), background_tasks: Backgroun
         if not question or not ai_response:
             continue # Skip invalid rows
             
+        input_hash = compute_input_hash(
+            question,
+            ai_response,
+            row.get("reference_answer"),
+            row.get("source_document")
+        )
+
         db_record = models.EvaluationRecord(
             question=question,
             ai_response=ai_response,
             reference_answer=row.get("reference_answer"),
             source_document=row.get("source_document"),
             status="pending",
+            input_hash=input_hash,
+            is_cached=False,
             batch_id=batch_id
         )
         db.add(db_record)
@@ -273,6 +303,7 @@ def get_batch_status(batch_id: str, db: Session = Depends(database.get_db)):
         results.append({
             "id": r.id,
             "status": r.status,
+            "is_cached": bool(r.is_cached),
             "question": r.question,
             "ai_response": r.ai_response,
             "reference_answer": r.reference_answer,
@@ -310,6 +341,7 @@ def get_evaluation_result(eval_id: int, db: Session = Depends(database.get_db)):
     return {
         "id": record.id,
         "status": record.status,
+        "is_cached": bool(record.is_cached),
         "question": record.question,
         "ai_response": record.ai_response,
         "reference_answer": record.reference_answer,
@@ -358,6 +390,7 @@ def get_evaluation_history(page: int = 1, limit: int = 10, db: Session = Depends
             events.append({
                 "id": r.id,
                 "is_batch": False,
+                "is_cached": bool(r.is_cached),
                 "question": r.question,
                 "ai_response": r.ai_response,
                 "status": r.status,
@@ -402,7 +435,17 @@ def get_analytics(
     total_evals = base_query.count()
     
     if total_evals == 0:
-        return {"total_evaluations": 0, "average_score": 0, "radar_data": [], "time_series": []}
+        return {
+            "total_evaluations": 0,
+            "average_score": 0,
+            "radar_data": [],
+            "time_series": [],
+            "heatmap_data": [],
+            "cache_stats": {
+                "total_cached": 0,
+                "cache_hit_rate_percent": 0.0
+            }
+        }
         
     avg_stats_query = db.query(
         func.avg(models.EvaluationRecord.final_score).label("avg_final"),
@@ -445,12 +488,19 @@ def get_analytics(
         
     heatmap_data = [{"date": k, "count": v} for k, v in heatmap_counts.items()]
     
+    total_cached = base_query.filter(models.EvaluationRecord.is_cached.is_(True)).count()
+    cache_hit_rate = round((total_cached / total_evals) * 100, 1) if total_evals > 0 else 0.0
+
     return {
         "total_evaluations": total_evals,
         "average_score": avg_final,
         "radar_data": radar_data,
         "time_series": time_series,
-        "heatmap_data": heatmap_data
+        "heatmap_data": heatmap_data,
+        "cache_stats": {
+            "total_cached": total_cached,
+            "cache_hit_rate_percent": cache_hit_rate
+        }
     }
 
 @app.get("/api/evaluations/export")
@@ -470,6 +520,7 @@ def export_evaluations(format: str = "csv", db: Session = Depends(database.get_d
                     "ai_response": r.ai_response,
                     "reference_answer": r.reference_answer,
                     "status": r.status,
+                    "is_cached": bool(r.is_cached),
                     "result_json": json.loads(r.result_json) if r.result_json else None
                 })
             yield "]"
