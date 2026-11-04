@@ -36,6 +36,13 @@ def test_sign_payload_and_verify():
     assert verify_signature(secret, payload, "invalid_header_without_sha256") is False
     assert verify_signature(secret, payload, "") is False
 
+    # Defensive edge cases
+    assert sign_payload("", payload) == ""
+    assert sign_payload(None, payload) == ""
+    assert verify_signature("", payload, header) is False
+    assert verify_signature(None, payload, header) is False
+    assert verify_signature(secret, None, header) is False
+
 
 def test_build_batch_webhook_payload():
     mock_r1 = MagicMock(status="completed", final_score=90.0, score_accuracy=4.5, score_relevance=4.8, score_completeness=4.2, score_hallucination=5.0)
@@ -129,6 +136,17 @@ def test_submit_batch_with_webhook_params(client):
         mock_bg.assert_called_once_with(batch_id, "https://ci.example.com/callback", "my-secret-pw")
 
 
+def test_submit_batch_invalid_callback_url(client):
+    """POST /api/evaluate/batch rejects invalid callback_url without http(s) scheme."""
+    csv_content = "question,ai_response\nWhat is Python?,A programming language."
+    files = {"file": ("test_batch.csv", io.BytesIO(csv_content.encode("utf-8")), "text/csv")}
+    data = {"callback_url": "ftp://malicious.example.com/callback"}
+
+    res = client.post("/api/evaluate/batch", files=files, data=data)
+    assert res.status_code == 400
+    assert "callback_url must begin with http:// or https://" in res.json()["detail"]
+
+
 # ==============================================================================
 # 4. Golden Benchmark CRUD & Comparison Tests
 # ==============================================================================
@@ -183,6 +201,11 @@ def test_benchmark_lifecycle_and_regression_detection(client, populated_batches,
     assert bm["total_records"] == 3
     assert bm["avg_final_score"] == 73.3
     assert bm["pass_rate"] == 66.7
+
+    # Duplicate name check -> 409 Conflict
+    res_dup = client.post("/api/benchmarks", json=create_payload)
+    assert res_dup.status_code == 409
+    assert "already exists" in res_dup.json()["detail"]
 
     # 2. List Benchmarks
     res_list = client.get("/api/benchmarks")

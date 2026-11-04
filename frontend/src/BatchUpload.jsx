@@ -169,6 +169,15 @@ const BatchUpload = () => {
 
   const submitBatch = async () => {
     if (!file) return;
+
+    if (callbackUrl.trim()) {
+      const trimmedUrl = callbackUrl.trim();
+      if (!trimmedUrl.startsWith('http://') && !trimmedUrl.startsWith('https://')) {
+        alert('Webhook Callback URL must begin with http:// or https://');
+        return;
+      }
+    }
+
     setUploadStatus('uploading');
     
     const formData = new FormData();

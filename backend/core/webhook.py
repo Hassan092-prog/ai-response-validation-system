@@ -13,7 +13,10 @@ def sign_payload(secret: str, payload_bytes: bytes) -> str:
     """
     Computes HMAC-SHA256 signature for the given payload using the shared secret.
     """
-    return hmac.new(secret.encode("utf-8"), payload_bytes, hashlib.sha256).hexdigest()
+    if not secret or payload_bytes is None:
+        return ""
+    secret_bytes = secret.encode("utf-8") if isinstance(secret, str) else bytes(secret)
+    return hmac.new(secret_bytes, payload_bytes, hashlib.sha256).hexdigest()
 
 
 def verify_signature(secret: str, payload_bytes: bytes, signature_header: str) -> bool:
@@ -21,13 +24,15 @@ def verify_signature(secret: str, payload_bytes: bytes, signature_header: str) -
     Verifies an incoming HMAC-SHA256 signature header against the payload.
     Expected header format: 'sha256=<hex_digest>'
     """
-    if not signature_header:
+    if not secret or not signature_header or payload_bytes is None:
         return False
     parts = signature_header.split("=", 1)
     if len(parts) != 2 or parts[0].strip().lower() != "sha256":
         return False
     expected_sig = parts[1].strip()
     computed_sig = sign_payload(secret, payload_bytes)
+    if not computed_sig:
+        return False
     return hmac.compare_digest(expected_sig, computed_sig)
 
 
@@ -84,8 +89,9 @@ def deliver_batch_webhook(
     Sends an HTTP POST webhook callback with an HMAC-SHA256 signature to callback_url.
     Returns True if delivery succeeded (HTTP 2xx), False otherwise.
     """
-    if not callback_url:
+    if not callback_url or not callback_url.strip():
         return False
+    callback_url = callback_url.strip()
 
     if records is None:
         from backend.api.database import SessionLocal

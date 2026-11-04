@@ -267,9 +267,16 @@ async def submit_batch(
     batch_id = str(uuid.uuid4())
     records_to_process = []
 
+    cleaned_callback_url = None
+    if callback_url and callback_url.strip():
+        cleaned_callback_url = callback_url.strip()
+        if not (cleaned_callback_url.startswith("http://") or cleaned_callback_url.startswith("https://")):
+            raise HTTPException(status_code=400, detail="callback_url must begin with http:// or https://")
+
+    cleaned_webhook_secret = webhook_secret.strip() if webhook_secret and webhook_secret.strip() else None
     secret_hash = None
-    if webhook_secret:
-        secret_hash = hashlib.sha256(webhook_secret.encode("utf-8")).hexdigest()
+    if cleaned_webhook_secret:
+        secret_hash = hashlib.sha256(cleaned_webhook_secret.encode("utf-8")).hexdigest()
     
     for row in reader:
         question = row.get("question")
@@ -294,7 +301,7 @@ async def submit_batch(
             input_hash=input_hash,
             is_cached=False,
             batch_id=batch_id,
-            batch_webhook_url=callback_url,
+            batch_webhook_url=cleaned_callback_url,
             batch_webhook_secret_hash=secret_hash
         )
         db.add(db_record)
@@ -302,7 +309,7 @@ async def submit_batch(
         
     db.commit()
         
-    background_tasks.add_task(process_batch_background, batch_id, callback_url, webhook_secret)
+    background_tasks.add_task(process_batch_background, batch_id, cleaned_callback_url, cleaned_webhook_secret)
     
     return {
         "batch_id": batch_id, 
@@ -832,15 +839,25 @@ def create_golden_benchmark(
     _: bool = Depends(require_api_key)
 ):
     """Saves a completed batch as a baseline Golden Benchmark."""
+    clean_name = req.name.strip()
+    clean_batch_id = req.batch_id.strip()
+
+    existing = db.query(models.GoldenBenchmark).filter(models.GoldenBenchmark.name == clean_name).first()
+    if existing:
+        raise HTTPException(
+            status_code=409,
+            detail=f"A benchmark with name '{clean_name}' already exists."
+        )
+
     records = db.query(models.EvaluationRecord).filter(
-        models.EvaluationRecord.batch_id == req.batch_id,
+        models.EvaluationRecord.batch_id == clean_batch_id,
         models.EvaluationRecord.status == "completed"
     ).all()
 
     if not records:
         raise HTTPException(
             status_code=400,
-            detail=f"Batch '{req.batch_id}' contains no completed evaluations to create a benchmark."
+            detail=f"Batch '{clean_batch_id}' contains no completed evaluations to create a benchmark."
         )
 
     total_records = len(records)
@@ -854,9 +871,9 @@ def create_golden_benchmark(
     avg_hal = round(sum(r.score_hallucination or 0 for r in records) / total_records, 2)
 
     benchmark = models.GoldenBenchmark(
-        name=req.name.strip(),
+        name=clean_name,
         description=req.description.strip() if req.description else None,
-        batch_id=req.batch_id,
+        batch_id=clean_batch_id,
         total_records=total_records,
         avg_final_score=avg_final,
         avg_accuracy=avg_acc,
@@ -868,7 +885,7 @@ def create_golden_benchmark(
     db.add(benchmark)
     db.commit()
     db.refresh(benchmark)
-    logger.info(f"Created Golden Benchmark '{benchmark.name}' (ID {benchmark.id}) from batch {req.batch_id}.")
+    logger.info(f"Created Golden Benchmark '{benchmark.name}' (ID {benchmark.id}) from batch {clean_batch_id}.")
     return benchmark
 
 @app.get("/api/benchmarks", response_model=List[benchmark_schemas.GoldenBenchmarkResponse])
@@ -906,15 +923,16 @@ def compare_batch_to_benchmark(
     if not bm:
         raise HTTPException(status_code=404, detail="Benchmark not found.")
 
+    clean_comparison_batch_id = req.comparison_batch_id.strip()
     comparison_records = db.query(models.EvaluationRecord).filter(
-        models.EvaluationRecord.batch_id == req.comparison_batch_id,
+        models.EvaluationRecord.batch_id == clean_comparison_batch_id,
         models.EvaluationRecord.status == "completed"
     ).all()
 
     if not comparison_records:
         raise HTTPException(
             status_code=400,
-            detail=f"Comparison batch '{req.comparison_batch_id}' has no completed records."
+            detail=f"Comparison batch '{clean_comparison_batch_id}' has no completed records."
         )
 
     n = len(comparison_records)
@@ -999,10 +1017,11 @@ def delete_golden_benchmark(
     bm = db.query(models.GoldenBenchmark).filter(models.GoldenBenchmark.id == benchmark_id).first()
     if not bm:
         raise HTTPException(status_code=404, detail="Benchmark not found.")
+    bm_name = bm.name
     db.delete(bm)
     db.commit()
-    logger.info(f"Deleted Golden Benchmark {benchmark_id} ('{bm.name}').")
-    return {"status": "deleted", "id": benchmark_id, "name": bm.name}
+    logger.info(f"Deleted Golden Benchmark {benchmark_id} ('{bm_name}').")
+    return {"status": "deleted", "id": benchmark_id, "name": bm_name}
 
 # Mount static frontend
 frontend_dist = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "frontend", "dist")

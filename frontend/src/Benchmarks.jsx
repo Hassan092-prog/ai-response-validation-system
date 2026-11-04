@@ -218,7 +218,7 @@ const Benchmarks = () => {
 
                   <div style={{ marginTop: '1rem', paddingTop: '0.8rem', borderTop: '1px solid var(--input-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <span style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', fontFamily: 'monospace' }}>
-                      Batch: {bm.batch_id.substring(0, 8)}...
+                      Batch: {bm.batch_id ? (bm.batch_id.length > 8 ? `${bm.batch_id.substring(0, 8)}...` : bm.batch_id) : 'N/A'}
                     </span>
                     <button 
                       onClick={() => {
@@ -350,7 +350,7 @@ const Benchmarks = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {Object.entries(comparisonResult.deltas).map(([key, delta]) => {
+                    {comparisonResult.deltas && Object.entries(comparisonResult.deltas).map(([key, delta]) => {
                       const labelMap = {
                         avg_final_score: "Average Final Score",
                         pass_rate_percent: "Pass Rate",

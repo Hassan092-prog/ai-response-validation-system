@@ -1,3 +1,4 @@
+import hmac
 import os
 from fastapi import HTTPException, Request
 
@@ -15,7 +16,7 @@ def require_api_key(request: Request) -> bool:
         return True
 
     provided = request.headers.get(API_KEY_HEADER)
-    if not provided or provided != expected:
+    if not provided or not hmac.compare_digest(provided.strip(), expected):
         raise HTTPException(
             status_code=403,
             detail="Invalid or missing API key. Please provide a valid 'X-API-KEY' header."

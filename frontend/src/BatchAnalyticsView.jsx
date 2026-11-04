@@ -295,7 +295,7 @@ const BatchAnalyticsView = ({ batchId }) => {
 
   const handleSaveBenchmark = async (e) => {
     e.preventDefault();
-    if (!benchmarkName.trim()) return;
+    if (!benchmarkName.trim() || !batchId) return;
     setIsSavingBenchmark(true);
     setBenchmarkMessage(null);
     try {
