@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Loader2, CheckCircle2, BarChart3, Download, Eye, EyeOff, Search, AlertTriangle, XCircle } from 'lucide-react';
+import { Loader2, CheckCircle2, BarChart3, Download, Eye, EyeOff, Search, AlertTriangle, XCircle, Award, X } from 'lucide-react';
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
@@ -15,6 +15,13 @@ const BatchAnalyticsView = ({ batchId }) => {
   // Phase 3: Smart Risk Filtering State
   const [filterMode, setFilterMode] = useState('all'); // 'all' | 'hallucinations' | 'failed' | 'passed'
   const [searchTerm, setSearchTerm] = useState('');
+
+  // Phase 5: Golden Benchmark Modal State
+  const [isBenchmarkModalOpen, setIsBenchmarkModalOpen] = useState(false);
+  const [benchmarkName, setBenchmarkName] = useState('');
+  const [benchmarkDesc, setBenchmarkDesc] = useState('');
+  const [isSavingBenchmark, setIsSavingBenchmark] = useState(false);
+  const [benchmarkMessage, setBenchmarkMessage] = useState(null);
 
   useEffect(() => {
     const fetchBatch = async () => {
@@ -286,6 +293,39 @@ const BatchAnalyticsView = ({ batchId }) => {
     doc.save(`batch_evaluation_report_${batchId}.pdf`);
   };
 
+  const handleSaveBenchmark = async (e) => {
+    e.preventDefault();
+    if (!benchmarkName.trim()) return;
+    setIsSavingBenchmark(true);
+    setBenchmarkMessage(null);
+    try {
+      const res = await fetch(`${API_BASE}/api/benchmarks`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: benchmarkName.trim(),
+          description: benchmarkDesc.trim() || undefined,
+          batch_id: batchId
+        })
+      });
+      if (!res.ok) {
+        const errJson = await res.json().catch(() => ({}));
+        throw new Error(errJson.detail || "Failed to save benchmark.");
+      }
+      setBenchmarkMessage({ type: 'success', text: `Saved as Golden Benchmark "${benchmarkName.trim()}"!` });
+      setTimeout(() => {
+        setIsBenchmarkModalOpen(false);
+        setBenchmarkMessage(null);
+        setBenchmarkName('');
+        setBenchmarkDesc('');
+      }, 1500);
+    } catch (err) {
+      setBenchmarkMessage({ type: 'error', text: err.message });
+    } finally {
+      setIsSavingBenchmark(false);
+    }
+  };
+
   if (loading) return <div style={{ padding: '2rem', textAlign: 'center' }}><Loader2 className="spinner" size={24} /></div>;
   if (!batchData) return <div style={{ padding: '2rem', textAlign: 'center' }}>Batch data not found.</div>;
 
@@ -299,7 +339,14 @@ const BatchAnalyticsView = ({ batchId }) => {
               <BarChart3 size={20} color="var(--accent-color)" />
               Batch Results Analytics
             </h3>
-            <div style={{ display: 'flex', gap: '1rem' }}>
+            <div style={{ display: 'flex', gap: '0.8rem', flexWrap: 'wrap' }}>
+              <button 
+                onClick={() => setIsBenchmarkModalOpen(true)} 
+                className="secondary-btn" 
+                style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '0.5rem 1rem', borderRadius: '6px', borderColor: 'var(--btn-bg)', color: 'var(--text-primary)' }}
+              >
+                <Award size={16} color="var(--btn-bg)" /> Save as Benchmark
+              </button>
               <button onClick={handleExportPDF} className="secondary-btn" style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '0.5rem 1rem', borderRadius: '6px' }}>
                 <Download size={16} /> Export PDF Report
               </button>
@@ -308,6 +355,111 @@ const BatchAnalyticsView = ({ batchId }) => {
               </button>
             </div>
           </div>
+
+          {/* Benchmark Save Modal */}
+          {isBenchmarkModalOpen && (
+            <div style={{
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: 'rgba(0, 0, 0, 0.6)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              zIndex: 1000,
+              padding: '1rem'
+            }}>
+              <div style={{
+                background: 'var(--bg-secondary)',
+                borderRadius: '12px',
+                border: '1px solid var(--border-color)',
+                padding: '1.5rem',
+                maxWidth: '450px',
+                width: '100%',
+                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)'
+              }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                  <h3 style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '8px', fontSize: '1.1rem' }}>
+                    <Award size={18} color="var(--btn-bg)" /> Save as Golden Benchmark
+                  </h3>
+                  <button 
+                    onClick={() => setIsBenchmarkModalOpen(false)}
+                    style={{ background: 'none', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', display: 'flex' }}
+                  >
+                    <X size={18} />
+                  </button>
+                </div>
+
+                <form onSubmit={handleSaveBenchmark}>
+                  <div style={{ marginBottom: '1rem' }}>
+                    <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, marginBottom: '4px', color: 'var(--text-secondary)' }}>
+                      Benchmark Name *
+                    </label>
+                    <input 
+                      type="text"
+                      placeholder="e.g. GPT-4o-mini Production Baseline"
+                      value={benchmarkName}
+                      onChange={(e) => setBenchmarkName(e.target.value)}
+                      required
+                      className="form-input"
+                      style={{ width: '100%', boxSizing: 'border-box', height: '38px', fontSize: '0.9rem' }}
+                    />
+                  </div>
+
+                  <div style={{ marginBottom: '1.2rem' }}>
+                    <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, marginBottom: '4px', color: 'var(--text-secondary)' }}>
+                      Description (Optional)
+                    </label>
+                    <textarea 
+                      placeholder="e.g. Baseline evaluated using default weights and temperature 0.0"
+                      value={benchmarkDesc}
+                      onChange={(e) => setBenchmarkDesc(e.target.value)}
+                      className="form-input"
+                      rows={3}
+                      style={{ width: '100%', boxSizing: 'border-box', fontSize: '0.85rem', resize: 'vertical' }}
+                    />
+                  </div>
+
+                  {benchmarkMessage && (
+                    <div style={{
+                      padding: '0.6rem 0.8rem',
+                      borderRadius: '6px',
+                      fontSize: '0.85rem',
+                      marginBottom: '1rem',
+                      background: benchmarkMessage.type === 'success' ? 'rgba(34, 197, 94, 0.1)' : 'rgba(239, 68, 68, 0.1)',
+                      color: benchmarkMessage.type === 'success' ? '#22c55e' : '#ef4444',
+                      border: `1px solid ${benchmarkMessage.type === 'success' ? 'rgba(34, 197, 94, 0.2)' : 'rgba(239, 68, 68, 0.2)'}`
+                    }}>
+                      {benchmarkMessage.text}
+                    </div>
+                  )}
+
+                  <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px' }}>
+                    <button 
+                      type="button" 
+                      onClick={() => setIsBenchmarkModalOpen(false)}
+                      className="secondary-btn"
+                      disabled={isSavingBenchmark}
+                      style={{ padding: '0.4rem 0.8rem', fontSize: '0.85rem' }}
+                    >
+                      Cancel
+                    </button>
+                    <button 
+                      type="submit"
+                      className="submit-btn"
+                      disabled={isSavingBenchmark || !benchmarkName.trim()}
+                      style={{ width: 'auto', minWidth: '120px', padding: '0.4rem 1rem', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '6px' }}
+                    >
+                      {isSavingBenchmark ? <Loader2 size={14} className="spinner" /> : <Award size={14} />}
+                      {isSavingBenchmark ? "Saving..." : "Save Benchmark"}
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          )}
           
           <div className="stats-grid" style={{ marginBottom: '2rem', gridTemplateColumns: 'repeat(3, 1fr)' }}>
             <div className="stat-card" style={{ padding: '1.5rem', background: 'var(--input-bg)', border: '1px solid var(--border-color)' }}>

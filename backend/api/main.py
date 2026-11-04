@@ -1,15 +1,17 @@
-from fastapi import FastAPI, Depends, Request, BackgroundTasks, HTTPException, UploadFile, File
+from fastapi import FastAPI, Depends, Request, BackgroundTasks, HTTPException, UploadFile, File, Form
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import StreamingResponse, JSONResponse
-from typing import Optional
+from typing import Optional, List
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from sqlalchemy import func
+from datetime import datetime, timezone
 import os
 import time
 import json
 import io
 import csv
+import hashlib
 
 try:
     import pypdf
@@ -21,13 +23,15 @@ try:
 except ImportError:
     docx = None
 
-from backend.api import models, schemas, database, kb_schemas
+from backend.api import models, schemas, database, kb_schemas, benchmark_schemas
+from backend.api.auth import require_api_key
 from backend.core import config
 from backend.core.config import logger
 from backend.core.orchestrator import process_evaluation_task
 from backend.core.batch_orchestrator import evaluate_batch_row
 from backend.core.config_weights import get_global_weights, set_global_weights
 from backend.core.cache import compute_input_hash, lookup_cache, clone_cached_record
+from backend.core.webhook import deliver_batch_webhook
 import uuid
 
 logger.info("Starting AI Response Validation API...")
@@ -166,7 +170,11 @@ def submit_evaluation(eval_input: schemas.EvaluationInput, background_tasks: Bac
         db.rollback()
         raise
 
-def process_batch_background(batch_id: str):
+def process_batch_background(
+    batch_id: str,
+    callback_url: Optional[str] = None,
+    webhook_secret: Optional[str] = None
+):
     """Background task to process a batch using the consolidated orchestrator to save API quota."""
     from backend.api.database import SessionLocal
     db = SessionLocal()
@@ -232,11 +240,22 @@ def process_batch_background(batch_id: str):
                 record.status = "failed"
                 record.result_json = json.dumps({"error": str(e)})
                 db.commit()
+
+        # Dispatch Webhook if callback_url was configured (Phase 5)
+        if callback_url:
+            deliver_batch_webhook(batch_id, callback_url, webhook_secret)
     finally:
         db.close()
 
 @app.post("/api/evaluate/batch")
-async def submit_batch(file: UploadFile = File(...), background_tasks: BackgroundTasks = BackgroundTasks(), db: Session = Depends(database.get_db)):
+async def submit_batch(
+    file: UploadFile = File(...),
+    callback_url: Optional[str] = Form(None),
+    webhook_secret: Optional[str] = Form(None),
+    background_tasks: BackgroundTasks = BackgroundTasks(),
+    db: Session = Depends(database.get_db),
+    _: bool = Depends(require_api_key)
+):
     """Accepts a CSV file of evaluations and processes them in the background."""
     if not file.filename.endswith(".csv"):
         raise HTTPException(status_code=400, detail="Must upload a CSV file.")
@@ -247,6 +266,10 @@ async def submit_batch(file: UploadFile = File(...), background_tasks: Backgroun
     
     batch_id = str(uuid.uuid4())
     records_to_process = []
+
+    secret_hash = None
+    if webhook_secret:
+        secret_hash = hashlib.sha256(webhook_secret.encode("utf-8")).hexdigest()
     
     for row in reader:
         question = row.get("question")
@@ -270,14 +293,16 @@ async def submit_batch(file: UploadFile = File(...), background_tasks: Backgroun
             status="pending",
             input_hash=input_hash,
             is_cached=False,
-            batch_id=batch_id
+            batch_id=batch_id,
+            batch_webhook_url=callback_url,
+            batch_webhook_secret_hash=secret_hash
         )
         db.add(db_record)
         records_to_process.append(db_record)
         
     db.commit()
         
-    background_tasks.add_task(process_batch_background, batch_id)
+    background_tasks.add_task(process_batch_background, batch_id, callback_url, webhook_secret)
     
     return {
         "batch_id": batch_id, 
@@ -795,6 +820,189 @@ def search_kb(req: kb_schemas.KBSearchRequest):
         "results": items,
         "count": len(items)
     }
+
+# ==============================================================================
+# Golden Benchmark & Regression Delta Endpoints (Phase 5)
+# ==============================================================================
+
+@app.post("/api/benchmarks", response_model=benchmark_schemas.GoldenBenchmarkResponse)
+def create_golden_benchmark(
+    req: benchmark_schemas.BenchmarkCreateRequest,
+    db: Session = Depends(database.get_db),
+    _: bool = Depends(require_api_key)
+):
+    """Saves a completed batch as a baseline Golden Benchmark."""
+    records = db.query(models.EvaluationRecord).filter(
+        models.EvaluationRecord.batch_id == req.batch_id,
+        models.EvaluationRecord.status == "completed"
+    ).all()
+
+    if not records:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Batch '{req.batch_id}' contains no completed evaluations to create a benchmark."
+        )
+
+    total_records = len(records)
+    avg_final = round(sum(r.final_score or 0 for r in records) / total_records, 1)
+    pass_count = sum(1 for r in records if (r.final_score or 0) >= 70.0)
+    pass_rate = round((pass_count / total_records) * 100, 1)
+
+    avg_acc = round(sum(r.score_accuracy or 0 for r in records) / total_records, 2)
+    avg_rel = round(sum(r.score_relevance or 0 for r in records) / total_records, 2)
+    avg_comp = round(sum(r.score_completeness or 0 for r in records) / total_records, 2)
+    avg_hal = round(sum(r.score_hallucination or 0 for r in records) / total_records, 2)
+
+    benchmark = models.GoldenBenchmark(
+        name=req.name.strip(),
+        description=req.description.strip() if req.description else None,
+        batch_id=req.batch_id,
+        total_records=total_records,
+        avg_final_score=avg_final,
+        avg_accuracy=avg_acc,
+        avg_relevance=avg_rel,
+        avg_completeness=avg_comp,
+        avg_hallucination=avg_hal,
+        pass_rate=pass_rate
+    )
+    db.add(benchmark)
+    db.commit()
+    db.refresh(benchmark)
+    logger.info(f"Created Golden Benchmark '{benchmark.name}' (ID {benchmark.id}) from batch {req.batch_id}.")
+    return benchmark
+
+@app.get("/api/benchmarks", response_model=List[benchmark_schemas.GoldenBenchmarkResponse])
+def list_golden_benchmarks(
+    db: Session = Depends(database.get_db),
+    _: bool = Depends(require_api_key)
+):
+    """Lists all saved Golden Benchmarks."""
+    return db.query(models.GoldenBenchmark).order_by(models.GoldenBenchmark.created_at.desc()).all()
+
+@app.get("/api/benchmarks/{benchmark_id}", response_model=benchmark_schemas.GoldenBenchmarkResponse)
+def get_golden_benchmark(
+    benchmark_id: int,
+    db: Session = Depends(database.get_db),
+    _: bool = Depends(require_api_key)
+):
+    """Retrieves metadata and baseline metrics for a single Golden Benchmark."""
+    bm = db.query(models.GoldenBenchmark).filter(models.GoldenBenchmark.id == benchmark_id).first()
+    if not bm:
+        raise HTTPException(status_code=404, detail="Benchmark not found.")
+    return bm
+
+@app.post("/api/benchmarks/{benchmark_id}/compare", response_model=benchmark_schemas.BenchmarkCompareResponse)
+def compare_batch_to_benchmark(
+    benchmark_id: int,
+    req: benchmark_schemas.BenchmarkCompareRequest,
+    db: Session = Depends(database.get_db),
+    _: bool = Depends(require_api_key)
+):
+    """
+    Compares a candidate batch against a saved Golden Benchmark and calculates
+    per-dimension delta metrics and an automated regression verdict.
+    """
+    bm = db.query(models.GoldenBenchmark).filter(models.GoldenBenchmark.id == benchmark_id).first()
+    if not bm:
+        raise HTTPException(status_code=404, detail="Benchmark not found.")
+
+    comparison_records = db.query(models.EvaluationRecord).filter(
+        models.EvaluationRecord.batch_id == req.comparison_batch_id,
+        models.EvaluationRecord.status == "completed"
+    ).all()
+
+    if not comparison_records:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Comparison batch '{req.comparison_batch_id}' has no completed records."
+        )
+
+    n = len(comparison_records)
+    cur_final = round(sum(r.final_score or 0 for r in comparison_records) / n, 1)
+    pass_count = sum(1 for r in comparison_records if (r.final_score or 0) >= 70.0)
+    cur_pass_rate = round((pass_count / n) * 100, 1)
+
+    cur_acc = round(sum(r.score_accuracy or 0 for r in comparison_records) / n, 2)
+    cur_rel = round(sum(r.score_relevance or 0 for r in comparison_records) / n, 2)
+    cur_comp = round(sum(r.score_completeness or 0 for r in comparison_records) / n, 2)
+    cur_hal = round(sum(r.score_hallucination or 0 for r in comparison_records) / n, 2)
+
+    def calc_delta(baseline: float, current: float, is_pct: bool = False):
+        diff = round(current - baseline, 2 if not is_pct else 1)
+        sign = "+" if diff > 0 else ""
+        diff_str = f"{sign}{diff:.2f}" if not is_pct else f"{sign}{diff:.1f}%"
+        threshold = 0.5 if is_pct else 0.05
+        if diff > threshold:
+            trend = "improved"
+        elif diff < -threshold:
+            trend = "degraded"
+        else:
+            trend = "stable"
+        return {
+            "baseline": baseline,
+            "current": current,
+            "delta": diff_str,
+            "delta_numeric": diff,
+            "trend": trend
+        }
+
+    deltas = {
+        "avg_final_score": calc_delta(bm.avg_final_score, cur_final),
+        "pass_rate_percent": calc_delta(bm.pass_rate, cur_pass_rate, is_pct=True),
+        "avg_accuracy": calc_delta(bm.avg_accuracy, cur_acc),
+        "avg_relevance": calc_delta(bm.avg_relevance, cur_rel),
+        "avg_completeness": calc_delta(bm.avg_completeness, cur_comp),
+        "avg_hallucination": calc_delta(bm.avg_hallucination, cur_hal),
+    }
+
+    pass_rate_delta = deltas["pass_rate_percent"]["delta_numeric"]
+    final_score_delta = deltas["avg_final_score"]["delta_numeric"]
+    hallucination_delta = deltas["avg_hallucination"]["delta_numeric"]
+
+    # Acceptance criteria: REGRESSION_DETECTED fires when pass rate drops by >5 percentage points
+    if pass_rate_delta <= -5.0 or final_score_delta <= -5.0 or hallucination_delta <= -0.5:
+        overall_verdict = "REGRESSION_DETECTED"
+        reasons = []
+        if pass_rate_delta <= -5.0:
+            reasons.append(f"Pass rate dropped by {abs(pass_rate_delta):.1f}% (regression tolerance: 5.0%)")
+        if final_score_delta <= -5.0:
+            reasons.append(f"Average final score dropped by {abs(final_score_delta):.1f} points")
+        if hallucination_delta <= -0.5:
+            reasons.append(f"Hallucination score degraded by {abs(hallucination_delta):.2f}")
+        verdict_reason = "; ".join(reasons) + "."
+    elif pass_rate_delta >= 2.0 and final_score_delta >= 1.0:
+        overall_verdict = "IMPROVED"
+        verdict_reason = f"Model quality improved across key benchmarks (+{pass_rate_delta:.1f}% pass rate, +{final_score_delta:.1f} score)."
+    else:
+        overall_verdict = "STABLE"
+        verdict_reason = "Metrics remain consistent with baseline within acceptable operational tolerance."
+
+    return {
+        "benchmark_id": bm.id,
+        "benchmark_name": bm.name,
+        "baseline_batch_id": bm.batch_id,
+        "comparison_batch_id": req.comparison_batch_id,
+        "comparison_total_records": n,
+        "deltas": deltas,
+        "overall_verdict": overall_verdict,
+        "verdict_reason": verdict_reason,
+        "triggered_at": datetime.now(timezone.utc)
+    }
+
+@app.delete("/api/benchmarks/{benchmark_id}")
+def delete_golden_benchmark(
+    benchmark_id: int,
+    db: Session = Depends(database.get_db),
+    _: bool = Depends(require_api_key)
+):
+    """Deletes a saved Golden Benchmark."""
+    bm = db.query(models.GoldenBenchmark).filter(models.GoldenBenchmark.id == benchmark_id).first()
+    if not bm:
+        raise HTTPException(status_code=404, detail="Benchmark not found.")
+    db.delete(bm)
+    db.commit()
+    logger.info(f"Deleted Golden Benchmark {benchmark_id} ('{bm.name}').")
+    return {"status": "deleted", "id": benchmark_id, "name": bm.name}
 
 # Mount static frontend
 frontend_dist = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "frontend", "dist")

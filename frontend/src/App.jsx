@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { PlusCircle, History, BarChart3, Moon, Sun, ChevronDown, Paperclip, Download, FileSpreadsheet, FileJson, Eye, EyeOff, Database, ShieldCheck, Inbox, Activity, Zap, RefreshCw, UploadCloud, FileText, X } from 'lucide-react'
+import { PlusCircle, History, BarChart3, Moon, Sun, ChevronDown, Paperclip, Download, FileSpreadsheet, FileJson, Eye, EyeOff, Database, ShieldCheck, Inbox, Activity, Zap, RefreshCw, UploadCloud, FileText, X, GitCompare } from 'lucide-react'
 import './App.css'
 import Results from './Results'
 import BatchAnalyticsView from './BatchAnalyticsView'
 import AnalyticsDashboard from './AnalyticsDashboard'
 import BatchUpload from './BatchUpload'
 import KnowledgeBase from './KnowledgeBase'
+import Benchmarks from './Benchmarks'
 import { API_BASE } from './config'
 
 function App() {
@@ -405,6 +406,12 @@ function App() {
             onClick={() => setActiveTab('batch')}
           >
             <FileSpreadsheet className="icon" size={18} /> Batch Process
+          </button>
+          <button 
+            className={`nav-btn ${activeTab === 'benchmarks' ? 'active' : ''}`}
+            onClick={() => setActiveTab('benchmarks')}
+          >
+            <GitCompare className="icon" size={18} /> Benchmarks & CI
           </button>
         </nav>
 
@@ -872,6 +879,11 @@ function App() {
           {/* TAB: KNOWLEDGE BASE */}
           {activeTab === 'kb' && (
             <KnowledgeBase />
+          )}
+
+          {/* TAB: BENCHMARKS & REGRESSION CI */}
+          {activeTab === 'benchmarks' && (
+            <Benchmarks />
           )}
 
         </div>

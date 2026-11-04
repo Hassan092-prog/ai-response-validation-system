@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import { FileSpreadsheet, Loader2, CheckCircle2, BarChart3, Download, RefreshCw, Eye, EyeOff, Search, AlertTriangle, XCircle } from 'lucide-react';
+import { FileSpreadsheet, Loader2, CheckCircle2, BarChart3, Download, RefreshCw, Eye, EyeOff, Search, AlertTriangle, XCircle, Zap } from 'lucide-react';
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import Results from './Results';
 import './App.css';
@@ -14,6 +14,11 @@ const BatchUpload = () => {
   const [isPolling, setIsPolling] = useState(false);
   const lastCompletedCount = useRef(0);
   const [toastState, setToastState] = useState({ show: false, message: '' });
+
+  // Phase 5: CI/CD Webhook Delivery Settings
+  const [callbackUrl, setCallbackUrl] = useState('');
+  const [webhookSecret, setWebhookSecret] = useState('');
+  const [showWebhookOptions, setShowWebhookOptions] = useState(false);
 
   // Phase 3: Smart Risk Filtering & In-Row Claim Inspector State
   const [filterMode, setFilterMode] = useState('all'); // 'all' | 'hallucinations' | 'failed' | 'passed'
@@ -168,6 +173,12 @@ const BatchUpload = () => {
     
     const formData = new FormData();
     formData.append('file', file);
+    if (callbackUrl.trim()) {
+      formData.append('callback_url', callbackUrl.trim());
+    }
+    if (webhookSecret.trim()) {
+      formData.append('webhook_secret', webhookSecret.trim());
+    }
 
     try {
       const response = await fetch(`${API_BASE}/api/evaluate/batch`, {
@@ -261,6 +272,64 @@ const BatchUpload = () => {
               {file ? "File selected. Click Upload to begin." : "or click to browse from your computer"}
             </p>
           </label>
+
+          {/* Phase 5: CI/CD Webhook Notification Settings */}
+          <div 
+            onClick={(e) => e.stopPropagation()}
+            style={{ 
+              marginTop: '1.5rem', 
+              background: 'var(--sidebar-hover)', 
+              border: '1px solid var(--input-border)', 
+              borderRadius: '10px', 
+              padding: '1rem 1.2rem',
+              textAlign: 'left',
+              maxWidth: '550px',
+              margin: '1.5rem auto 0 auto'
+            }}
+          >
+            <div 
+              onClick={() => setShowWebhookOptions(!showWebhookOptions)}
+              style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', userSelect: 'none' }}
+            >
+              <span style={{ fontSize: '0.85rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-primary)' }}>
+                <Zap size={15} color="var(--btn-bg)" /> CI/CD Webhook Notification
+              </span>
+              <span style={{ fontSize: '0.8rem', color: 'var(--btn-bg)', fontWeight: 600 }}>
+                {showWebhookOptions ? 'Hide Settings' : 'Configure (Optional)'}
+              </span>
+            </div>
+
+            {showWebhookOptions && (
+              <div style={{ marginTop: '0.8rem', display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, marginBottom: '4px', color: 'var(--text-secondary)' }}>
+                    Callback URL
+                  </label>
+                  <input 
+                    type="url"
+                    placeholder="https://ci.example.com/hooks/arvs"
+                    value={callbackUrl}
+                    onChange={(e) => setCallbackUrl(e.target.value)}
+                    className="form-input"
+                    style={{ width: '100%', boxSizing: 'border-box', height: '36px', fontSize: '0.85rem' }}
+                  />
+                </div>
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, marginBottom: '4px', color: 'var(--text-secondary)' }}>
+                    HMAC Webhook Secret (Optional)
+                  </label>
+                  <input 
+                    type="password"
+                    placeholder="Shared secret to generate X-ARVS-Signature header"
+                    value={webhookSecret}
+                    onChange={(e) => setWebhookSecret(e.target.value)}
+                    className="form-input"
+                    style={{ width: '100%', boxSizing: 'border-box', height: '36px', fontSize: '0.85rem' }}
+                  />
+                </div>
+              </div>
+            )}
+          </div>
 
           {file && (
             <button 
