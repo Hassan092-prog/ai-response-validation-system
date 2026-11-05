@@ -73,6 +73,17 @@ def health_check():
         "llm_model": provider.model_name,
     }
 
+@app.get("/api/provider/status")
+def provider_status():
+    """Inspect active LLM provider, active model, and operational status."""
+    from backend.core.providers import get_active_provider
+    provider = get_active_provider()
+    return {
+        "status": "healthy",
+        "provider": provider.provider_name,
+        "model": provider.model_name,
+    }
+
 @app.get("/api/config/weights")
 def api_get_weights():
     return get_global_weights()
@@ -451,6 +462,15 @@ def get_evaluation_history(page: int = 1, limit: int = 10, db: Session = Depends
         }
     }
 
+@app.get("/api/history", include_in_schema=False)
+def get_history_alias(
+    page: int = 1,
+    limit: int = 10,
+    db: Session = Depends(database.get_db)
+):
+    """Backwards-compatible alias for /api/evaluations/history."""
+    return get_evaluation_history(page=page, limit=limit, db=db)
+
 @app.get("/api/evaluations/analytics")
 def get_analytics(
     batch_id: Optional[str] = None,
@@ -537,6 +557,16 @@ def get_analytics(
             "cache_hit_rate_percent": cache_hit_rate
         }
     }
+
+@app.get("/api/analytics", include_in_schema=False)
+def get_analytics_alias(
+    batch_id: Optional[str] = None,
+    min_score: Optional[int] = None,
+    max_score: Optional[int] = None,
+    db: Session = Depends(database.get_db)
+):
+    """Backwards-compatible alias for /api/evaluations/analytics."""
+    return get_analytics(batch_id=batch_id, min_score=min_score, max_score=max_score, db=db)
 
 @app.get("/api/evaluations/export")
 def export_evaluations(format: str = "csv", db: Session = Depends(database.get_db)):
@@ -777,6 +807,11 @@ def delete_kb_document(doc_id: str):
     except Exception as e:
         logger.error(f"Error deleting document {doc_id}: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
+@app.delete("/api/kb/{doc_id}", include_in_schema=False)
+def delete_kb_document_alias(doc_id: str):
+    """Backwards-compatible alias for /api/kb/documents/{doc_id}."""
+    return delete_kb_document(doc_id=doc_id)
 
 @app.post("/api/kb/search", response_model=kb_schemas.KBSearchResponse)
 def search_kb(req: kb_schemas.KBSearchRequest):

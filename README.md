@@ -6,7 +6,7 @@
 [![Python](https://img.shields.io/badge/Python-3.12-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
 [![React](https://img.shields.io/badge/React-18.3-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
-[![Pytest](https://img.shields.io/badge/Pytest-76%20Passed-brightgreen?style=for-the-badge&logo=pytest&logoColor=white)](https://docs.pytest.org/)
+[![Pytest](https://img.shields.io/badge/Pytest-78%20Passed-brightgreen?style=for-the-badge&logo=pytest&logoColor=white)](https://docs.pytest.org/)
 [![Ruff](https://img.shields.io/badge/Ruff-0%20Errors-success?style=for-the-badge&logo=ruff&logoColor=white)](https://docs.astral.sh/ruff/)
 [![Docker](https://img.shields.io/badge/Docker-Multi--Stage-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
 [![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](LICENSE)
@@ -118,7 +118,7 @@ To elevate the system from a polished internship prototype into an **enterprise-
 
 ### ⚙️ Phase 1: Automated Test Suite & CI/CD Pipeline
 - **Continuous Integration Pipeline ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)):** GitHub Actions workflow executing Ruff linting, test matrices, and container builds on every PR.
-- **Automated Test Suite ([`tests/`](tests/)):** Expanded from a single retrieval test to **76 automated pytest tests** covering API endpoints, judge parsing, database queries, and chunking with in-memory SQLite isolation.
+- **Automated Test Suite ([`tests/`](tests/)):** Expanded from a single retrieval test to **78 automated pytest tests** covering API endpoints, judge parsing, database queries, and chunking with in-memory SQLite isolation.
 - **Ruff Static Analysis:** Zero linting errors across all backend, script, and test code.
 
 ### ⚡ Phase 2: Caching Engine & Deduplication
@@ -141,7 +141,7 @@ To elevate the system from a polished internship prototype into an **enterprise-
   - `GET /api/kb/documents`: Ingested document catalog with chunk counts.
   - `POST /api/kb/upload`: Direct file upload and vector indexing.
   - `POST /api/kb/search`: Semantic search with cosine similarity distance scoring.
-  - `DELETE /api/kb/{filename}`: Chunk deletion.
+  - `DELETE /api/kb/documents/{doc_id}`: Chunk deletion.
 - **Frontend Tab ([`frontend/src/KnowledgeBase.jsx`](frontend/src/KnowledgeBase.jsx)):** Interactive Knowledge Base explorer with drag-and-drop document upload and semantic search playground.
 
 ### 🔗 Phase 5: Automated Regression Benchmarking & Webhook CI Integration
@@ -173,7 +173,7 @@ To elevate the system from a polished internship prototype into an **enterprise-
 | **Database** | SQLite (with WAL mode, composite indexes, and yield-per streaming) |
 | **Vector Store & Embeddings** | ChromaDB, Sentence-Transformers (`all-MiniLM-L6-v2`) |
 | **LLM Providers** | Groq Cloud, Ollama (Local/Offline), OpenAI / vLLM / Compatible |
-| **Testing & Quality** | Pytest (76 tests), Pytest-Cov, Unittest Mock, Ruff Linter, ESLint |
+| **Testing & Quality** | Pytest (78 tests), Pytest-Cov, Unittest Mock, Ruff Linter, ESLint |
 | **DevOps & Packaging** | Docker (Multi-stage build), Docker Compose, GitHub Actions CI |
 
 ---
@@ -225,7 +225,7 @@ pip install -r requirements.txt
 python scripts/migrate_benchmarks.py
 
 # Start API server
-uvicorn backend.api.main:app --host 0.0.0.0 --port 8000 --reload
+uvicorn backend.api.main:app --host 0.0.0.0 --port 8005 --reload
 ```
 
 #### Terminal 2 — Frontend (React / Vite):
@@ -240,13 +240,13 @@ npm run dev
 
 ## 🧪 Testing & Verification
 
-### 1. Run the Automated Test Suite (76 Tests)
+### 1. Run the Automated Test Suite (78 Tests)
 ```bash
 pytest tests/ -v
 ```
-All 76 tests execute in memory with mocked LLM calls and isolated SQLite databases, running in ~17 seconds without consuming API credits:
+All 78 tests execute in memory with mocked LLM calls and isolated SQLite databases, running in ~14 seconds without consuming API credits:
 ```text
-============================= 76 passed in 17.74s ==============================
+============================= 78 passed in 14.24s ==============================
 ```
 
 ### 2. Code Linting & Static Analysis
@@ -268,22 +268,24 @@ cd frontend && npm run lint
 | `POST` | `/api/evaluate/batch` | Upload CSV for batch processing (supports webhooks) | Optional |
 | `GET` | `/api/results/{id}` | Retrieve evaluation result by ID | Public |
 | `GET` | `/api/batch/{batch_id}` | Poll batch processing progress and completed records | Public |
-| `GET` | `/api/history` | Paginated evaluation history with filtering | Public |
-| `GET` | `/api/analytics` | Aggregated metrics, radar profiles, and time-series data | Public |
+| `GET` | `/api/evaluations/history` | Paginated evaluation history with KPI stats (alias: `/api/history`) | Public |
+| `GET` | `/api/evaluations/analytics` | Aggregated metrics, radar profiles, and time-series (alias: `/api/analytics`) | Public |
+| `GET` | `/api/evaluations/export` | Export evaluation records to CSV or JSON | Public |
+| `POST` | `/api/extract-text` | Extract text from uploaded PDF, DOCX, or TXT file | Public |
 | `GET` | `/api/config/weights` | Get active evaluation dimension weights | Public |
 | `POST` | `/api/config/weights` | Globally update scoring penalty weights | Public |
 | `GET` | `/api/kb/status` | ChromaDB vector store health status | Public |
 | `GET` | `/api/kb/documents` | List ingested documents with chunk counts | Public |
 | `POST` | `/api/kb/upload` | Upload and chunk PDF/DOCX/TXT/MD into ChromaDB | Public |
 | `POST` | `/api/kb/search` | Semantic vector search with cosine similarity | Public |
-| `DELETE` | `/api/kb/{filename}` | Delete document and remove chunk embeddings | Public |
+| `DELETE` | `/api/kb/documents/{id}` | Delete document and remove chunk embeddings (alias: `/api/kb/{id}`) | Public |
 | `POST` | `/api/benchmarks` | Snapshot a completed batch as a Golden Benchmark | `X-API-KEY` |
 | `GET` | `/api/benchmarks` | List all saved Golden Benchmarks | `X-API-KEY` |
 | `GET` | `/api/benchmarks/{id}` | Retrieve a single Golden Benchmark | `X-API-KEY` |
 | `POST` | `/api/benchmarks/{id}/compare` | Compare candidate batch & generate regression delta report | `X-API-KEY` |
 | `DELETE` | `/api/benchmarks/{id}` | Delete a Golden Benchmark | `X-API-KEY` |
 | `GET` | `/api/provider/status` | Inspect active LLM provider and available models | Public |
-| `GET` | `/api/health` | Service health status and version check | Public |
+| `GET` | `/api/health` | Service health status, active provider, and version check | Public |
 
 ---
 

@@ -175,22 +175,24 @@ flowchart TD
 | | `POST` | `/api/evaluate/batch` | Upload CSV for background batch evaluation | Optional |
 | | `GET` | `/api/results/{id}` | Retrieve evaluation record by ID | Public |
 | | `GET` | `/api/batch/{batch_id}` | Poll batch evaluation progress & completed records | Public |
-| **Analytics** | `GET` | `/api/history` | Paginated evaluation history with filtering | Public |
-| | `GET` | `/api/analytics` | Aggregated metrics, radar profiles & time series | Public |
+| **Analytics** | `GET` | `/api/evaluations/history` | Paginated evaluation history with KPI stats (alias: `/api/history`) | Public |
+| | `GET` | `/api/evaluations/analytics` | Aggregated metrics, radar profiles & time series (alias: `/api/analytics`) | Public |
+| | `GET` | `/api/evaluations/export` | Stream evaluation records in CSV or JSON format | Public |
+| | `POST` | `/api/extract-text` | Extract text from uploaded PDF, DOCX, or TXT file | Public |
 | | `GET` | `/api/config/weights` | Read active scoring penalty weights | Public |
 | | `POST` | `/api/config/weights` | Globally update scoring penalty weights | Public |
 | **Knowledge Base** | `GET` | `/api/kb/status` | Vector store health & chunk stats (503 on cloud) | Public |
 | | `GET` | `/api/kb/documents` | Catalog of ingested source documents | Public |
 | | `POST` | `/api/kb/upload` | Ingest and chunk PDF/DOCX/TXT/MD files | Public |
 | | `POST` | `/api/kb/search` | Semantic search with cosine similarity scoring | Public |
-| | `DELETE` | `/api/kb/{filename}` | Delete document and remove chunk embeddings | Public |
+| | `DELETE` | `/api/kb/documents/{id}` | Delete document and remove chunk embeddings (alias: `/api/kb/{id}`) | Public |
 | **Benchmarks & CI** | `POST` | `/api/benchmarks` | Snapshot a completed batch as a Golden Benchmark | `X-API-KEY` |
 | | `GET` | `/api/benchmarks` | List all saved Golden Benchmarks | `X-API-KEY` |
 | | `GET` | `/api/benchmarks/{id}` | Retrieve metadata for a single Golden Benchmark | `X-API-KEY` |
 | | `POST` | `/api/benchmarks/{id}/compare` | Compare candidate batch & return delta report | `X-API-KEY` |
 | | `DELETE` | `/api/benchmarks/{id}` | Delete a Golden Benchmark | `X-API-KEY` |
 | **Telemetry** | `GET` | `/api/provider/status` | Inspect active LLM provider and available models | Public |
-| | `GET` | `/api/health` | Service health status and version check | Public |
+| | `GET` | `/api/health` | Service health status, active provider, and version check | Public |
 
 ---
 

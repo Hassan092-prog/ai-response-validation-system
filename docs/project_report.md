@@ -108,7 +108,7 @@ flowchart LR
 ### 7.1 Phase 1: Automated Test Suite & CI/CD Hardening
 - **GitHub Actions Pipeline ([`.github/workflows/ci.yml`](../.github/workflows/ci.yml)):** Automated CI gating every commit with Ruff linting, test execution, and Docker build checks.
 - **Pytest Infrastructure ([`tests/conftest.py`](../tests/conftest.py)):** In-memory SQLite session with mock LLM fixtures for deterministic offline testing.
-- **76 Automated Tests:** Expanded test coverage from 1 file to 76 tests across agents, API endpoints, caching, retrieval, vector store, and webhook delivery.
+- **78 Automated Tests:** Expanded test coverage from 1 file to 78 tests across agents, API endpoints, caching, retrieval, vector store, and webhook delivery.
 - **Ruff Linter:** Enforced clean Python code standards with 0 errors across the codebase.
 
 ### 7.2 Phase 2: Deterministic SHA-256 Caching Engine
@@ -126,7 +126,7 @@ flowchart LR
 
 ### 7.4 Phase 4: Dynamic Knowledge Base Management UI & Ingestion Pipeline
 - **Sliding-Window Sentence Chunker ([`backend/kb/chunking.py`](../backend/kb/chunking.py)):** Ingestion for PDF, DOCX, TXT, and Markdown files with configurable chunk overlap.
-- **Management API Endpoints:** Complete CRUD and vector search suite (`/api/kb/status`, `/api/kb/documents`, `/api/kb/upload`, `/api/kb/search`, `/api/kb/{filename}`).
+- **Management API Endpoints:** Complete CRUD and vector search suite (`/api/kb/status`, `/api/kb/documents`, `/api/kb/upload`, `/api/kb/search`, `/api/kb/documents/{doc_id}`).
 - **Interactive UI Tab ([`frontend/src/KnowledgeBase.jsx`](../frontend/src/KnowledgeBase.jsx)):** Drag-and-drop document upload zone and a semantic search playground displaying cosine similarity distance metrics.
 
 ### 7.5 Phase 5: Automated Regression Benchmarking & Webhook CI Integration
@@ -145,7 +145,7 @@ flowchart LR
 
 | Quality Dimension | Standard Enforced | Verification Result |
 | :--- | :--- | :---: |
-| **Unit & Integration Tests** | 100% passing offline test suite | **76 / 76 Passed** |
+| **Unit & Integration Tests** | 100% passing offline test suite | **78 / 78 Passed** |
 | **Python Code Quality** | PEP 8, Ruff static analysis | **0 Errors** |
 | **Frontend Code Quality** | React 18, ESLint with FlatConfig | **0 Errors** |
 | **Regression Gating** | Drop $>5\%$ triggers `REGRESSION_DETECTED` | **Verified** |

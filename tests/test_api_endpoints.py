@@ -13,6 +13,15 @@ def test_health_check(client):
     assert "llm_provider" in data
     assert "llm_model" in data
 
+def test_provider_status(client):
+    """GET /api/provider/status returns 200 with healthy status and active provider name."""
+    response = client.get("/api/provider/status")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["status"] == "healthy"
+    assert "provider" in data
+    assert "model" in data
+
 def test_weights_config_endpoints(client):
     """GET and POST /api/config/weights dynamically read and update scoring weights."""
     get_res = client.get("/api/config/weights")
@@ -155,3 +164,13 @@ def test_extract_text_unsupported(client):
     files = {"file": ("test.exe", io.BytesIO(b"binary"), "application/octet-stream")}
     response = client.post("/api/extract-text", files=files)
     assert response.status_code == 400
+
+def test_endpoint_aliases(client):
+    """Backwards-compatible aliases /api/history and /api/analytics return 200."""
+    res_history = client.get("/api/history?page=1&limit=5")
+    assert res_history.status_code == 200
+    assert "history" in res_history.json()
+
+    res_analytics = client.get("/api/analytics")
+    assert res_analytics.status_code == 200
+    assert "total_evaluations" in res_analytics.json()

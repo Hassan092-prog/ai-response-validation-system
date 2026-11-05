@@ -25,7 +25,7 @@ flowchart TD
 | **Real-Time Telemetry & Latency Monitor** | Horizon 1 | **Delivered** | Header telemetry pill displaying backend health and roundtrip inference latency in milliseconds. |
 | **Smart Batch Risk Filtering & Accordion** | Horizon 1 | **Delivered** | 1-click filter pills (`⚠️ Hallucinations Only`, `❌ Failed Only`, etc.) and in-row claim accordion in [`BatchUpload.jsx`](../frontend/src/BatchUpload.jsx). |
 | **Direct PDF/TXT Drag-and-Drop Ingestion** | Horizon 1 | **Delivered** | Direct file drop zone parsing text files into the Source Document textarea with word-count chips. |
-| **Automated Test Suite & GitHub Actions CI** | Horizon 2 | **Delivered** | 76 automated Pytest tests, in-memory SQLite fixtures, Ruff linter, and [`.github/workflows/ci.yml`](../.github/workflows/ci.yml). |
+| **Automated Test Suite & GitHub Actions CI** | Horizon 2 | **Delivered** | 78 automated Pytest tests, in-memory SQLite fixtures, Ruff linter, and [`.github/workflows/ci.yml`](../.github/workflows/ci.yml). |
 | **SHA-256 Deduplication Caching Engine** | Horizon 2 | **Delivered** | Deterministic SHA-256 input hashing in [`cache.py`](../backend/core/cache.py), $<5\text{ms}$ replay clones, and telemetry tracking. |
 | **Model-Agnostic Multi-Provider LLM Layer** | Horizon 2 | **Delivered** | Provider Factory supporting Groq Cloud, local/offline Ollama, OpenAI-compatible APIs, and automatic failover. |
 | **Dynamic Knowledge Base Management UI** | Horizon 2 | **Delivered** | ChromaDB document catalog, sentence chunker, and semantic search playground in [`KnowledgeBase.jsx`](../frontend/src/KnowledgeBase.jsx). |
