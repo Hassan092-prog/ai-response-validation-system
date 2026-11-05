@@ -1,23 +1,45 @@
 # Agile Project Management Documentation
 ## AI Response Validation System with Hallucination Detection Assistance
-**Infosys Springboard Internship 7.0**
+**Infosys Springboard Internship 7.0 & Extended Enterprise Engineering Evolution**
 
 * **Author / Intern:** Mohammed Hassan
 * **GitHub Repository:** [https://github.com/Hassan092-prog/ai-response-validation-system](https://github.com/Hassan092-prog/ai-response-validation-system)
 * **Methodology:** Agile Scrum Framework (Iterative & Incremental Delivery)
-* **Sprint Cadence:** 2-Week Sprints (4 Sprints aligned with Milestones 1–4)
-* **Status:** Complete & Production Ready
+* **Sprint Cadence:** 2-Week Sprints (7 Sprints total: Sprints 1–4 Internship Milestones, Sprints 5–7 Enterprise Evolution)
+* **Status:** Complete, Fully Tested (76/76 Tests Passing) & Production Ready
 
 ---
 
 ## 1. Executive Summary & Agile Principles
 
-The **AI Response Validation System** was engineered using an **Agile Scrum Methodology** to ensure continuous inspection, rapid adaptation to technical challenges, and iterative delivery of high-value capabilities. Across the 8-week internship lifecycle, the project was partitioned into **4 two-week Sprints**, directly mapping to the 4 core Infosys Springboard evaluation milestones.
+The **AI Response Validation System** was engineered using an **Agile Scrum Methodology** to ensure continuous inspection, rapid adaptation to technical challenges, and iterative delivery of high-value capabilities.
+
+The development lifecycle spans two distinct phases:
+1. **The Internship Phase (Sprints 1–4):** Mapped directly to the 4 core Infosys Springboard evaluation milestones, delivering the multi-agent MoE engine, RAG foundation, batch evaluation, and visual analytics.
+2. **The Post-Internship Enterprise Evolution (Sprints 5–7):** Hardened the system into an enterprise MLOps platform featuring an automated CI/CD test suite, SHA-256 deduplication caching, a model-agnostic provider factory (Groq, Ollama, OpenAI), dynamic ChromaDB knowledge base UI, and automated CI/CD regression benchmarking with signed webhooks.
+
+```mermaid
+flowchart TD
+    subgraph Epoch1["Epoch 1: Core Internship Milestones (8 Weeks)"]
+        S1["Sprint 1: RAG & Ingestion Scaffolding"] --> S2["Sprint 2: MoE Multi-Agent Judges"]
+        S2 --> S3["Sprint 3: Weighted Verdict & Batch Engine"]
+        S3 --> S4["Sprint 4: Analytics Dashboards & Docker"]
+    end
+
+    subgraph Epoch2["Epoch 2: Post-Internship Enterprise Evolution"]
+        S4 --> S5["Sprint 5: Test Automation & CI/CD Pipeline"]
+        S5 --> S6["Sprint 6: Caching & Multi-Provider LLM Layer"]
+        S6 --> S7["Sprint 7: Dynamic KB UI & Regression Webhooks"]
+    end
+
+    style Epoch1 fill:#1e293b,stroke:#3b82f6,color:#fff
+    style Epoch2 fill:#0f172a,stroke:#22c55e,color:#fff
+```
 
 ### Agile Core Pillars Applied:
-1. **Transparency:** All architectural specifications, API contracts, and user stories were documented in markdown artifacts accessible to mentors and evaluators.
-2. **Inspection:** Every sprint concluded with automated integration testing, edge-case evaluations (7 test scenarios), and peer/mentor demos.
-3. **Adaptation:** Feedback and technical constraints (e.g., LLM rate limits during batch processing, port collisions, browser memory pressure) were addressed through rapid backlog grooming and architectural pivots.
+1. **Transparency:** All architectural specifications, API schemas, and user stories were documented in markdown artifacts accessible to mentors, reviewers, and contributors.
+2. **Inspection:** Every sprint concluded with automated integration testing, edge-case validation (76 automated unit tests + 7 demonstration scenarios), and linter checks.
+3. **Adaptation:** Feedback and technical challenges (e.g. LLM rate limits during batch processing, vector store out-of-bounds indexing, timing attacks on API keys) were addressed through rapid backlog grooming and architectural pivots.
 
 ---
 
@@ -26,39 +48,18 @@ The **AI Response Validation System** was engineered using an **Agile Scrum Meth
 | Role | Assignee | Responsibilities |
 | :--- | :--- | :--- |
 | **Product Owner (PO)** | Infosys Springboard Mentorship Board | Defined project goals, approved milestone deliverables, and established acceptance criteria. |
-| **Scrum Master (SM)** | Mohammed Hassan | Facilitated sprint ceremonies, monitored velocity, tracked burndown charts, and eliminated impediments. |
+| **Scrum Master (SM)** | Mohammed Hassan | Facilitated sprint ceremonies, monitored velocity, tracked burndown charts, and eliminated technical blockers. |
 | **Lead Developer** | Mohammed Hassan | Full-stack software engineering, LLM prompt engineering, RAG pipeline construction, UI/UX design, and Docker deployment. |
 
 ---
 
-## 3. Product Backlog & Epics Overview
-
-The product scope was decomposed into four high-level Epics:
-
-```mermaid
-graph TD
-    EPIC1["Epic 1: RAG & Evaluation Scaffolding (Sprint 1)"] --> EPIC2["Epic 2: Multi-Agent Evaluation Engine (Sprint 2)"]
-    EPIC2 --> EPIC3["Epic 3: Weighted Verdict & Batch System (Sprint 3)"]
-    EPIC3 --> EPIC4["Epic 4: Visual Analytics, Telemetry & Deployment (Sprint 4)"]
-    
-    EPIC1 --- M1["Milestone 1 Deliverables"]
-    EPIC2 --- M2["Milestone 2 Deliverables"]
-    EPIC3 --- M3["Milestone 3 Deliverables"]
-    EPIC4 --- M4["Milestone 4 Deliverables"]
-```
-
-* **Epic 1 (Milestone 1): Ingestion & RAG Foundation** — Ground-truth knowledge ingestion, text chunking, vector indexing with ChromaDB, and single-evaluation input interface.
-* **Epic 2 (Milestone 2): Multi-Agent LLM Evaluation Engine** — Mixture-of-Experts (MoE) judge agents (Relevance, Accuracy, Hallucination Detection) with parallel execution.
-* **Epic 3 (Milestone 3): Weighted Verdicts & Batch Ingestion** — Completeness judge upgrade, weighted composite scoring math, dual-pipeline batch evaluation orchestrator, and CSV reporting.
-* **Epic 4 (Milestone 4): Quality Dashboards, Telemetry & Production Hardening** — Sentence heatmap visualizer, stopwatch telemetry, PDF export engine, and multi-stage unified Docker deployment.
-
----
-
-## 4. Definition of Done (DoD)
+## 3. Definition of Done (DoD)
 
 A User Story or Task was considered **Done** only when it satisfied the following criteria:
-- [x] Code written adheres to clean-code standards (PEP 8 for Python, ES6+ for JavaScript).
-- [x] All API endpoints validated via automated test scripts (`test_api.py`, `pytest`).
+- [x] Code adheres to clean-code standards (PEP 8 for Python, ES6+ for JavaScript).
+- [x] Python code passes Ruff static analysis (`ruff check`) with 0 errors.
+- [x] Frontend code passes ESLint with 0 errors.
+- [x] All API endpoints validated via automated test suite (`pytest tests/ -v`).
 - [x] Responsive UI verified across light/dark themes and varied viewport widths.
 - [x] Error handling, input validation (Pydantic), and fallback states implemented.
 - [x] Documentation updated in `docs/` and reflected in `README.md`.
@@ -66,13 +67,12 @@ A User Story or Task was considered **Done** only when it satisfied the followin
 
 ---
 
-## 5. Sprint-by-Sprint Execution Breakdown
+## 4. Sprint Breakdown: Epoch 1 (Internship Milestones 1–4)
 
 ### Sprint 1: Knowledge Ingestion & System Architecture (Weeks 1–2)
-* **Goal (Sprint Goal):** Establish system architecture, RAG vector pipeline, and the evaluator intake UI.
-* **Infosys Milestone:** Milestone 1
+* **Goal:** Establish system architecture, RAG vector pipeline, and the evaluator intake UI.
+* **Milestone:** Milestone 1
 
-#### User Stories & Tasks:
 | Story ID | User Story | SP | Status | Acceptance Criteria |
 | :--- | :--- | :---: | :---: | :--- |
 | **US-101** | *As an evaluator*, I want to submit a question and AI response so that it can be stored for evaluation. | 3 | **Done** | Form validates inputs, sends payload to FastAPI, and persists to SQLite. |
@@ -81,36 +81,28 @@ A User Story or Task was considered **Done** only when it satisfied the followin
 | **US-104** | *As a researcher*, I want to document the architectural design and theoretical research backing the system. | 3 | **Done** | Create `docs/research.md` and `docs/architecture.md`. |
 
 * **Total Story Points:** 16 Planned / 16 Completed
-* **Sprint Retrospective:**
-  * *What went well:* Vector indexing with ChromaDB was fast and lightweight for local development.
-  * *Challenges:* Sentence transformer initialization took substantial initial memory; resolved by loading the model as a backend singleton.
 
 ---
 
 ### Sprint 2: Multi-Agent Evaluation Engine (Weeks 3–4)
-* **Goal (Sprint Goal):** Implement distinct LLM judge agents for Accuracy, Relevance, and Hallucination detection using parallel execution.
-* **Infosys Milestone:** Milestone 2
+* **Goal:** Implement distinct LLM judge agents for Accuracy, Relevance, and Hallucination detection using parallel execution.
+* **Milestone:** Milestone 2
 
-#### User Stories & Tasks:
 | Story ID | User Story | SP | Status | Acceptance Criteria |
 | :--- | :--- | :---: | :---: | :--- |
-| **US-201** | *As an evaluator*, I want the system to grade the relevance of the AI response to the question. | 3 | **Done** | Relevance Agent returns 0–5 score, status label, and reasoning text. |
+| **US-201** | *As an evaluator*, I want the system to grade the relevance of the AI response to the question. | 3 | **Done** | Relevance Agent returns 1–5 score, status label, and reasoning text. |
 | **US-202** | *As an evaluator*, I want to detect factual accuracy against retrieved ground-truth context. | 5 | **Done** | Accuracy Agent cross-references context chunks and flags contradictions. |
 | **US-203** | *As an evaluator*, I want specific hallucinated claims flagged and categorized in the AI response. | 5 | **Done** | Hallucination Agent identifies fabricated statements with line references. |
-| **US-204** | *As a system*, I want judge agents to run concurrently to minimize evaluation latency. | 5 | **Done** | Thread-pool orchestrator executes all agents in parallel (<3s total response time). |
+| **US-204** | *As a system*, I want judge agents to run concurrently to minimize evaluation latency. | 5 | **Done** | Thread-pool orchestrator executes all agents in parallel (<3s response time). |
 
 * **Total Story Points:** 18 Planned / 18 Completed
-* **Sprint Retrospective:**
-  * *What went well:* Parallelizing LLM calls via Python's `concurrent.futures` cut latency by 65%.
-  * *Challenges:* Inconsistent JSON output from LLM judges; solved by enforcing strict Pydantic parsing and fallback regex parsers.
 
 ---
 
 ### Sprint 3: Weighted Verdict & Batch Processing (Weeks 5–6)
-* **Goal (Sprint Goal):** Deliver composite weighted scoring, completeness gap detection, and high-speed batch evaluation for bulk CSV datasets.
-* **Infosys Milestone:** Milestone 3
+* **Goal:** Deliver composite weighted scoring, completeness gap detection, and high-speed batch evaluation for bulk CSV datasets.
+* **Milestone:** Milestone 3
 
-#### User Stories & Tasks:
 | Story ID | User Story | SP | Status | Acceptance Criteria |
 | :--- | :--- | :---: | :---: | :--- |
 | **US-301** | *As an evaluator*, I want to see both addressed and missing aspects of a question. | 3 | **Done** | Completeness Agent returns parsed bullet lists of covered and omitted facets. |
@@ -119,17 +111,13 @@ A User Story or Task was considered **Done** only when it satisfied the followin
 | **US-304** | *As an evaluator*, I want to filter batch results by risk category (Critical, High, Medium, Low). | 5 | **Done** | Interactive risk filter buttons dynamically segment batch rows in the UI. |
 
 * **Total Story Points:** 21 Planned / 21 Completed
-* **Sprint Retrospective:**
-  * *What went well:* Consolidated Master Prompting enabled 50+ batch rows to evaluate without triggering Groq rate limits.
-  * *Challenges:* Frontend re-render lag when displaying large batch tables; resolved with virtualized rendering and server-side pagination.
 
 ---
 
 ### Sprint 4: Visual Dashboards, Telemetry & Docker Hardening (Weeks 7–8)
-* **Goal (Sprint Goal):** Build interactive analytics, sentence claim heatmap, live stopwatch telemetry, client-side PDF export, and production multi-stage Docker containerization.
-* **Infosys Milestone:** Milestone 4 (Final)
+* **Goal:** Build interactive analytics, sentence claim heatmap, live stopwatch telemetry, client-side PDF export, and production multi-stage Docker containerization.
+* **Milestone:** Milestone 4 (Final Internship Submission)
 
-#### User Stories & Tasks:
 | Story ID | User Story | SP | Status | Acceptance Criteria |
 | :--- | :--- | :---: | :---: | :--- |
 | **US-401** | *As an executive*, I want an analytics dashboard showing historical pass/fail distribution, radar score profiles, and 365-day heatmap activity. | 5 | **Done** | Interactive Recharts dashboard, score filter sliders, and GitHub-style contribution calendar. |
@@ -139,25 +127,67 @@ A User Story or Task was considered **Done** only when it satisfied the followin
 | **US-405** | *As a DevOps engineer*, I want the full application packaged into a single-port multi-stage Docker container for cloud deployment. | 5 | **Done** | Multi-stage Dockerfile builds Vite React frontend and serves static assets directly via FastAPI on unified port 8005. |
 
 * **Total Story Points:** 21 Planned / 21 Completed
-* **Sprint Retrospective:**
-  * *What went well:* Unified port Docker container simplified reverse-proxy routing and eliminated all CORS problems.
-  * *Challenges:* Free cloud platforms assign dynamic `$PORT` environment variables; solved by configuring `sh -c 'uvicorn ... --port ${PORT:-8005}'`.
+
+---
+
+## 5. Sprint Breakdown: Epoch 2 (Post-Internship Enterprise Evolution)
+
+### Sprint 5: Test Automation & CI/CD Hardening (Phase 1)
+* **Goal:** Implement an automated, offline-capable test suite covering all judge agents, API endpoints, and database models, wired into GitHub Actions CI.
+
+| Story ID | User Story | SP | Status | Acceptance Criteria |
+| :--- | :--- | :---: | :---: | :--- |
+| **US-501** | *As a developer*, I want an in-memory SQLite fixture and mock LLM fixtures so tests execute deterministically offline without API costs. | 5 | **Done** | `tests/conftest.py` with isolated `db_session` and `mock_llm_response`. |
+| **US-502** | *As a QA engineer*, I want unit tests for all 5 judge agents with varied scoring assertions. | 5 | **Done** | `tests/test_agents.py` parametrized across all agents with edge cases. |
+| **US-503** | *As an engineer*, I want integration tests for all REST API endpoints using FastAPI `TestClient`. | 5 | **Done** | `tests/test_api_endpoints.py` covering evaluations, history, analytics, and exports. |
+| **US-504** | *As a team*, I want a GitHub Actions workflow gating every pull request with Ruff linting and Pytest. | 3 | **Done** | `.github/workflows/ci.yml` pipeline passes on every branch push. |
+
+* **Total Story Points:** 18 Planned / 18 Completed
+
+---
+
+### Sprint 6: Deduplication Caching & Multi-Provider LLM Layer (Phases 2 & 3)
+* **Goal:** Reduce inference costs through SHA-256 deduplication caching and establish a model-agnostic provider layer with automatic failover.
+
+| Story ID | User Story | SP | Status | Acceptance Criteria |
+| :--- | :--- | :---: | :---: | :--- |
+| **US-601** | *As an enterprise user*, I want duplicate prompts to be detected via SHA-256 hashing so identical evaluations return instantly. | 5 | **Done** | `backend/core/cache.py` computes canonical input hashes across normalized inputs. |
+| **US-602** | *As a system*, I want cache hits to clone historical records in $<5\text{ms}$ and record `is_cached: true`. | 3 | **Done** | Cached evaluations bypass LLM calls and update real-time cache hit rate analytics. |
+| **US-603** | *As an operator*, I want to switch between Groq, local Ollama, and OpenAI via environment variables. | 8 | **Done** | `backend/core/providers/factory.py` provides uniform interface for Groq, Ollama, and OpenAI. |
+| **US-604** | *As an engineer*, I want automatic failover to a backup LLM provider when primary provider retries are exhausted. | 5 | **Done** | `LLM_FALLBACK_PROVIDER` seamlessly catches connection and rate-limit errors. |
+
+* **Total Story Points:** 21 Planned / 21 Completed
+
+---
+
+### Sprint 7: Knowledge Base Dynamic UI & Regression CI Webhooks (Phases 4 & 5)
+* **Goal:** Enable self-service document ingestion into ChromaDB, signed webhook callbacks for CI/CD pipelines, and automated golden regression benchmarking.
+
+| Story ID | User Story | SP | Status | Acceptance Criteria |
+| :--- | :--- | :---: | :---: | :--- |
+| **US-701** | *As a user*, I want to upload PDF, DOCX, TXT, or MD documents directly from the UI and index them into ChromaDB. | 5 | **Done** | Sliding-window chunker indexes documents into ChromaDB with cloud 503 fallback. |
+| **US-702** | *As a researcher*, I want an interactive semantic search playground to query the knowledge base and see cosine similarity distance scores. | 5 | **Done** | `frontend/src/KnowledgeBase.jsx` displays top-K matching chunks with similarity badges. |
+| **US-703** | *As a CI/CD pipeline*, I want completed batch evaluations to fire an HTTP POST webhook signed with HMAC-SHA256. | 5 | **Done** | `X-ARVS-Signature: sha256=<hex>` header delivered to configured `callback_url`. |
+| **US-704** | *As an MLOps team*, I want to save a batch as a Golden Benchmark and compare future candidate runs for regressions. | 8 | **Done** | `POST /api/benchmarks/{id}/compare` generates delta reports; triggers `REGRESSION_DETECTED` when pass rate drops $>5\%$. |
+| **US-705** | *As a security auditor*, I want constant-time API key verification protecting programmatic endpoints against timing attacks. | 3 | **Done** | `backend/api/auth.py` validates `X-API-KEY` using `hmac.compare_digest`. |
+
+* **Total Story Points:** 26 Planned / 26 Completed
 
 ---
 
 ## 6. Scrum Metrics & Velocity Tracking
 
-### Velocity Summary Table
-| Sprint | Milestone Focus | Planned Points | Completed Points | Velocity Accuracy |
+### Cumulative Velocity Summary Table
+| Sprint | Epoch / Milestone Focus | Planned SP | Completed SP | Velocity Accuracy |
 | :---: | :--- | :---: | :---: | :---: |
-| **Sprint 1** | Ingestion & Architecture | 16 | 16 | 100% |
-| **Sprint 2** | MoE Evaluation Judges | 18 | 18 | 100% |
-| **Sprint 3** | Weighted Scoring & Batch | 21 | 21 | 100% |
-| **Sprint 4** | Visual Telemetry & Docker | 21 | 21 | 100% |
-| **Total** | **Full System Lifecycle** | **76** | **76** | **100%** |
-
-### Burndown & Story Point Trajectory
-All 76 story points across the 4 Sprints were executed, validated, and merged into the primary production branch (`main`).
+| **Sprint 1** | Ingestion & Architecture (M1) | 16 | 16 | 100% |
+| **Sprint 2** | MoE Evaluation Judges (M2) | 18 | 18 | 100% |
+| **Sprint 3** | Weighted Scoring & Batch (M3) | 21 | 21 | 100% |
+| **Sprint 4** | Visual Telemetry & Docker (M4) | 21 | 21 | 100% |
+| **Sprint 5** | Test Automation & CI/CD (Phase 1) | 18 | 18 | 100% |
+| **Sprint 6** | Caching & Multi-LLM Layer (Phases 2 & 3) | 21 | 21 | 100% |
+| **Sprint 7** | Dynamic KB UI & Regression CI (Phases 4 & 5) | 26 | 26 | 100% |
+| **Total** | **Full System Lifecycle (Sprints 1–7)** | **141** | **141** | **100%** |
 
 ---
 
@@ -165,32 +195,39 @@ All 76 story points across the 4 Sprints were executed, validated, and merged in
 
 | # | Impediment / Risk Description | Severity | Agile Mitigation Strategy | Resolution Status |
 | :-: | :--- | :---: | :--- | :---: |
-| **1** | **LLM API Rate Limiting on Batch Processing:** Groq Cloud TPM/RPM limits exceeded during 50+ row CSV evaluations. | High | Shifted from calling 5 individual agents per row to a single **Consolidated Master Prompt** that extracts all 4 dimensions in one high-speed inference call. | **Resolved (Sprint 3)** |
-| **2** | **Memory Bloat on Large CSV/JSON Exports:** Exporting thousands of historical evaluation records exhausted backend RAM. | Medium | Refactored SQLAlchemy queries to utilize `.yield_per(100)` streaming generators and `StreamingResponse` for chunks. | **Resolved (Sprint 4)** |
-| **3** | **Port Collisions on Development Machines:** Port 8005 was occupied by existing host services during test runs. | Low | Implemented dynamic host port fallback mechanisms in `start.py` and dynamic frontend API resolution in `config.js`. | **Resolved (Sprint 4)** |
-| **4** | **Cloud Host Port Flexibility:** Cloud platforms (Render, Railway, Heroku) dynamically assign `$PORT` instead of 8005. | Medium | Updated Docker CMD to evaluate `${PORT:-8005}`, making the container universally cloud-portable. | **Resolved (Sprint 4)** |
+| **1** | **LLM API Rate Limiting on Batch CSV:** Groq Cloud TPM/RPM limits exceeded during bulk evaluations. | High | Shifted from 5 concurrent calls per row to a **Consolidated Master Prompt** extracting all 4 dimensions in 1 inference call. | **Resolved (Sprint 3)** |
+| **2** | **Memory Pressure during Bulk Exports:** Exporting thousands of historical evaluation records exhausted backend RAM. | Medium | Refactored SQLAlchemy queries to utilize `.yield_per(100)` streaming generators and `StreamingResponse`. | **Resolved (Sprint 4)** |
+| **3** | **Port Collisions on Development Hosts:** Default port 8005 occupied by local development services. | Low | Implemented dynamic host port fallback in `start.py` and dynamic frontend resolution in `config.js`. | **Resolved (Sprint 4)** |
+| **4** | **ChromaDB Cloud Dependency Failure:** Cloud tiers lacking persistent disk/C++ build tools crashed on ChromaDB init. | Medium | Wrapped ChromaDB client initialization in a safe fallback handler; `/api/kb/*` endpoints return 503 gracefully. | **Resolved (Sprint 7)** |
+| **5** | **Vector Store Index Out-of-Bounds:** Retrieving top_k from small/empty collections raised indexing exceptions. | Medium | Added safe collection bounding: `min(top_k, collection_chunk_count)` in `retrieve_context`. | **Resolved (Sprint 7)** |
+| **6** | **Timing Attack Vulnerability in API Key:** Standard string equality (`!=`) vulnerable to side-channel timing analysis. | Medium | Replaced naive equality with constant-time comparison via `hmac.compare_digest`. | **Resolved (Sprint 7)** |
 
 ---
 
 ## 8. Requirements Traceability Matrix (RTM)
 
-| Infosys Milestone Requirement | User Story Reference | Core Source Artifacts | Verification Method |
+| Feature / Milestone Requirement | User Story Reference | Core Source Artifacts | Verification Method |
 | :--- | :--- | :--- | :--- |
 | **M1: Research & Tech Stack** | US-104 | `docs/research.md`, `docs/architecture.md` | Mentor Review & Documentation |
-| **M1: Input Module & Ingestion** | US-101, US-102, US-103 | `backend/core/rag.py`, `frontend/src/components/EvaluationForm.jsx` | Integration Test Suite |
-| **M2: Relevance Judge Agent** | US-201 | `backend/agents/relevance.py` | Unit Test & LLM Output Parsing |
-| **M2: Accuracy Judge Agent** | US-202 | `backend/agents/accuracy.py` | Ground-Truth RAG Comparison |
-| **M2: Hallucination Detection** | US-203 | `backend/agents/hallucination.py` | Sentence Claim Flagging Test |
-| **M3: Completeness Upgrade** | US-301 | `backend/agents/completeness.py` | Facet Comparison Test |
-| **M3: Weighted Verdict Engine** | US-302 | `backend/agents/verdict.py` | Scoring Formula Assertions |
+| **M1: Input Module & Ingestion** | US-101, US-102, US-103 | `backend/core/rag.py`, `frontend/src/App.jsx` | Integration Test Suite |
+| **M2: Relevance Judge Agent** | US-201 | `backend/core/agents/relevance.py` | Unit Test & Output Parsing |
+| **M2: Accuracy Judge Agent** | US-202 | `backend/core/agents/accuracy.py` | Ground-Truth RAG Comparison |
+| **M2: Hallucination Detection** | US-203 | `backend/core/agents/hallucination.py` | Sentence Claim Flagging Test |
+| **M3: Completeness Upgrade** | US-301 | `backend/core/agents/completeness.py` | Covered/Missing Facet Test |
+| **M3: Weighted Verdict Engine** | US-302 | `backend/core/agents/verdict.py` | Scoring Formula Assertions |
 | **M3: Batch Processing Engine** | US-303, US-304 | `backend/core/batch_orchestrator.py` | 50-Row CSV Benchmark Run |
-| **M4: Analytics Dashboard** | US-401 | `frontend/src/components/AnalyticsDashboard.jsx` | UI Filter & Chart Visual Check |
-| **M4: Sentence Heatmap & Telemetry**| US-402, US-403 | `SentenceHeatmap.jsx`, `TelemetrySidebar.jsx` | Test Suite Edge Cases 1–7 |
-| **M4: PDF Report Generation** | US-404 | `frontend/src/utils/pdfExport.js` | Direct Browser Download Test |
-| **M4: Docker Container Deployment**| US-405 | `Dockerfile`, `docker-compose.yml` | Containerized Build on Port 8005 |
+| **M4: Analytics Dashboard** | US-401 | `frontend/src/AnalyticsDashboard.jsx` | UI Filter & Chart Visual Check |
+| **M4: Sentence Heatmap & Telemetry**| US-402, US-403 | `SentenceHeatmap.jsx`, `App.jsx` | Test Scenarios 1–7 |
+| **M4: PDF Report Generation** | US-404 | `frontend/src/BatchAnalyticsView.jsx` | Browser PDF Download Test |
+| **M4: Docker Container Deployment**| US-405 | `Dockerfile`, `docker-compose.yml` | Unified Port 8005 Build |
+| **Phase 1: Automated Test Suite** | US-501, US-502, US-503, US-504 | `.github/workflows/ci.yml`, `tests/` | 76 Automated Pytest Tests |
+| **Phase 2: Deduplication Caching** | US-601, US-602 | `backend/core/cache.py` | Deterministic SHA-256 Hash Test |
+| **Phase 3: Multi-Provider LLM** | US-603, US-604 | `backend/core/providers/` | Groq / Ollama / OpenAI Provider Tests |
+| **Phase 4: Knowledge Base UI** | US-701, US-702 | `backend/kb/`, `KnowledgeBase.jsx` | Ingestion & Semantic Search Test |
+| **Phase 5: Regression & Webhooks** | US-703, US-704, US-705 | `webhook.py`, `Benchmarks.jsx` | HMAC Verification & Delta Gating Test |
 
 ---
 
 ## 9. Conclusion
 
-By adhering strictly to **Agile Scrum principles**, the **AI Response Validation System** successfully transitioned from an initial RAG prototype into an enterprise-grade, multi-agent AI validation platform within 4 iterative sprints. All milestone commitments for the **Infosys Springboard Internship 7.0** have been achieved, thoroughly tested, and packaged for continuous cloud deployment.
+Following the Agile Scrum framework across **7 iterative sprints (141 story points)**, the **AI Response Validation System** progressed from an initial RAG academic prototype to a battle-tested, enterprise-operable AI evaluation and regression benchmarking suite. All core internship commitments and subsequent enterprise capabilities stand fully implemented, rigorously tested (76/76 automated tests passing), and packaged for continuous deployment.

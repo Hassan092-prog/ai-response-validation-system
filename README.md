@@ -1,245 +1,304 @@
 # AI Response Validation System with Hallucination Detection Assistance
 
-🌐 **Live Deployed Application:** [https://ai-response-validation-system-ez6e.onrender.com/](https://ai-response-validation-system-ez6e.onrender.com/)
+<div align="center">
 
-This repository contains the implementation for the **Infosys Springboard Internship 7.0** project. 
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Render.com-46E3B7?style=for-the-badge&logo=render&logoColor=white)](https://ai-response-validation-system-ez6e.onrender.com/)
+[![Python](https://img.shields.io/badge/Python-3.12-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![React](https://img.shields.io/badge/React-18.3-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
+[![Pytest](https://img.shields.io/badge/Pytest-76%20Passed-brightgreen?style=for-the-badge&logo=pytest&logoColor=white)](https://docs.pytest.org/)
+[![Ruff](https://img.shields.io/badge/Ruff-0%20Errors-success?style=for-the-badge&logo=ruff&logoColor=white)](https://docs.astral.sh/ruff/)
+[![Docker](https://img.shields.io/badge/Docker-Multi--Stage-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
+[![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](LICENSE)
 
-## 🏆 Milestone 1 Overview
+**An enterprise-grade, model-agnostic LLM evaluation and hallucination detection platform.**  
+*Originally developed as the Capstone Project for **Infosys Springboard Internship 7.0**, and subsequently engineered into a full-scale automated CI/CD regression benchmarking and MLOps validation suite.*
 
-The goal of Milestone 1 was to establish the foundation of the evaluation system, including the knowledge base for RAG (Retrieval-Augmented Generation) and the user interface for submitting evaluation requests.
-
-### Objectives Achieved:
-1. **Research & Technical Understanding (M1.1)**: Formally documented in `docs/research.md`.
-2. **System Architecture (M1.2)**: Designed the agent orchestration flow and defined the tech stack, documented in `docs/architecture.md`.
-3. **Evaluation Input Module (M1.3)**: Built a React (Vite) frontend for users to submit questions and AI responses, connected to a FastAPI backend that validates and stores data in SQLite.
-4. **Reference Knowledge Base (M1.4)**: Ingested `TruthfulQA` and `SQuAD` benchmark datasets, chunked the text, generated embeddings using `sentence-transformers`, and indexed them in a local ChromaDB vector store. 
-
----
-
-## 🏆 Milestone 2 Overview
-
-The goal of Milestone 2 was to build and integrate the Evaluation Judge Agents to score AI responses based on specific criteria and provide detailed reasoning, strictly adhering to the mentor requirements.
-
-### Objectives Achieved:
-1. **Relevance Judge Agent (M2.1)**: Built an agent to evaluate whether the AI-generated response directly addresses the user's question. Handles fully relevant, partially relevant, and off-topic responses, providing a score and detailed explanation.
-2. **Accuracy Judge Agent (M2.2)**: Developed an agent to check factual correctness against reference answers or RAG-retrieved source chunks. It identifies correct, partially correct, incorrect, and contradictory claims with supporting evidence.
-3. **Hallucination Detection Agent (M2.3)**: Implemented an agent to cross-reference AI claims against retrieved source content, breaking down responses to flag specific unsupported, fabricated, or contradictory statements.
-4. **Agent Evaluation & Validation (M2.4)**: Tested the agents using benchmark datasets for scoring consistency and reasoning quality. Integrated them concurrently into the `Evaluation Orchestrator` to evaluate the same dataset inputs and consolidate the results.
+</div>
 
 ---
 
-## 🏆 Milestone 3 Overview
+## 🌟 Executive Summary & Architectural Overview
 
-The goal of Milestone 3 was to refine the evaluation metrics, introduce batch processing, and calculate final weighted scores to determine overarching Pass/Fail verdicts.
+The **AI Response Validation System** is an automated, multi-agent evaluation framework that independently scores and audits AI-generated answers against ground-truth context and reference facts. The system detects factual contradictions, sentence-level hallucinations, topical drift, and missing response facets across multiple LLM providers.
 
-### Objectives Achieved:
-1. **Completeness Agent Upgrade (M3.1)**: Enhanced the Completeness Agent to not only provide a score, but to explicitly list the specific "Addressed Aspects" and "Missing Aspects" when compared to the reference context.
-2. **Weighted Verdict Engine (M3.2)**: Developed a scoring algorithm that weighs Accuracy (40%), Relevance (20%), Completeness (20%), and Hallucination (20%). High hallucination or low accuracy now triggers an automatic "FAIL" verdict.
-3. **Per-Dimension Scoring UI (M3.3)**: Redesigned the frontend to display individual color-coded metric cards for each dimension, along with detailed AI reasoning and a centralized Verdict badge (PASS, IMPROVEMENT, FAIL).
-4. **Dual-Architecture & Batch Evaluation (M3.4)**: Engineered a robust dual-pipeline evaluation system:
-   - **Single Evaluations (M1-M3 Strict Compliance):** Powered by the 5 distinct distributed Python Micro-Agents (`relevance.py`, `accuracy.py`, `hallucination.py`, `completeness.py`, `verdict.py`) running in parallel via thread-pooling.
-   - **Batch Processing Module (M3.4):** A heavily optimized `/api/evaluate/batch` endpoint. To process massive CSV uploads without hitting strict rate limits, this module leverages a single *Consolidated Master Prompt* to extract all 4 dimensions in a single inference call, acting as a high-speed batch orchestrator.
+```mermaid
+flowchart TD
+    subgraph Client["Frontend Client (React 18 + Vite)"]
+        UI_Input["Prompt & Context Intake"]
+        UI_Batch["Batch Processing (CSV)"]
+        UI_KB["Dynamic Knowledge Base UI"]
+        UI_Bench["Benchmarks & CI Dashboard"]
+        UI_Heatmap["Sentence Hallucination Heatmap"]
+    end
+
+    subgraph Gateway["API Layer & Security (FastAPI)"]
+        Auth["X-API-KEY Auth Guard"]
+        Router["REST Endpoint Routers"]
+        Cache["SHA-256 Deduplication Cache"]
+    end
+
+    subgraph Engine["Multi-Agent MoE Evaluation Engine"]
+        Orchestrator["Agent Orchestrator"]
+        Judge_Rel["Relevance Judge (20%)"]
+        Judge_Acc["Accuracy Judge (40%)"]
+        Judge_Comp["Completeness Judge (20%)"]
+        Judge_Hal["Hallucination Judge (20%)"]
+        Verdict["Weighted Verdict Aggregator"]
+    end
+
+    subgraph Providers["Model-Agnostic LLM Layer"]
+        Factory["Provider Factory + Failover"]
+        Groq["Groq Cloud (Llama 3.3 / GPT-OSS)"]
+        Ollama["Local Ollama (Offline Mode)"]
+        OpenAI["OpenAI / vLLM / Compatible"]
+    end
+
+    subgraph Storage["Persistence & Vectors"]
+        DB[(SQLite / SQLAlchemy)]
+        Chroma[(ChromaDB Vector Store)]
+        BenchDB[(Golden Benchmarks)]
+    end
+
+    subgraph CI["CI/CD Webhook & Regression Engine"]
+        HMAC["HMAC-SHA256 Webhook Signer"]
+        Delta["Regression Delta Calculator"]
+        Webhook["External CI Webhook Receiver"]
+    end
+
+    Client --> Auth --> Router
+    Router --> Cache
+    Cache -- Cache Miss --> Orchestrator
+    Cache -- Cache Hit --> Router
+    Orchestrator --> Judge_Rel & Judge_Acc & Judge_Comp & Judge_Hal
+    Judge_Rel & Judge_Acc & Judge_Comp & Judge_Hal --> Factory
+    Factory --> Groq & Ollama & OpenAI
+    Judge_Rel & Judge_Acc & Judge_Comp & Judge_Hal --> Verdict
+    Verdict --> DB
+    Router --> Chroma
+    Router --> BenchDB
+    Verdict --> HMAC --> Webhook
+    Verdict --> Delta
+```
 
 ---
 
-## 🏆 Milestone 4 Overview (Final)
+## 🚀 The Two Phases of the Project
 
-The goal of Milestone 4 was to wrap up the project by building comprehensive analytics dashboards, PDF reporting engines, and an end-to-end testing suite for the final demonstration.
+This codebase represents a two-epoch engineering journey:
 
-### Objectives Achieved:
-1. **Evaluation Scoring Dashboard (M4.1)**: Built a dynamic analytics dashboard aggregating global pass/fail rates and dimension scores, complete with an interactive filtering system (by Min/Max Score and Batch ID) that perfectly adapts to the UI's dark/light theme.
-2. **Evaluation Report Export (M4.2)**: Integrated `jsPDF` to generate highly styled, premium PDF Validation Reports natively in the browser for both Batch processing and Single evaluations.
-3. **End-to-End Testing Suite (M4.3)**: Added an integrated "Load Test Case" button in the frontend that cycles through 7 predefined testing scenarios (Perfect, Hallucination, Incomplete, etc.) to immediately validate system robustness and agent accuracy during demonstrations.
-4. **Documentation & Demonstration (M4.4)**: Finalized all architectural markdown files, generated the Final Project Report, and polished the frontend CSS elements to ensure a premium UI/UX for the final project submission.
+```
+┌────────────────────────────────────────────────────────┐
+│     EPOCH 1: INFOSYS SPRINGBOARD INTERNSHIP 7.0        │
+│   Milestones 1–4: Core Foundation & Evaluation Engine  │
+└──────────────────────────┬─────────────────────────────┘
+                           │
+                           ▼
+┌────────────────────────────────────────────────────────┐
+│      EPOCH 2: POST-INTERNSHIP ENTERPRISE EVOLUTION     │
+│   Phases 1–5: Automated Testing, Caching, Multi-LLM,   │
+│   Dynamic Knowledge Base & Regression CI/CD Webhooks   │
+└────────────────────────────────────────────────────────┘
+```
 
 ---
 
-## ✨ Extra Features & UI Updates
+## 🏆 Part I: Core Internship Deliverables (Milestones 1–4)
 
-In addition to the core mentor requirements, we have significantly enhanced the application with the following features:
-* **Interactive UI Dashboard**: The frontend dynamically renders an interactive Radar Chart breakdown and evaluation report immediately upon submission.
-* **Analytics Module**: A dedicated Analytics Tab aggregates metrics from the database and visualizes the average performance over time using Recharts, fully filterable by batch or score thresholds.
-* **History & Data Exports**: A server-side paginated History Tab that allows users to export their evaluation datasets to `CSV`, `JSON`, and heavily customized `PDF` formats.
-* **Backend Performance Optimization**: Refactored the SQLite database to extract nested JSON scores into indexed `Float` columns. Used native SQLAlchemy `func.avg()` aggregations and `.yield_per(100)` streaming generators to ensure the application scales safely without running out of memory.
-* **Configurable Scoring Weights Engine**: A real-time sandbox in the Analytics dashboard where users can dynamically adjust the penalty weights for Accuracy, Relevance, Completeness, and Hallucination globally.
-* **GitHub-Style Heatmap Calendar**: A 365-day contribution heatmap graph mapped to historical evaluations with dynamic month labels and density-based color grading.
-* **Agent Confidence Visualization**: A real-time linguistic parser that analyzes the reasoning output of the LLM judges for "hedging" language and tags evaluations with High/Medium/Low confidence badges.
-* **1-Click Re-Evaluate Engine**: Seamlessly fetch a historical evaluation, reload it into the prompt staging area, modify it, and fire a fresh evaluation.
-* **Animated UI Elements & Portals**: Fluid number-counting animations for final scores and completely detached background batch progress notifications using React Portals.
-* **Dynamic Test Data Engine**: Included a "Load Test Case" button in the UI that cycles sequentially through **7 distinct edge-case testing scenarios** (Perfect Score, Dangerous Hallucination, Subtle Contradiction, Irrelevant, Incomplete, etc.) for rapid debugging and edge-case validation.
+* **Milestone 1 — Research & RAG Scaffolding:** Initial architecture design, evaluation intake form, benchmark dataset ingestion (`TruthfulQA` & `SQuAD`), chunking, embeddings with `sentence-transformers` (`all-MiniLM-L6-v2`), and ChromaDB vector indexing.
+* **Milestone 2 — Multi-Agent Evaluation Judges:** Built 3 independent judge agents (Relevance, Accuracy, and Hallucination Detection) running concurrently in a thread-pooled orchestrator.
+* **Milestone 3 — Weighted Verdicts & Dual Batch Architecture:** Added the Completeness judge, engineered the composite scoring model (Accuracy 40%, Relevance 20%, Completeness 20%, Hallucination 20%), and introduced a dual-pipeline batch orchestrator with Consolidated Master Prompting to process 50+ row CSVs without hitting API rate limits.
+* **Milestone 4 — Visual Dashboards, PDF Reports & Packaging:** Recharts analytics dashboards, browser-native styled PDF validation reports via `jsPDF`, 7 predefined demonstration test cases, and multi-stage single-port Docker containerization on Render.com.
+
+---
+
+## ⚡ Part II: Post-Internship Enterprise Engineering Evolution (Phases 1–5)
+
+To elevate the system from a polished internship prototype into an **enterprise-operable, model-agnostic MLOps platform**, 5 post-internship engineering phases were implemented and verified:
+
+### ⚙️ Phase 1: Automated Test Suite & CI/CD Pipeline
+- **Continuous Integration Pipeline ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)):** GitHub Actions workflow executing Ruff linting, test matrices, and container builds on every PR.
+- **Automated Test Suite ([`tests/`](tests/)):** Expanded from a single retrieval test to **76 automated pytest tests** covering API endpoints, judge parsing, database queries, and chunking with in-memory SQLite isolation.
+- **Ruff Static Analysis:** Zero linting errors across all backend, script, and test code.
+
+### ⚡ Phase 2: Caching Engine & Deduplication
+- **Deterministic SHA-256 Hashing ([`backend/core/cache.py`](backend/core/cache.py)):** Generates canonical input hashes across normalized prompt, response, reference, and context.
+- **0-Latency Replay Clones:** Evaluates cache hits in milliseconds without making external LLM calls, saving API quota and reducing latency.
+- **Telemetry & Cache Analytics:** Real-time cache hit rate tracking integrated into the Analytics Dashboard.
+
+### 🔌 Phase 3: Model-Agnostic Multi-Provider LLM Layer
+- **Unified Provider Factory ([`backend/core/providers/factory.py`](backend/core/providers/factory.py)):** Support for:
+  - **Groq Cloud:** High-speed cloud inference (`openai/gpt-oss-120b`, `llama-3.3-70b-versatile`).
+  - **Ollama:** Local/offline inference (`llama3.2:3b`, `mistral`, etc.) for air-gapped environments.
+  - **OpenAI:** OpenAI API or compatible endpoints (vLLM, Together AI, LocalAI).
+- **Runtime Failover:** Graceful fallback to `LLM_FALLBACK_PROVIDER` when primary provider retries are exhausted.
+- **Provider Status API:** Real-time health endpoint at `GET /api/provider/status`.
+
+### 🗂️ Phase 4: Dynamic Knowledge Base Management UI
+- **Full Ingestion Pipeline ([`backend/kb/chunking.py`](backend/kb/chunking.py)):** Sliding-window sentence chunker for PDF, DOCX, TXT, and Markdown files.
+- **Management Endpoints:**
+  - `GET /api/kb/status`: ChromaDB connection health.
+  - `GET /api/kb/documents`: Ingested document catalog with chunk counts.
+  - `POST /api/kb/upload`: Direct file upload and vector indexing.
+  - `POST /api/kb/search`: Semantic search with cosine similarity distance scoring.
+  - `DELETE /api/kb/{filename}`: Chunk deletion.
+- **Frontend Tab ([`frontend/src/KnowledgeBase.jsx`](frontend/src/KnowledgeBase.jsx)):** Interactive Knowledge Base explorer with drag-and-drop document upload and semantic search playground.
+
+### 🔗 Phase 5: Automated Regression Benchmarking & Webhook CI Integration
+- **HMAC-SHA256 Signed Webhooks ([`backend/core/webhook.py`](backend/core/webhook.py)):** `POST /api/evaluate/batch` accepts `callback_url` and `webhook_secret`. Fires signed callbacks (`X-ARVS-Signature: sha256=<hex>`) upon batch completion.
+- **Golden Benchmarks & Regression Engine ([`backend/api/benchmark_schemas.py`](backend/api/benchmark_schemas.py)):**
+  - Save completed batches as golden baseline benchmarks in `golden_benchmarks` table.
+  - `POST /api/benchmarks/{id}/compare`: Evaluates candidate batches against baselines, calculating per-dimension deltas and automated regression verdicts (`REGRESSION_DETECTED` when pass rate drops by >5%, `IMPROVED`, or `STABLE`).
+- **Constant-Time API Key Security ([`backend/api/auth.py`](backend/api/auth.py)):** `X-API-KEY` protection against timing attacks (`hmac.compare_digest`).
+- **Benchmarks Dashboard ([`frontend/src/Benchmarks.jsx`](frontend/src/Benchmarks.jsx)):** Dedicated "Benchmarks & CI" tab with baseline catalog, comparison runner, and regression delta badges.
+
+---
+
+## 🎨 Interactive Frontend Highlights
+
+* **Interactive Sentence-Level Hallucination Heatmap:** Highlights supported claims in green, extrapolations in amber, and hallucinations in red with bidirectional source document illumination.
+* **Real-Time Telemetry & Latency Monitor:** Pulsing header health widget showing live API latency in milliseconds.
+* **Smart Batch Risk Filtering:** 1-click filter pills (`⚠️ Hallucinations Only`, `❌ Failed Only`, `✅ Passed Only`) and in-row claim accordion inspector.
+* **Configurable Weights Sandbox:** Sliders to adjust Accuracy, Relevance, Completeness, and Hallucination penalty weights globally with real-time recalculation.
+* **GitHub-Style Evaluation Calendar:** 365-day density-coded activity heatmap.
 
 ---
 
 ## 💻 Tech Stack
-* **Frontend:** React.js (Vite) with custom CSS (Glassmorphism design, Lucide icons, Recharts)
-* **Backend:** FastAPI (Python)
-* **LLM API:** Groq Cloud High-Speed Inference API (`openai/gpt-oss-120b`)
-* **Database:** SQLite (SQLAlchemy ORM)
-* **Vector Store:** ChromaDB
-* **Embeddings:** `sentence-transformers` (`all-MiniLM-L6-v2`)
-* **Validation:** Pydantic
+
+| Domain | Technologies |
+| :--- | :--- |
+| **Frontend** | React 18, Vite, Lucide React, Recharts, jsPDF, jspdf-autotable, diff, pure CSS |
+| **Backend** | FastAPI, Python 3.12, Uvicorn, Pydantic v2, SQLAlchemy, HTTPX |
+| **Database** | SQLite (with WAL mode, composite indexes, and yield-per streaming) |
+| **Vector Store & Embeddings** | ChromaDB, Sentence-Transformers (`all-MiniLM-L6-v2`) |
+| **LLM Providers** | Groq Cloud, Ollama (Local/Offline), OpenAI / vLLM / Compatible |
+| **Testing & Quality** | Pytest (76 tests), Pytest-Cov, Unittest Mock, Ruff Linter, ESLint |
+| **DevOps & Packaging** | Docker (Multi-stage build), Docker Compose, GitHub Actions CI |
 
 ---
 
-## 🚀 How to Run the Application
+## 🚀 Quickstart & Setup Guide
 
-The application consists of a Python backend and a React frontend. You can run both simultaneously using the provided startup script, or run them manually in separate terminals.
+### 1. Prerequisites & Environment Setup
+Clone the repository and copy the environment configuration:
+```bash
+git clone https://github.com/Hassan092-prog/ai-response-validation-system.git
+cd ai-response-validation-system
+cp .env.example .env
+```
+Edit `.env` to configure your preferred LLM provider:
+```env
+# Choose provider: 'groq' | 'ollama' | 'openai'
+LLM_PROVIDER=groq
+GROQ_API_KEY=your_groq_api_key_here
 
-### 0. Prerequisites
-You must configure your Groq API key for the AI Evaluation Engine to function.
-1. Create a `.env` file in the root of the project (`ai-response-validation-system/.env`).
-2. Add your API key:
-   ```env
-   GROQ_API_KEY=your_groq_api_key_here
-   ```
+# Optional: Failover provider
+LLM_FALLBACK_PROVIDER=ollama
+OLLAMA_BASE_URL=http://localhost:11434
 
-### 1. Docker Setup (Recommended / Unified Port)
-We have containerized the application using a multi-stage build. The React frontend is served statically by the FastAPI backend, meaning the entire system operates seamlessly on a single port (**8005**). 
+# Optional: API security key (leave blank for open local dev)
+ARVS_API_KEY=
+```
 
-Because we use `docker-compose`, it automatically injects your API key from the `.env` file, so you don't need to pass it manually in the terminal.
+---
 
-#### Starting the Application
-Navigate to the root directory of the project and simply run:
+### 2. Run with Docker (Single Unified Port)
+The multi-stage Docker build compiles the React frontend and serves static assets directly via FastAPI on unified port **8005**:
 ```bash
 docker compose up --build -d
 ```
-*This single command automatically builds the image (using cache when possible), stops any old containers, and starts the new one in the background.*
-
-#### Accessing the Application
-The entire system is now live on a single unified port:
-- **Web UI (Frontend):** `http://localhost:8005`
-- **Interactive API Docs (Backend):** `http://localhost:8005/docs`
-
-#### Stopping or Checking Logs
-To watch the live API logs:
-```bash
-docker compose logs -f
-```
-To shut everything down:
-```bash
-docker compose down
-```
-
-
-### 2. Manual Local Setup (Terminal 1 - Backend)
-First, set up the Python virtual environment and start the FastAPI server.
-
-```bash
-# Clone the repository
-git clone https://github.com/Hassan092-prog/ai-response-validation-system.git
-cd ai-response-validation-system
-
-# Create and activate a virtual environment
-python3 -m venv venv
-source venv/bin/activate  # On Windows use: venv\Scripts\activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Start the application using the start script (runs both frontend and backend)
-python start.py
-
-# OR start the FastAPI server manually:
-uvicorn backend.api.main:app --host 0.0.0.0 --port 8005 --reload
-```
-The backend API will be running at: `http://localhost:8005`
-Interactive API Docs (Swagger): `http://localhost:8005/docs`
-
-### 3. Manual Local Setup (Terminal 2 - Frontend)
-Leave the backend running and open a new terminal.
-
-```bash
-# Navigate to the frontend directory
-cd frontend
-
-# Install Node dependencies
-npm install
-
-# Start the Vite development server
-npm run dev
-```
-The frontend will be running at: `http://localhost:5173`
+* **Web Application:** `http://localhost:8005`
+* **Swagger API Documentation:** `http://localhost:8005/docs`
 
 ---
 
-## 🧪 How to Test and Verify
+### 3. Run Manually (Local Development)
 
-### 1. Automated Test Suite & Coverage (Pytest)
-Run the full automated unit, integration, and mocking test suite covering API endpoints, agent reasoning, database operations, and text chunking:
+#### Terminal 1 — Backend (FastAPI):
 ```bash
-# Run all tests with verbose output
-pytest tests/ -v
+python3 -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+pip install -r requirements.txt
 
-# Run with coverage breakdown
-pytest tests/ -v --cov=backend/core --cov=backend/api --cov-report=term-missing
+# Run migrations (if needed)
+python scripts/migrate_benchmarks.py
+
+# Start API server
+uvicorn backend.api.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
-### 2. Code Linting & Static Analysis (Ruff & ESLint)
+#### Terminal 2 — Frontend (React / Vite):
 ```bash
-# Python backend and tests linting
-ruff check backend/ tests/ scripts/
+cd frontend
+npm install
+npm run dev
+```
+* **Frontend Dev Server:** `http://localhost:5173`
 
-# React frontend linting
+---
+
+## 🧪 Testing & Verification
+
+### 1. Run the Automated Test Suite (76 Tests)
+```bash
+pytest tests/ -v
+```
+All 76 tests execute in memory with mocked LLM calls and isolated SQLite databases, running in ~17 seconds without consuming API credits:
+```text
+============================= 76 passed in 17.74s ==============================
+```
+
+### 2. Code Linting & Static Analysis
+```bash
+# Backend linting (Ruff)
+ruff check backend/ scripts/ tests/
+
+# Frontend linting (ESLint)
 cd frontend && npm run lint
 ```
 
-### 3. Test the AI Judge Agents (M2.4 Validation Script)
-To formally validate the consistency, reasoning quality, and scoring formats of the Relevance, Accuracy, and Hallucination agents against baseline cases:
-```bash
-# Ensure your venv is activated
-python scripts/validate_agents.py
-```
+---
 
-### 4. Test the UI and Database
-1. Open `http://localhost:5173` in your browser.
-2. Click **Load Test Case** to automatically inject a randomized testing scenario, or manually fill out the "Original Question" and "AI Generated Response" fields.
-3. Click **Submit Evaluation**.
-4. The React app will communicate with FastAPI and trigger the agent orchestrator. Once completed, the UI will dynamically render the detailed evaluation breakdown, including the final score and Radar Chart.
-5. Navigate to the **Analytics** and **History** tabs to view aggregated metrics and export your records to CSV/JSON.
+## 📡 REST API Reference
 
-### 5. Test the RAG Knowledge Base Retrieval
-To verify that the vector store correctly retrieves semantically relevant information from the ingested datasets:
-```bash
-python tests/test_retrieval.py
-```
-This will query the ChromaDB vector store with predefined questions and print out the closest matching document chunks along with their mathematical semantic distance scores.
+| Method | Endpoint | Description | Auth |
+| :--- | :--- | :--- | :---: |
+| `POST` | `/api/evaluate` | Submit single prompt for multi-agent evaluation (with caching) | Optional |
+| `POST` | `/api/evaluate/batch` | Upload CSV for batch processing (supports webhooks) | Optional |
+| `GET` | `/api/results/{id}` | Retrieve evaluation result by ID | Public |
+| `GET` | `/api/batch/{batch_id}` | Poll batch processing progress and completed records | Public |
+| `GET` | `/api/history` | Paginated evaluation history with filtering | Public |
+| `GET` | `/api/analytics` | Aggregated metrics, radar profiles, and time-series data | Public |
+| `GET` | `/api/config/weights` | Get active evaluation dimension weights | Public |
+| `POST` | `/api/config/weights` | Globally update scoring penalty weights | Public |
+| `GET` | `/api/kb/status` | ChromaDB vector store health status | Public |
+| `GET` | `/api/kb/documents` | List ingested documents with chunk counts | Public |
+| `POST` | `/api/kb/upload` | Upload and chunk PDF/DOCX/TXT/MD into ChromaDB | Public |
+| `POST` | `/api/kb/search` | Semantic vector search with cosine similarity | Public |
+| `DELETE` | `/api/kb/{filename}` | Delete document and remove chunk embeddings | Public |
+| `POST` | `/api/benchmarks` | Snapshot a completed batch as a Golden Benchmark | `X-API-KEY` |
+| `GET` | `/api/benchmarks` | List all saved Golden Benchmarks | `X-API-KEY` |
+| `GET` | `/api/benchmarks/{id}` | Retrieve a single Golden Benchmark | `X-API-KEY` |
+| `POST` | `/api/benchmarks/{id}/compare` | Compare candidate batch & generate regression delta report | `X-API-KEY` |
+| `DELETE` | `/api/benchmarks/{id}` | Delete a Golden Benchmark | `X-API-KEY` |
+| `GET` | `/api/provider/status` | Inspect active LLM provider and available models | Public |
+| `GET` | `/api/health` | Service health status and version check | Public |
 
 ---
 
-## ☁️ Cloud Deployment (Docker)
+## 📚 Project Documentation Catalog
 
-The application is containerized using a multi-stage Docker build that bundles the React frontend and FastAPI backend into a single container running on port `8005` (with dynamic `$PORT` evaluation for cloud hosts).
+All detailed architectural, engineering, and historical records are available in the [`docs/`](docs/) directory:
 
-### 1-Click Cloud Deployment (Render.com)
-1. Fork or push this repository to your GitHub account: `https://github.com/Hassan092-prog/ai-response-validation-system`.
-2. Sign up / Log in to [Render](https://render.com).
-3. Click **New +** > **Web Service**.
-4. Select this repository.
-5. In the service settings:
-   - **Environment:** `Docker`
-   - **Branch:** `main`
-   - **Region:** Any preferred region (e.g. Frankfurt, Oregon, Singapore)
-   - **Plan:** Free
-6. Add your Environment Variable:
-   - Key: `GROQ_API_KEY`
-   - Value: `your_groq_api_key`
-7. Click **Deploy Web Service**. Render builds the Docker container and provides the live public HTTPS URL: [https://ai-response-validation-system-ez6e.onrender.com/](https://ai-response-validation-system-ez6e.onrender.com/).
-
----
-
-## 📚 Project Documentation & Agile Artifacts
-
-All comprehensive project artifacts prepared for the **Infosys Springboard Internship 7.0** submission are available in the [`docs/`](docs/) directory:
-
-* 📋 **[Agile Scrum Documentation](docs/agile_documentation.md)**: Details the Agile framework, User Stories (US-101 through US-405), sprint breakdowns (Sprints 1–4 matching Milestones 1–4), velocity tracking, burndown metrics, and impediment log.
-* 📄 **[Final Project Report](docs/project_report.md)**: Complete academic & technical overview of problem statement, architecture, MoE scoring methodology, test scenarios, and final audit results.
-* 🏗️ **[System Architecture](docs/architecture.md)**: In-depth technical specifications of the decoupled React + FastAPI + ChromaDB architecture and multi-agent orchestration flows.
-* 🔬 **[Research Documentation](docs/research.md)**: Literature review and technical background on hallucination detection, RAG retrieval techniques, and LLM-as-a-Judge evaluations.
-* 🔮 **[Future Scope and Additions](docs/Future%20scope%20and%20additions.md)**: Strategic roadmap for continuous enterprise evolution (RLHF feedback loop, enterprise SSO, dynamic web scraping).
+* 📄 **[Final Project Report](docs/project_report.md):** Academic & technical deep dive covering problem statement, system architecture, MoE scoring models, post-internship enterprise evolution, and evaluation results.
+* 🏗️ **[System Architecture](docs/architecture.md):** Detailed architectural diagrams, pipeline specifications, and data flow from ingestion to regression verdicts.
+* 📋 **[Agile Scrum Documentation](docs/agile_documentation.md):** Comprehensive agile delivery records across original internship Sprints 1–4 and post-internship enterprise Sprints 5–7 (velocity, burndown, DoD, RTM).
+* 🔮 **[Future Scope & Roadmap](docs/Future%20scope%20and%20additions.md):** Analysis of delivered features and strategic roadmap for upcoming initiatives.
+* 🔬 **[Research Documentation](docs/research.md):** Theoretical foundation and literature review on hallucination detection, RAG retrieval boundaries, and LLM-as-a-Judge paradigms.
 
 ---
 
 ## 📄 License
 
-This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
-
+This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.

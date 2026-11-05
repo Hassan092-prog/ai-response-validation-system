@@ -1,114 +1,100 @@
-# Future Scope & Feature Additions: AI Response Validation System
+# Future Scope & Feature Roadmap: AI Response Validation System
 
-> **Document Status:** Finalized Planning & Design Specification (Aligned with Codebase Audit)  
-> **Rule Compliance:** *Zero codebase changes made. Only truly missing, high-value, compatible features are included.*
-
----
-
-## 1. Deep Codebase Audit: What Our Project Already Covers
-
-Before planning any additions, we performed a thorough audit of our existing frontend and backend codebase to avoid duplicate work:
-
-| Analyzed Feature | Codebase Reality & Findings | Verdict |
-| :--- | :--- | :--- |
-| **Configurable Scoring Weights** | **Already 100% built in our app!** Exists in [`frontend/src/AnalyticsDashboard.jsx:L368-L420`](file:///h:/Documents/Hassan/coding_projects/Infosys%20Springboard%20Internship%207.0/ai-response-validation-system/frontend/src/AnalyticsDashboard.jsx#L368-L420) with interactive sliders and real-time score recalculation, connected to backend endpoints `@app.get("/api/config/weights")` and `@app.post("/api/config/weights")` in [`backend/api/main.py:L62-L69`](file:///h:/Documents/Hassan/coding_projects/Infosys%20Springboard%20Internship%207.0/ai-response-validation-system/backend/api/main.py#L62-L69). | **Excluded (Already Done)** |
-| **Test Case Bench** | **Already built!** The `[ 🗄️ Load Test Case 1/7 ]` button in [`frontend/src/App.jsx:L317-L319`](file:///h:/Documents/Hassan/coding_projects/Infosys%20Springboard%20Internship%207.0/ai-response-validation-system/frontend/src/App.jsx#L317-L319) already cycles through 7 curated factual, contradictory, and hallucinated test cases. | **Excluded (Already Done)** |
-| **Multi-Vector Grounding Metrics** | Redundant. Handled directly by our specialized **Hallucination** and **Relevance** Judge Agents in [`backend/core/agents/`](file:///h:/Documents/Hassan/coding_projects/Infosys%20Springboard%20Internship%207.0/ai-response-validation-system/backend/core/agents/). | **Excluded (Redundant)** |
-| **System Health API** | Backend already provides `@app.get("/api/health")` in [`backend/api/main.py:L57`](file:///h:/Documents/Hassan/coding_projects/Infosys%20Springboard%20Internship%207.0/ai-response-validation-system/backend/api/main.py#L57), returning `{"status": "healthy", "version": "1.0.0"}`. | **Ready for Frontend Hookup** |
-| **Claim Flagging Logic** | [`backend/core/agents/hallucination.py:L12-L18`](file:///h:/Documents/Hassan/coding_projects/Infosys%20Springboard%20Internship%207.0/ai-response-validation-system/backend/core/agents/hallucination.py#L12-L18) already prompts the LLM to output `flagged_claims: [{ statement, status, explanation }]`. | **Ready for UI Heatmap** |
+> **Document Status:** Comprehensive Roadmap & Feature Delivery Ledger  
+> **Status:** Horizons 1 & 2 Completed; Horizon 3 Defined  
 
 ---
 
-## 2. Curated High-Value Features Selected for Implementation
+## 1. Feature Delivery Ledger: What Has Been Engineered
 
-Based on user review and architectural fit, the future scope is strictly focused on **4 features** that deliver genuine analytical and workflow value:
-
-```
-┌──────────────────────────────────────────────────────────────────────────────────┐
-│                             FINALIZED FEATURE SCOPE                              │
-├──────────────────────────────────────────────────────────────────────────────────┤
-│ 1. Interactive Sentence-Level Hallucination Heatmap with Bidirectional Grounding │
-│ 2. Real-Time Telemetry & Header Latency Monitor                                  │
-│ 3. Smart Batch Risk Filtering & In-Row Claim Inspector                          │
-│ 4. Direct PDF & Text Document Drag-and-Drop Ingestion                            │
-└──────────────────────────────────────────────────────────────────────────────────┘
-```
-
----
-
-### Feature 1: Sentence-Level Hallucination Heatmap with Bidirectional Source Grounding
-* **Value & Rationale:** Currently, our evaluation output displays overall scores, text reasoning, and a lexical diff. For long responses, users must read paragraphs to find exactly which statement failed and why. This feature transforms the output into an interactive visual heatmap.
-* **How It Works:**
-  1. The AI response is rendered as discrete sentence spans.
-  2. Each sentence is highlighted based on the Hallucination Agent's analysis:
-     * **Supported / Grounded:** Subtle emerald tint with green left accent.
-     * **Unverified / Extrapolated:** Subtle amber tint (information not grounded in source context).
-     * **Hallucination / Contradiction:** Crimson tint with warning badge.
-  3. **Bidirectional Source Grounding:**
-     * Clicking any highlighted sentence in the AI response illuminates the matching supporting or conflicting sentence in the **Source Document** textarea.
-     * An inline inspection card opens below the sentence displaying the agent's exact explanation for that specific claim.
-* **Codebase Compatibility:**
-  * Uses the existing `flagged_claims` generated by [`backend/core/agents/hallucination.py`](file:///h:/Documents/Hassan/coding_projects/Infosys%20Springboard%20Internship%207.0/ai-response-validation-system/backend/core/agents/hallucination.py).
-  * Exposes claims through `generate_verdict()` in [`verdict.py`](file:///h:/Documents/Hassan/coding_projects/Infosys%20Springboard%20Internship%207.0/ai-response-validation-system/backend/core/agents/verdict.py).
-  * Rendered cleanly inside [`frontend/src/Results.jsx`](file:///h:/Documents/Hassan/coding_projects/Infosys%20Springboard%20Internship%207.0/ai-response-validation-system/frontend/src/Results.jsx).
-
----
-
-### Feature 2: Real-Time Telemetry & Header Latency Monitor
-* **Value & Rationale:** Provides immediate visibility into backend operational status, active server health, and inference roundtrip latency.
-* **How It Works:**
-  1. A sleek pill widget in the persistent sidebar/header next to the theme toggle.
-  2. **Pulse Dot:** Breathing green dot when online and healthy, shifting to amber during long inference or red if unreachable.
-  3. **Latency Tracker:** Shows live roundtrip ping or last evaluation inference time in milliseconds (e.g., `⚡ 142ms`).
-  4. **Model Badge:** Quick tooltip indicating backend status (`FastAPI :8005 • Agents Ready`).
-* **Codebase Compatibility:**
-  * Uses the existing `@app.get("/api/health")` in [`backend/api/main.py:L57`](file:///h:/Documents/Hassan/coding_projects/Infosys%20Springboard%20Internship%207.0/ai-response-validation-system/backend/api/main.py#L57).
-  * Light periodic ping (every 15s) in [`frontend/src/App.jsx`](file:///h:/Documents/Hassan/coding_projects/Infosys%20Springboard%20Internship%207.0/ai-response-validation-system/frontend/src/App.jsx).
-
----
-
-### Feature 3: Smart Batch Risk Filtering & In-Row Claim Inspector
-* **Value & Rationale:** When evaluating a batch of 20–50 items, users currently have to scroll through every row to spot failures. Instant risk filtering and in-row claim expansion make batch auditing fast and productive.
-* **How It Works:**
-  1. **Instant Quick-Filter Buttons above Batch Results Table:**
-     * `All Records`
-     * `⚠️ Hallucinations Only` (filters to records where Hallucination Agent flagged issues)
-     * `❌ Failed Only` (filters to score < 70)
-     * `✅ Passed Only`
-  2. **In-Row Claim Inspector:**
-     * Clicking the expand chevron on any batch row expands an accordion section *directly inside the table*, showing the sentence heatmap and flagged claims for that specific record without leaving the batch view.
-* **Codebase Compatibility:**
-  * Integrates directly into [`frontend/src/BatchUpload.jsx`](file:///h:/Documents/Hassan/coding_projects/Infosys%20Springboard%20Internship%207.0/ai-response-validation-system/frontend/src/BatchUpload.jsx) and [`frontend/src/BatchAnalyticsView.jsx`](file:///h:/Documents/Hassan/coding_projects/Infosys%20Springboard%20Internship%207.0/ai-response-validation-system/frontend/src/BatchAnalyticsView.jsx).
-
----
-
-### Feature 4: Direct PDF & Document Drag-and-Drop Ingestion into Source Context
-* **Value & Rationale:** Ground truth documents in the real world are almost always PDFs or text files. Having to manually open a PDF, copy text, and paste it into the textarea is tedious.
-* **How It Works:**
-  1. Users can drag and drop a `.pdf` or `.txt` file directly onto the "Source Document" textarea.
-  2. The text is automatically extracted and populated into the field.
-  3. Displays a file chip above the textarea (e.g., `📄 policy_manual.pdf • 1,420 words extracted`) with a 1-click "Clear" button.
-* **Codebase Compatibility:**
-  * Uses client-side lightweight text parsing or an endpoint in [`backend/api/main.py`](file:///h:/Documents/Hassan/coding_projects/Infosys%20Springboard%20Internship%207.0/ai-response-validation-system/backend/api/main.py) to parse file uploads cleanly.
-  * Extends the existing `handleFileUpload` function in [`frontend/src/App.jsx:L218`](file:///h:/Documents/Hassan/coding_projects/Infosys%20Springboard%20Internship%207.0/ai-response-validation-system/frontend/src/App.jsx#L218).
-
----
-
-## 3. Phased Implementation Roadmap
+To ensure transparency across development epochs, this ledger tracks every feature proposed, planned, and implemented across the system's lifecycle:
 
 ```mermaid
-graph TD
-    A["Phase 1: Sentence Heatmap & Bidirectional Grounding"] --> B["Phase 2: Header Live Telemetry & Health Monitor"]
-    B --> C["Phase 3: Smart Batch Risk Filtering & In-Row Claim Inspector"]
-    C --> D["Phase 4: Direct PDF & Document Drag-and-Drop Ingestion"]
+flowchart TD
+    H1["Horizon 1: Pre-Submission UI & Analytics\n(Heatmap, Telemetry, Risk Filters, Drag-Drop)"] --> H2["Horizon 2: Enterprise Engineering Roadmap\n(CI/CD, Cache, Multi-LLM, KB UI, Benchmarks & Webhooks)"]
+    H2 --> H3["Horizon 3: Next Strategic Frontiers\n(Model Arena, Synthetic Data, Calibration, Distributed Celery)"]
+
+    style H1 fill:#1e3a5f,stroke:#3b82f6,color:#fff
+    style H2 fill:#14532d,stroke:#22c55e,color:#fff
+    style H3 fill:#312e81,stroke:#818cf8,color:#fff
 ```
 
-### Implementation Sequence:
-1. **Phase 1:** Update `backend/core/agents/verdict.py` to forward `flagged_claims` -> Build `SentenceHeatmap` component in `frontend/src/Results.jsx`.
-2. **Phase 2:** Connect `/api/health` in `App.jsx` -> Render real-time latency & pulse telemetry pill in sidebar header.
-3. **Phase 3:** Add quick-filter pills and row-level heatmap accordion in `frontend/src/BatchUpload.jsx`.
-4. **Phase 4:** Add drag-and-drop PDF/TXT parsing to Source Document in `frontend/src/App.jsx`.
+| Feature / Capability | Initial Target | Current Status | Delivery Details |
+| :--- | :---: | :---: | :--- |
+| **Sentence-Level Hallucination Heatmap** | Horizon 1 | **Delivered** | Color-coded sentence spans (green, yellow, red) with bidirectional source illumination in [`Results.jsx`](../frontend/src/Results.jsx). |
+| **Real-Time Telemetry & Latency Monitor** | Horizon 1 | **Delivered** | Header telemetry pill displaying backend health and roundtrip inference latency in milliseconds. |
+| **Smart Batch Risk Filtering & Accordion** | Horizon 1 | **Delivered** | 1-click filter pills (`⚠️ Hallucinations Only`, `❌ Failed Only`, etc.) and in-row claim accordion in [`BatchUpload.jsx`](../frontend/src/BatchUpload.jsx). |
+| **Direct PDF/TXT Drag-and-Drop Ingestion** | Horizon 1 | **Delivered** | Direct file drop zone parsing text files into the Source Document textarea with word-count chips. |
+| **Automated Test Suite & GitHub Actions CI** | Horizon 2 | **Delivered** | 76 automated Pytest tests, in-memory SQLite fixtures, Ruff linter, and [`.github/workflows/ci.yml`](../.github/workflows/ci.yml). |
+| **SHA-256 Deduplication Caching Engine** | Horizon 2 | **Delivered** | Deterministic SHA-256 input hashing in [`cache.py`](../backend/core/cache.py), $<5\text{ms}$ replay clones, and telemetry tracking. |
+| **Model-Agnostic Multi-Provider LLM Layer** | Horizon 2 | **Delivered** | Provider Factory supporting Groq Cloud, local/offline Ollama, OpenAI-compatible APIs, and automatic failover. |
+| **Dynamic Knowledge Base Management UI** | Horizon 2 | **Delivered** | ChromaDB document catalog, sentence chunker, and semantic search playground in [`KnowledgeBase.jsx`](../frontend/src/KnowledgeBase.jsx). |
+| **Regression Benchmarking & Signed Webhooks** | Horizon 2 | **Delivered** | Golden benchmarks catalog, comparison delta engine, automated regression verdicts, and HMAC-SHA256 signed webhooks. |
 
 ---
 
-> ⚠️ **Status:** Standing by for review. Codebase remains untouched until your instruction.
+## 2. Horizon 3: Next Strategic Frontiers
+
+With the core evaluation engine, provider flexibility, caching, and CI/CD benchmarking complete, the following four initiatives represent the next strategic evolutions for the platform:
+
+---
+
+### Feature 1: Model Arena & Head-to-Head Comparative Evaluation
+* **Objective:** Allow evaluators to benchmark two distinct LLMs side-by-side on the same prompt and ground truth in real time.
+* **Architecture & Workflow:**
+  1. Evaluator inputs prompt and optional context, then selects Model A (e.g. `Groq llama-3.3-70b`) and Model B (e.g. `Ollama llama3.2:3b` or `OpenAI gpt-4o-mini`).
+  2. Both models generate answers in parallel.
+  3. The 4 Judge Agents evaluate both outputs concurrently.
+  4. A **Dual Comparison Arena** renders:
+     - Side-by-side sentence hallucination heatmaps.
+     - Dual radar chart overlay comparing accuracy, relevance, and completeness profiles.
+     - Automated Win / Loss / Tie verdict with a consolidated comparative summary.
+* **Impact:** Provides empirical decision support for enterprises choosing between open-source self-hosted models and cloud API models.
+
+---
+
+### Feature 2: Synthetic Adversarial Dataset Generator
+* **Objective:** Eliminate the manual effort required to construct high-quality evaluation and regression datasets.
+* **Architecture & Workflow:**
+  1. The user selects an ingested document from the Knowledge Base or provides a domain topic.
+  2. An adversarial generator agent uses few-shot prompting to synthesize 10 diverse validation pairs:
+     - **Control Cases:** High-accuracy, fully grounded responses.
+     - **Subtle Hallucinations:** Fabricates a single plausible statistic, date, or entity.
+     - **Inversions & Contradictions:** Inverts a rule or condition stated in the context.
+     - **Incomplete Responses:** Omits critical caveats or partial answers.
+  3. Evaluators can export the generated dataset directly as CSV or click *"Send to Batch Evaluation"* to stress-test their active evaluation pipeline.
+* **Impact:** Enables rapid stress-testing of judge agents and automated pipeline calibration.
+
+---
+
+### Feature 3: LLM-as-a-Judge Calibration & Confusion Matrix
+* **Objective:** Quantify the accuracy and agreement of the judge agents against human domain expert feedback.
+* **Architecture & Workflow:**
+  1. Evaluators can provide "Thumbs Up" or "Thumbs Down" feedback on agent verdicts in the UI.
+  2. The system maintains a human feedback dataset alongside LLM verdicts.
+  3. An Analytics module calculates:
+     - **Precision, Recall, and F1-Score** of the Hallucination Detection Agent against human labels.
+     - **Confusion Matrix:** True Positives (correctly flagged hallucinations), False Positives (over-penalized valid responses), False Negatives (missed hallucinations).
+  4. Generates recommended prompt adjustments or weight tuning suggestions to improve judge reliability.
+* **Impact:** Essential for enterprise compliance and auditing when deploying LLM-as-a-Judge workflows in regulated industries (healthcare, legal, finance).
+
+---
+
+### Feature 4: Distributed Celery & Redis Task Queue for Large Enterprise Batches
+* **Objective:** Scale batch evaluation throughput from hundreds of rows to tens of thousands of rows across worker clusters.
+* **Architecture & Workflow:**
+  1. Replace in-process `BackgroundTasks` with a Celery task queue backed by Redis or RabbitMQ.
+  2. Implement distributed rate-limiting buckets per LLM provider to maximize API throughput without hitting TPM/RPM ceilings.
+  3. Support paused, resumed, and prioritized batch jobs with real-time SSE (Server-Sent Events) progress streaming to the frontend.
+* **Impact:** Positions the platform as a high-throughput enterprise evaluation service capable of processing continuous production inference logs.
+
+---
+
+## 3. Prioritization Matrix
+
+| Initiative | Effort | Technical Risk | Enterprise Impact | Recommended Next Step |
+| :--- | :---: | :---: | :---: | :---: |
+| **Model Arena (Side-by-Side Comparison)** | 2–3 Days | Low | High | ⭐ **Top Priority** |
+| **Synthetic Adversarial Dataset Generator** | 3–4 Days | Medium | High | Second Priority |
+| **LLM-as-a-Judge Calibration & Confusion Matrix** | 3 Days | Low | Medium | Third Priority |
+| **Distributed Celery / Redis Worker Queue** | 4–5 Days | Medium | High (for scale) | Future Scale |

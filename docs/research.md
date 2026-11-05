@@ -36,4 +36,12 @@ Both tools heavily rely on the "LLM-as-a-Judge" paradigm.
 
 ## 5. LLM-as-a-Judge
 
-Using an LLM to evaluate another LLM is scalable and correlates well with human judgment when prompted correctly. Instead of complex, brittle heuristic scripts, we define specific, constrained prompts for an LLM to grade an answer on a scale (e.g., 1-5) and provide reasoning. This is the core logic behind our Relevance, Accuracy, and Completeness judge agents.
+Using an LLM to evaluate another LLM is scalable and correlates well with human judgment when prompted correctly. Instead of complex, brittle heuristic scripts, we define specific, constrained prompts for an LLM to grade an answer on a scale (e.g., 1-5) and provide reasoning. This is the core logic behind our Relevance, Accuracy, Completeness, and Hallucination judge agents.
+
+## 6. Enterprise MLOps & Continuous Regression Benchmarking
+
+As LLM applications move into production, models and prompts must be continually regression-tested against fixed "Golden Baselines". Key research paradigms adopted in our system include:
+- **Golden Evaluation Sets:** Curated benchmark datasets against which every candidate model iteration is compared to detect quality regressions before deployment.
+- **Regression Tolerance Thresholds:** Statistical alerting based on delta variations (e.g., flagging automated CI build failures when pass rates drop by $>5$ percentage points or key dimensions degrade).
+- **Cryptographically Signed Webhooks (HMAC-SHA256):** Standardized delivery pattern (analogous to GitHub and Stripe webhooks) allowing external automated CI pipelines to trigger evaluations and asynchronously receive signed, verified validation payloads.
+- **Deduplication Hashing:** Canonical normalization and deterministic SHA-256 caching preventing redundant inference calls on previously validated prompt-context pairs.
